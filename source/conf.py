@@ -79,3 +79,12 @@ sys.path.insert(0, os.path.abspath('.'))
 extensions = [
     'citation',  # Our custom citation extension
 ]
+
+# Add these settings for GitHub Pages
+html_context = {
+    'display_github': True,
+    'github_user': 'gpi-pack',
+    'github_repo': 'gpi_pack.github.io',
+    'github_version': 'main',  # or whatever your default branch is
+    'conf_py_path': '/source/'
+}
