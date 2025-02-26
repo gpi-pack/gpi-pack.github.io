@@ -27,6 +27,7 @@ templates_path = ['_templates']
 exclude_patterns = []
 
 # -- Options for HTML output -------------------------------------------------
+html_baseurl = 'https://gpi-pack.github.io/'
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
 html_logo = None  # Add path to your logo if you have one
