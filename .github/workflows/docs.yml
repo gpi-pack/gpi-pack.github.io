@@ -1,11 +1,11 @@
-name: Debug and Deploy Documentation
+name: Build and Deploy Documentation
 on:
   push:
     branches:
       - main
 
 jobs:
-  debug-and-build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -14,10 +14,8 @@ jobs:
         run: |
           echo "Root directory contents:"
           ls -la
-          echo "Finding Makefile:"
-          find . -name "Makefile"
-          echo "Finding conf.py:"
-          find . -name "conf.py"
+          echo "Finding Makefile and conf.py:"
+          find . -name "Makefile" -o -name "conf.py"
       
       - name: Set up Python
         uses: actions/setup-python@v2
@@ -29,48 +27,21 @@ jobs:
           python -m pip install --upgrade pip
           pip install sphinx sphinx_rtd_theme
       
-      - name: Build documentation
+      - name: Build documentation directly with sphinx-build
         run: |
-          # This will be determined based on the path to your Makefile
-          # We'll use a variable to store the directory
-          DOCS_DIR=$(dirname $(find . -name "Makefile" | head -n 1))
-          echo "Found Makefile in: $DOCS_DIR"
-          if [ -n "$DOCS_DIR" ]; then
-            cd "$DOCS_DIR"
-            make html
-          else
-            echo "No Makefile found!"
-            exit 1
-          fi
-      
-      - name: Locate build directory
-        id: find_build
-        run: |
-          BUILD_DIR=$(find . -type d -name "html" | grep -i build | head -n 1)
-          if [ -n "$BUILD_DIR" ]; then
-            echo "Found build directory: $BUILD_DIR"
-            echo "::set-output name=build_dir::$BUILD_DIR"
-          else
-            echo "No build directory found!"
-            # Try to guess based on conventional locations
-            if [ -d "./docs/build/html" ]; then
-              echo "Found ./docs/build/html"
-              echo "::set-output name=build_dir::./docs/build/html"
-            elif [ -d "./docs/_build/html" ]; then
-              echo "Found ./docs/_build/html"
-              echo "::set-output name=build_dir::./docs/_build/html"
-            elif [ -d "./_build/html" ]; then
-              echo "Found ./_build/html"
-              echo "::set-output name=build_dir::./build/_build/html"
-            else
-              echo "Could not locate build directory!"
-              exit 1
-            fi
-          fi
+          # Find the directory containing conf.py
+          CONF_DIR=$(dirname $(find . -name "conf.py" | head -n 1))
+          echo "Found conf.py in: $CONF_DIR"
+          
+          # Create build directory
+          mkdir -p _build/html
+          
+          # Run sphinx-build directly instead of using make
+          sphinx-build -b html "$CONF_DIR" _build/html
       
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ${{ steps.find_build.outputs.build_dir }}
+          publish_dir: ./_build/html
           force_orphan: true
