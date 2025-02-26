@@ -3,7 +3,7 @@
 get_instruction
 ===============
 
-Purpose and Description
+Description
 ----------------------------
 The ``get_instruction`` function generates an instruction string based on a given task type. This string guides the language model’s behavior during text generation. For example, if the task type is ``"create"``, the instruction tells the model to generate text; if ``"repeat"``, it instructs the model to simply repeat the provided input; any other string is treated as a custom task instruction.
 

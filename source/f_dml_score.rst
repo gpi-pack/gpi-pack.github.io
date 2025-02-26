@@ -3,7 +3,7 @@
 dml_score
 ===========
 
-Purpose and Description
+Description
 ----------------------------
 The ``dml_score`` function computes the influence function for the average treatment effect (ATE) using a doubly robust estimation. It combines the predicted outcomes under treatment and control along with the observed treatment assignment to generate a score for each sample.
 

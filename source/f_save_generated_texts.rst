@@ -3,7 +3,7 @@
 save_generated_texts
 ===========
 
-Purpose and Description
+Description
 ----------------------------
 The ``save_generated_texts`` function saves the generated texts along with their corresponding prompts to a pickle file. This is useful for later retrieval or further analysis of the outputs.
 

@@ -3,7 +3,7 @@
 SpectralNormClassifier
 ===========
 
-Purpose and Description
+Description
 -------------------------
 The ``SpectralNormClassifier`` class implements a feed-forward neural network for multi-class classification with spectral normalization. It also works for binary classification when ``num_classes`` is set to 2. This classifier applies spectral normalization to each linear layer in order to control the Lipschitz constant and improve training stability. Its architecture is a multi-layer perceptron (MLP) that can optionally include batch normalization and dropout in each hidden layer.
 

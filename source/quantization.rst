@@ -1,25 +1,25 @@
 When LLM is too big
 ===============
 
-It is often the case that the LLM is too big to be loaded into the memory. In these cases, you encounter the error message ``CUDA out of memory``. This error message means that your GPU does not have enough memory to load the LLM.
+Sometimes a large language model (LLM) cannot be loaded into memory, resulting in a ``CUDA out of memory``. This error indicates that your GPU lacks sufficient memory to load the LLM.
 
-In that case, you can use the quantization technique to reduce the size of the model. The quantization technique reduces the precision of the model parameters, which can significantly reduce the size of the model. The quantized model can be loaded into the memory and used for generating texts.
+In such cases, you can use quantization techniques to reduce the model's size. Quantization lowers the precision of the model parameters, significantly reducing its size. As a result, the quantized model can be loaded into memory and used for generating text.
 
 Model Quantization
 ----------
 
-Here, we show how to use the quantization technique to reduce the size of the model (`LLaMa3 <https://huggingface.co/meta-llama>`_).
+Below is an example of how to use quantization to reduce the size of the model (using `LLaMa3 <https://huggingface.co/meta-llama>`_).
 
 .. note::
-    The quantization technique is not supported for all LLMs. You need to check the documentation of the LLM to see if the quantization technique is supported.
+    Quantization is not supported for all LLMs. Please consult the LLM's documentation to determine whether it supports this technique.
 
-To use the quantization technique, you need to install the `bitsandbytes <https://huggingface.co/docs/transformers/main/en/quantization/bitsandbytes?bnb=4-bit>`_ package. You can install it using the following command:
+To use quantization, first install the `bitsandbytes <https://huggingface.co/docs/transformers/main/en/quantization/bitsandbytes?bnb=4-bit>`_ package with the following command
 
 .. code-block:: bash
 
     pip install bitsandbytes
 
-Once you install the `bitsandbytes <https://huggingface.co/docs/transformers/main/en/quantization/bitsandbytes?bnb=4-bit>`_ package, you can use the quantization technique to reduce the size of the model. Below is an example of how to use the quantization technique to reduce the size of LLaMa3.
+After installing the package, you can apply quantization to reduce the size of LLaMa3. The example below demonstrates how to do this:
 
 .. code-block:: python
 

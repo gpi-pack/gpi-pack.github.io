@@ -19,7 +19,7 @@ TarNet is a neural network architecture we use to learn the deconfounder. TarNet
    :alt: TarNet architecture
    :width: 600px
 
-**gpi-pack** provides a class ``TarNet`` that implements the TarNet architecture. You can use this class to estimate the deconfounder and outcome models. Below is an example of how to use the ``TarNet`` class. Note that you need to split the sample into training and test sets before using the ``TarNet`` class.
+**gpi_pack** provides a class ``TarNet`` that implements the TarNet architecture. You can use this class to estimate the deconfounder and outcome models. Below is an example of how to use the ``TarNet`` class. Note that you need to split the sample into training and test sets before using the ``TarNet`` class.
 
 .. code-block:: python
 
@@ -59,7 +59,7 @@ For the specific hyperparameters of the ``TarNet`` class, please refer to :ref:`
 Propensity Score Model
 ---------
 
-Once we obtain the estimated deconfounder, we can estimate the propensity score model. The propensity score model is used to estimate the probability of receiving treatment given the observed deconfounder. You can use any flexible machine learning model to estimate the propensity score, but as our input is the *estimated* deconfounder, the model needs to have a nice properties called *Lipschitz continuity*.
+Once we obtain the estimated deconfounder, we are ready to estimate the propensity score model. The propensity score model is used to estimate the probability of receiving treatment given the observed deconfounder. You can use any flexible machine learning model to estimate the propensity score; however, as our input is the *estimated* deconfounder, the model needs to possess a desirable property known as *Lipschitz continuity*.
 
 For this reason, **gpi_pack** provides a propensity score model ``SpectralNormClassifier``, which is the neural network model with the spectral normalization. Below is an example of how to use the ``SpectralNormClassifier`` class.
 
@@ -90,9 +90,9 @@ For the specific hyperparameters of the ``SpectralNormClassifier`` class, please
 Estimation Workflow
 ---------
 
-Because we estimate the propensity score based on the *estimated* deconfounder, the cross-fitting becomes more complicated than the standard double machine learning. Specifically, we need to split the sample into two halves, estimate the deconfounder and outcome models on one half, and then estimate the propensity score on the other half. This process is repeated for both halves of the sample.
+Because we estimate the propensity score based on the *estimated* deconfounder, cross-fitting becomes more complicated than in standard double machine learning. Specifically, we must split the sample into two halves, estimate the deconfounder and outcome models on one half, and then estimate the propensity score on the other half. This process is repeated for both halves of the sample.
 
-**gpi_pack** provides a function ``estimate_psi_split`` that implements this cross-fitting procedure once you obtain the outcome model and deconfounder. Below is an example of how to use the ``estimate_psi_split`` function.
+**gpi_pack** provides a function ``estimate_psi_split`` that implements this cross-fitting procedure once you obtain the outcome models and deconfounder. Below is an example of how to use the ``estimate_psi_split`` function.
 
 .. code-block:: python
 

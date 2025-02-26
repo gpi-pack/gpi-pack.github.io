@@ -24,7 +24,7 @@ You can also install the package directly from `the source <https://github.com/k
 Requirements
 -----------
 
-gpi_pack requires:
+**gpi_pack** requires:
 
 * Python 3.7+
 * numpy

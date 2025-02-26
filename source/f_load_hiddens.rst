@@ -3,7 +3,7 @@
 load_hiddens
 ===========
 
-Purpose and Description
+Description
 ----------------------------
 The ``load_hiddens`` function loads hidden state tensors from disk. Given a directory and a list of file identifiers (without the ``.pt`` extension), it reads each tensor file (optionally using a prefix), stacks them together, and returns a tensor of hidden representations.
 

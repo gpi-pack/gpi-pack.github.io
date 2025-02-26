@@ -18,7 +18,7 @@ GPI: Generative-AI Powered Inference
    </a>
    </p>
 
-**gpi_pack** is a Python library for the statistical inference powered by Generative Artificial Intelligence. It provides a set of tools and utilities for performing statistical inference using the internal representation of the Generative AI models. The library is designed to be easy to use and flexible, allowing users to perform a wide range of statistical analyses.
+**gpi_pack** is a Python library for the statistical inference powered by Generative Artificial Intelligence (AI). It provides a set of tools and utilities for performing statistical inference using the internal representation of the Generative AI models. The library is designed to be easy to use and flexible, allowing users to perform a wide range of statistical analyses.
 
 .. note::
 

@@ -3,9 +3,9 @@
 TarNet
 ===========
 
-Purpose and Description
+Description
 ----------------------------
-The ``TarNet`` class is a wrapper for a treatment effect estimation model using a shared representation and treatment-specific outcome models. It integrates the TarNetBase model, data loading, training, validation, prediction, and evaluation functionality. The class also supports saving and loading model checkpoints.
+The ``TarNet`` class is a wrapper for a treatment effect estimation model using a shared representation (deconfounder) and treatment-specific outcome models. It integrates the TarNetBase model, data loading, training, validation, prediction, and evaluation functionality. The class also supports saving and loading model checkpoints.
 
 Parameters
 -------

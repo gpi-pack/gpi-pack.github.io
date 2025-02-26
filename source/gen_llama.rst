@@ -3,10 +3,10 @@
 Generating Texts with LLaMa3
 ===========
 
-For GPI, you need to generate texts and extract the internal representation of LLMs. This section describes how to generate texts using `LLaMa3 <https://huggingface.co/meta-llama>`_, which is one of the best open-source LLM.
+For GPI, you need to generate texts and extract the internal representation of LLMs. This section describes how to generate texts and extract the internal representations using `LLaMa3 <https://huggingface.co/meta-llama>`_, which is one of the best open-source LLM.
 
 .. note::
-    For data generation, we recommend users to use GPUs. See :ref:`gpu_usage_section` for how to use GPUs.
+    For data generation, we recommend users to use GPUs. See :ref:`gpu_usage_section`.
 
 How to use LLaMa3
 ---------
@@ -105,7 +105,7 @@ The function ``extract_and_save_hidden_states`` has the following arguments.
 - ``model_config``: configuration of model (optional)
 - ``pooling``: pooling method to extract the internal representation. The default is "last". You can also use "mean" or "max".
 
-System Prompts
+System Prompt
 ---------
 System prompt is a special type of prompt that is used to provide instructions or context to the LLM. The function ``extract_and_save_hidden_states`` instructs the task type (create or repeat) by using the system prompt. This function also allows you to specify your own system prompt by providing a string to ``task_type``. Below is an example of how to use the system prompt.
 

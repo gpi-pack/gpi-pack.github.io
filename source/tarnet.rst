@@ -3,29 +3,29 @@
 Text-As-Treatment
 ===========
 
-Text-As-Treatment is one of the most important settings where **gpi-pack** is useful. Instead of modeling the texts directly, we use the internal representation of the LLMs to estimate the treatment effects. By avoiding the direct modeling of the texts, we can achieve the accurate and more computationally efficient estimation of the treatment effects. This section provides the overview of the Text-As-Treatment setting and how to use **gpi-pack** to estimate the treatment effects using the internal representation of the LLMs.
+Text-As-Treatment is a key setting where **gpi_pack** is especially useful. Instead of directly modeling texts, we use the internal representations of LLMs to estimate treatment effects. This approach improves accuracy and computational efficiency. In this section, we provide an overview of the Text-As-Treatment setting and demonstrate how to use gpi_pack to estimate treatment effects with the internal representations of LLMs.
 
 .. note::
     This part is based on our paper `Causal Representation Learning with Generative Artificial Intelligence: Application to Texts as Treatments <https://arxiv.org/abs/2410.00903>`_. Please refer to the paper for the technical details.
 
 What is Text-As-Treatment?
 ---------
-Text-As-Treatment refers to the setting where many texts are assigned to the participants and we are interested in how one specific feature (e.g., topics, sentiments) of texts influences the downstream outcomes. The key challenge in this setting is that texts contain some other featrues that might confound the relationship between the feature of interest and the outcome.
+Text-As-Treatment refers to scenarios where participants receive various texts, and the goal is to determine how one specific feature of the texts (e.g., topics or sentiments) influences downstream outcomes. A primary challenge in this setting is that texts inherently contain other features that might confound the relationship between the feature of interest and the outcome.
 
-To address this challenge, `our paper <https://arxiv.org/abs/2410.00903>`_ proposes to use the internal representation of the LLMs to avoid the modeling of the texts, and we devised the representation learning method called **deconfounder**, by which we can estimate the treatment effects of the feature of interest without directly observing all the confounding features. Deconfounder is estimated using `TarNet`, which inputs the internal representation and predict the outcome under the treatment and control conditions using the shared **deconfounder**. The following figure shows the architecture of `TarNet`.
+To address this challenge, `our paper <https://arxiv.org/abs/2410.00903>`_ proposes using LLMs’ internal representations to bypass the direct modeling of texts. We introduce a representation learning method called  **deconfounder**, which enables us to estimate the treatment effects of the feature of interest without directly observing all confounding features. The deconfounder is estimated using `TarNet`, which takes the internal representations as input and predicts outcomes under both treatment and control conditions using a shared deconfounder. The following figure illustrates the architecture of `TarNet`:
 
 .. image:: /_static/images/tarnet.png
    :alt: TarNet architecture
    :width: 600px
 
-Once we estimate the **deconfoudner** and the outcome models, we estimate the propensity score model based on the estimated deconfounder. Finally, we use the estimated outcome models and the propensity score model to estimate the treatment effects using the double machine learning techniques.
+Once the deconfounder and the outcome models are estimated, a propensity score model is built based on the deconfounder. Finally, the estimated outcome models and propensity score model are used together with double machine learning techniques to estimate treatment effects.
 
 How to estimate treatment effects
 ---------
 
-**gpi_pack** provides the wrapper function ``estimate_k_ate`` to estimate the treatment effects using the internal representation of the LLMs. This function internally handles all the estimation procedures including deconfounder estimation and propensity score estimations, and you only need to specify the data. Below is the example of how to use ``estimate_k_ate`` to estimate the treatment effects.
+**gpi_pack** offers the wrapper function ``estimate_k_ate`` to streamline the estimation of treatment effects using LLMs’ internal representations. This function handles all the necessary steps, including deconfounder estimation and propensity score estimation, so you only need to provide the data.
 
-Suppose that we have the following data frame ``df`` that contains the treatment variable, outcome variable, and the texts, and we already extracted the internal representation of the LLMs and saved them as .pt files.
+Suppose you have a DataFrame ``df`` containing the treatment variable, outcome variable, and texts, and you have already extracted the internal representations of the LLMs (saved as .pt files). Below is an example demonstrating how to use ``estimate_k_ate`` .
 
 .. code-block:: python
 
@@ -45,11 +45,11 @@ Suppose that we have the following data frame ``df`` that contains the treatment
         ]
     })
 
-.. note::
 
-    If you have not extracted internal representation, please refer to the section :ref:`generate_texts`.
+Step 1: Load the Internal Representations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Firstly, you need to load the internal representation of the LLMs. You can use the function ``load_hiddens`` to load the internal representation of the LLMs. The following is an example of how to use ``load_hiddens`` to load the internal representation of the LLMs.
+First, load the internal representations using the ``load_hiddens`` function:
 
 .. code-block:: python
 
@@ -65,7 +65,14 @@ Firstly, you need to load the internal representation of the LLMs. You can use t
         prefix = "hidden_last_", # prefix of hidden states (e.g., "hidden_last_" for "hidden_last_1.pt")
     )
 
-Once you load the internal representation of the LLMs, you can use the function ``estimate_k_ate`` to estimate the treatment effects. The following is an example of how to use ``estimate_k_ate`` to estimate the treatment effects.
+.. note::
+
+    If you have not extracted internal representation, please refer to the section :ref:`generate_texts`.
+
+Step 2: Estimate the Treatment Effects
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Once the internal representations are loaded, use ``estimate_k_ate`` to estimate the treatment effects:
 
 .. code-block:: python
     # estimate treatment effects
@@ -82,7 +89,7 @@ Once you load the internal representation of the LLMs, you can use the function 
         architecture_z = [2048], #deconfounder architecture
     )
 
-Theoretically, the estimator follows the normal distribution when the sample size is large enough. Therefore, we can use the following code to calculate the 95% confidence interval of the treatment effects.
+To compute a 95% confidence interval for the treatment effect estimate, use the following code:
 
 .. code-block:: python
 
@@ -96,9 +103,12 @@ Theoretically, the estimator follows the normal distribution when the sample siz
 How to control confounders
 ---------
 
-Sometimes, we want to control the confounders that are not included in the texts. In this case, we can use the function ``estimate_k_ate`` to estimate the treatment effects while controlling the confounders. The following is an example of how to use ``estimate_k_ate`` to estimate the treatment effects while controlling the confounders.
+In some cases, you may want to control for confounders that are not included in the texts. **gpi_pack** supports this via the ``estimate_k_ate`` function in two ways:
 
-There are two ways to control the confounders. One is to use the formula and the ``pandas`` data frame. To do this, your data frame must contain the confounders as columns, and you need to specify the formula of confounders (``formula_c = "conf1 + conf2"``) and the data frame (``data = df``) in the function ``estimate_k_ate``.
+Method 1: Using a Formula with a DataFrame
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If your DataFrame includes confounders as columns, specify a formula (e.g., ``formula_c = "conf1 + conf2"``) along with the DataFrame in the function call:
 
 .. code-block:: python
 
@@ -126,7 +136,14 @@ There are two ways to control the confounders. One is to use the formula and the
         architecture_z = [2048],
     )
 
-The other way is to use the design matrix of confounders. To do this, you need to create a design matrix of confounders and specify it in the ``C`` argument.
+Method 2: Using a Design Matrix
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Alternatively, create a design matrix of confounders and pass it to the ``C`` argument:
+
+.. note::
+    The design matrix should be a NumPy array or a list of values.
+
 
 .. code-block:: python
 
@@ -156,9 +173,9 @@ The other way is to use the design matrix of confounders. To do this, you need t
 Visualizing Propensity Scores
 ---------
 
-For Text-As-Treatment, we need to assume that textual feature and confounding features are disentangled. This assumption is called **separability**, and this can be directly diagnosed by visualizing the propensity scores. For this reason, we recommend users to visualize the propensity scores to check if the separability is not violated. If the propensity score shows the extreme values (0 or 1), it is likely that some confounding features are entangled with the treatment feature of interest.
+For the Text-As-Treatment setting, it is crucial to assume that the textual feature and the confounding features are disentangled—a property known as **separability**. Visualizing the propensity scores can help diagnose whether this assumption holds. If the propensity scores are extreme (close to 0 or 1), it may indicate that confounding features are entangled with the treatment feature of interest.
 
-Our function ``estimate_k_ate`` provides the option to visualize the propensity scores. To visualize the propensity scores, you need to set ``plot_propensity = True`` in the function ``estimate_k_ate`` (which is the default option). The following is an example of how to visualize the propensity scores.
+By default, the ``estimate_k_ate`` function allows you to visualize the propensity scores by setting ``plot_propensity=True``. Below is an example:
 
 .. code-block:: python
 
@@ -181,7 +198,7 @@ Our function ``estimate_k_ate`` provides the option to visualize the propensity 
 Hyperparameters
 ---------
 
-The function ``estimate_k_ate`` has the following parameters.
+The ``estimate_k_ate`` function accepts the following parameters:
 
 - ``R``: list or np.ndarray
     A list or NumPy array of hidden states extracted from LLM. Shape: (N, d_R) where N is the number of samples and d_R is the dimension of hidden states. You can load the stored hidden states using `load_hiddens` function.

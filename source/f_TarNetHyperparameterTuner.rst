@@ -3,7 +3,7 @@
 TarNetHyperparameterTuner
 ===========
 
-Purpose and Description:
+Description
 -------
 
 The ``TarNetHyperparameterTuner`` class is used for hyperparameter tuning of the TarNet model. It leverages a hyperparameter optimization framework (e.g., Optuna) to explore different model configurations and determine the best set of hyperparameters based on validation loss.
@@ -26,7 +26,7 @@ Arguments
   - **patience_min** (*int*, optional): Minimum patience value (default: 5).
   - **patience_max** (*int*, optional): Maximum patience value (default: 20).
 
-Example Usage:
+Example Usage
 -------
 
 .. code-block:: python

@@ -1,18 +1,18 @@
 Hyperparameter Tuning
 ===========
 
-If you use our representation learning method (TarNet), we recommend you to tune the hyperparameters of the model. The hyperparameters are the parameters that are not learned during training, but are set before training. These parameters can have a significant impact on the performance of the model, and tuning changes the performance of **deconfounder**. In this section, we will introduce how to tune the hyperparameters of the model using **gpi-pack**.
+If you use our representation learning method (TarNet), we recommend tuning the model's hyperparameters. Hyperparameters are parameters set prior to training (i.e., not learned during training) that can affect the model's performance. In this section, we explain how to tune the hyperparameters using **gpi_pack**.
 
 Automated Hyperparameter Tuning
 ---------
 
-For the automated hyperparameter tuning, we use the existing framework called `Optuna <https://optuna.org/>`_. `Optuna <https://optuna.org/>`_ is a hyperparameter optimization framework that is designed to be easy to use and flexible. If you have not installed `Optuna <https://optuna.org/>`_, please install it using the following command:
+For automated hyperparameter tuning, we use the framework called `Optuna <https://optuna.org/>`_. Optuna is a hyperparameter optimization framework designed for ease of use and efficiency. If you have not installed Optuna yet, please install it using the following command:
 
 .. code-block:: bash
 
     pip install optuna
 
-To use `Optuna <https://optuna.org/>`_, we need to define the objective function that we want to optimize and the set of hyperparameters we want to fine-tune. You can use the class ``TarNetHyperparameterTuner`` to do this. The ``TarNetHyperparameterTuner`` class is a wrapper around the `Optuna <https://optuna.org/>`_ framework, and it provides a simple interface for defining the objective function and the hyperparameters. The following is an example of how to use the ``TarNetHyperparameterTuner`` class:
+To use Optuna, you need to define an objective function to optimize and specify the set of hyperparameters to fine-tune. You can accomplish this using the `TarNetHyperparameterTuner`` class. This class is a wrapper around the Optuna framework and provides a simple interface for defining both the objective function and the hyperparameters. The following example demonstrates how to use the ``TarNetHyperparameterTuner`` class:
 
 .. code-block:: python
 
@@ -53,7 +53,7 @@ To use `Optuna <https://optuna.org/>`_, we need to define the objective function
 List of Hyperparameters
 ---------
 
-The following is the list of hyperparameters that can be tuned using the ``TarNetHyperparameterTuner`` class:
+The following table lists the hyperparameters that can be tuned using the ``TarNetHyperparameterTuner`` class:
 
 
 .. list-table::

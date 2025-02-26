@@ -3,7 +3,7 @@
 extract_and_save_hiddens
 ===========
 
-Purpose and Description
+Description
 ----------------------------
 The ``extract_and_save_hidden_states`` function provides a high-level interface for generating texts and extracting hidden representations from a language model. It takes a list of prompts, uses the specified tokenizer and model to generate texts, extracts hidden states using the chosen pooling strategy, saves the hidden states to disk, and then saves the generated texts to a pickle file.
 

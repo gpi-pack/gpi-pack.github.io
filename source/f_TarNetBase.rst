@@ -3,13 +3,13 @@
 TarNetBase
 ===========
 
-Purpose and Description
+Description
 -------------------------
-The ``TarNetBase`` class implements the core neural network architecture used for treatment effect estimation. It consists of a shared representation network and two outcome prediction networks—one for the untreated (control) and one for the treated group. The network supports optional dropout and batch normalization. The forward pass computes a latent representation from input data and then generates predictions for both treatment scenarios. Optionally, if ``return_prob`` is set to ``True``, the network applies a softmax activation to return predicted probabilities.
+The ``TarNetBase`` class implements the core neural network architecture used for treatment effect estimation. It consists of a shared representation network (deconfounder) and two outcome prediction networks—one for the untreated (control) and one for the treated group. The network supports optional dropout and batch normalization. The forward pass computes a latent representation from input data and then generates predictions for both treatment scenarios. Optionally, if ``return_prob`` is set to ``True``, the network applies a softmax activation to return predicted probabilities.
 
 Parameters
 ----------
-- **sizes_z** (*tuple*, optional): Sizes of the hidden layers for the shared representation model. Default is ``[2048]``.
+- **sizes_z** (*tuple*, optional): Sizes of the hidden layers for the shared representation model (deconfounder). Default is ``[2048]``.
 - **sizes_y** (*tuple*, optional): Sizes of the hidden layers for the outcome prediction models (for both treated and control groups). Default is ``[200, 1]``.
 - **dropout** (*float*, optional): Dropout rate applied to hidden layers. If not provided (``None``), dropout is not applied.
 - **bn** (*bool*, optional): Whether to use batch normalization after each linear layer. Defaults to ``False``.

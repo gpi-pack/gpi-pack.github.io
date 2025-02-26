@@ -51,7 +51,7 @@ Suppose that you have the following list of prompts.
 You can generate texts and extract the internal representation of Gemma2 using the following code. You need to specify the directory to save the hidden states and the file name to save the generated texts.
 
 .. note::
-    We recommend users to use loop to process each prompt rather than giving the batch of prompts to LLM. This is because LLM may generate responses based on the entire prompts in the batch, which can invalidate the independent assumptions of the generated texts.
+    We recommend users to use loop to process each prompt rather than giving the batch of prompts to LLM. This is because LLM may generate responses based on all the prompts in the batch, which can invalidate the independent assumptions of the generated texts.
 
 .. code-block:: python
 

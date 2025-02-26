@@ -3,7 +3,7 @@
 generate_text
 ===========
 
-Purpose and Description
+Description
 ----------------------------
 The ``generate_text`` function generates texts from a list of prompts using a specified language model and tokenizer. It also extracts hidden states from the model’s outputs using a chosen pooling strategy and saves these hidden states to a designated directory. Finally, it returns the generated texts as a list.
 

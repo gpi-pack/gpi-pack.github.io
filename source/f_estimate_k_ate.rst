@@ -3,11 +3,11 @@
 estimate_k_ate
 ===========
 
-Purpose and Description:
+Description
 -------
   Estimates the Average Treatment Effect (ATE) using the TarNet model with k-fold cross-fitting. For each fold, the model is trained on the training split, outcomes are predicted on the test split, the influence function (psi) is computed, and the mean ATE and its standard error are returned.
 
-Arguments:
+Arguments
 -------
   - **R** (*list* or *np.ndarray*): Hidden state representations from a language model.
   - **Y** (*list* or *np.ndarray*): Outcome values.
@@ -34,12 +34,12 @@ Arguments:
   - **model_dir** (*str*, optional): Directory for saving model checkpoints.
   - **verbose** (*bool*, optional): If True, prints progress messages (default: True).
 
-Returns:
+Returns
 -------
   - **ate_est** (*float*): The estimated Average Treatment Effect.
   - **se_est** (*float*): The standard error (SE) of the ATE estimate.
 
-Example Usage:
+Example Usage
 -------
 
 .. code-block:: python

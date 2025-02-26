@@ -3,9 +3,9 @@
 TarNet_loss
 ===========
 
-Purpose and Description
+Description
 ----------------------------
-The ``TarNet_loss`` function calculates the loss for the TarNet model. Depending on whether the outcomes are categorical (indicated by ``return_probability=True``) or continuous, it computes either a negative log-likelihood loss or a mean squared error loss for the treated and control groups.
+The ``TarNet_loss`` function calculates the loss for the TarNet model.
 
 Arguments
 ---------
