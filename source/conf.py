@@ -84,7 +84,7 @@ extensions = [
 html_context = {
     'display_github': True,
     'github_user': 'gpi-pack',
-    'github_repo': 'gpi_pack.github.io',
+    'github_repo': 'gpi-pack.github.io',
     'github_version': 'main',  # or whatever your default branch is
     'conf_py_path': '/source/'
 }
