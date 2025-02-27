@@ -51,10 +51,10 @@ html_theme_options = {
     'style_external_links': False,
     'style_nav_header_background': '#2980B9',
     # Toc options
-    'collapse_navigation': False,  # Show all sections
+    'collapse_navigation': False,
     'sticky_navigation': True,
     'navigation_depth': 4,
-    'includehidden': False,  # Changed to False to ensure all pages are shown
+    'includehidden': False,
     'titles_only': False,
     # Disable view source link
     'display_github': False,
@@ -82,7 +82,7 @@ extensions = [
 
 # Add these settings for GitHub Pages
 html_context = {
-    'display_github': True,
+    'display_github': False,
     'github_user': 'gpi-pack',
     'github_repo': 'gpi-pack.github.io',
     'github_version': 'main',  # or whatever your default branch is
