@@ -120,5 +120,5 @@ System prompt is a special type of prompt that is used to provide instructions o
         tokenizer = tokenizer,
         model = model,
         #supply the user-specified system prompt
-        task_type = "You are a text generator who always produces a biography of the instructed person" 
+        task_type = "You are a text generator who always produces a biography of the instructed person"
     )

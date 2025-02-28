@@ -20,20 +20,3 @@ You can also install the package directly from `the source <https://github.com/g
    git clone https://github.com/gpi-pack/gpi_pack.git
    cd gpi_pack
    pip install -e .
-
-Requirements
------------
-
-**gpi_pack** requires:
-
-* Python 3.7+
-* numpy
-* scipy
-* matplotlib
-* torch
-* scikit-learn
-* pandas
-* transformers
-* tqdm
-* accelerate
-* patsy

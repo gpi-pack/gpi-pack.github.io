@@ -17,6 +17,7 @@ To address this challenge, `our paper <https://arxiv.org/abs/2410.00903>`_ propo
 .. image:: /_static/images/tarnet.png
    :alt: TarNet architecture
    :width: 600px
+   :align: center
 
 Once the deconfounder and the outcome models are estimated, a propensity score model is built based on the deconfounder. Finally, the estimated outcome models and propensity score model are used together with double machine learning techniques to estimate treatment effects.
 

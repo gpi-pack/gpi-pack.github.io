@@ -10,10 +10,12 @@ GPI: Generative-AI Powered Inference
    <a href="https://pypi.org/project/gpi_pack/">
       <img src="https://img.shields.io/pypi/pyversions/gpi_pack.svg" alt="Python Versions">
    </a>
-   <a href="LICENSE">
-      <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT">
-   </a>
    </p>
+
+.. image:: /_static/images/gpi.png
+   :alt: logo
+   :width: 200px
+   :align: center
 
 **gpi_pack** is a Python library for the statistical inference powered by Generative Artificial Intelligence (AI). It provides a set of tools and utilities for performing statistical inference using the internal representation of the Generative AI models. The library is designed to be easy to use and flexible, allowing users to perform a wide range of statistical analyses.
 
@@ -69,3 +71,16 @@ GPI: Generative-AI Powered Inference
    f_TarNet
    f_TarNetBase
    f_TarNetHyperparameterTuner
+
+How to cite
+---------
+- Imai, Kosuke and Nakamura, Kentaro (2024). Causal Representation Learning with Generative Artificial Intelligence: Application to Texts as Treatments. arXiv preprint arXiv:2410.00903. `[Paper] <https://arxiv.org/abs/2410.00903>`_
+
+.. code-block:: bibtex
+
+   @article{imai2024causal,
+     title={Causal Representation Learning with Generative Artificial Intelligence: Application to Texts as Treatments},
+     author={Imai, Kosuke and Nakamura, Kentaro},
+     journal={arXiv preprint arXiv:2410.00903},
+     year={2024}
+   }

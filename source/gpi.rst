@@ -20,9 +20,5 @@ Contribute to GPI
 ---------
 We welcome your feedback, comments, suggestions, code contributions, and bug reports. You can contribute to GPI by:
 
-- Submitting bug reports and feature requests on `Github Issues <https://github.com/k-nakam/gpi-pack/issues>`_
+- Submitting bug reports and feature requests on `Github Issues <https://github.com/gpi-pack/gpi_pack/issues>`_
 - Emailing the maintainer at `knakamura [at] g.harvard.edu <mailto:knakamura@g.harvard.edu>`_.
-
-References
----------
-- Imai, Kosuke and Nakamura, Kentaro (2024). Causal Representation Learning with Generative Artificial Intelligence: Application to Texts as Treatments. arXiv preprint arXiv:2410.00903. `[Paper] <https://arxiv.org/abs/2410.00903>`_

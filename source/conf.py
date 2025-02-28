@@ -30,8 +30,8 @@ exclude_patterns = []
 html_baseurl = 'https://gpi-pack.github.io/'
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
-html_logo = None  # Add path to your logo if you have one
-html_favicon = None  # Add path to your favicon if you have one
+html_logo = None #"_static/images/gpi.png"  # Path to your logo file
+html_favicon = "_static/images/gpi.png"  # Path to your logo file
 
 # -- HTML theme settings -----------------------------------------------------
 html_show_sourcelink = False  # Disable "View page source" link
