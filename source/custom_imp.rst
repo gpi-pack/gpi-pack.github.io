@@ -18,6 +18,7 @@ TarNet is a neural network architecture we use to learn the deconfounder. TarNet
 .. image:: /_static/images/tarnet.png
    :alt: TarNet architecture
    :width: 600px
+   :align: center
 
 **gpi_pack** provides a class ``TarNet`` that implements the TarNet architecture. You can use this class to estimate the deconfounder and outcome models. Below is an example of how to use the ``TarNet`` class. Note that you need to split the sample into training and test sets before using the ``TarNet`` class.
 
