@@ -5,7 +5,7 @@ Generating Texts without GPU
 In many cases, you do not have access to a GPU, but you still want to use GPI. In such cases, `nnsight <https://nnsight.net/>`_ offers a solution. nnsight is a Python package that allows you to generate texts and extract the internal representations of various open-source LLMs using API. This package is particularly useful for users who want to perform GPI on machines without GPU support.
 
 .. note::
-    nnsight is a third-party package, and it requires an API key to use. See `nnsight documentation </https://nnsight.net/start/>`_ for more details on how to obtain an API key and use the package.
+    nnsight is a third-party package, and it requires an API key to use. See `nnsight documentation <https://nnsight.net/start/>`_ for more details on how to obtain an API key and use the package.
 
 Below, we will show how to use nnsight to generate texts and extract the internal representations of LLMs using `LLaMa3.3-70B-Instruct <https://huggingface.co/meta-llama/Llama-3.3-70B-Instruct>`_.
 
