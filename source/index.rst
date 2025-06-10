@@ -37,6 +37,7 @@ GPI: Generative-AI Powered Inference
 
    gen_llama
    gen_llm
+   gen_nnsight
 
 .. toctree::
    :maxdepth: 2
