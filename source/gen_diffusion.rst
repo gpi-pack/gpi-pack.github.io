@@ -1,5 +1,5 @@
 .. _generate_images:
-Generating Images without Diffusion Models
+Generating Images with Diffusion Models
 ===========
 
 
