@@ -75,7 +75,9 @@ Step 2: Estimate the Treatment Effects
 
 Once the internal representations are loaded, use ``estimate_k_ate`` to estimate the treatment effects:
 
+
 .. code-block:: python
+
     # estimate treatment effects
     ate, se = estimate_k_ate(
         # Data (Inputs)
@@ -90,7 +92,9 @@ Once the internal representations are loaded, use ``estimate_k_ate`` to estimate
         architecture_z = [2048], #deconfounder architecture
     )
 
+
 To compute a 95% confidence interval for the treatment effect estimate, use the following code:
+
 
 .. code-block:: python
 

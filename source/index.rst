@@ -38,12 +38,15 @@ GPI: Generative-AI Powered Inference
    gen_llama
    gen_llm
    gen_nnsight
+   gen_diffusion
 
 .. toctree::
    :maxdepth: 2
    :caption: Basic Operation
 
    tarnet
+   text_as_confounder
+   image_as_treatment
 
 
 .. toctree::
@@ -84,4 +87,15 @@ How to cite
      author={Imai, Kosuke and Nakamura, Kentaro},
      journal={arXiv preprint arXiv:2410.00903},
      year={2024}
+   }
+
+- Imai, Kosuke and Nakamura, Kentaro (2025). GenAI-Powered Inference. arXiv preprint arXiv:2507.03897. `[Paper] <https://arxiv.org/abs/2507.03897>`_
+
+.. code-block:: bibtex
+
+   @article{imai2025genai,
+      title={GenAI-Powered Inference},
+      author={Imai, Kosuke and Nakamura, Kentaro},
+      journal={arXiv preprint arXiv:2507.03897},
+      year={2025}
    }
