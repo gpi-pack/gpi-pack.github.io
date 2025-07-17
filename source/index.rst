@@ -21,7 +21,7 @@ GPI: Generative-AI Powered Inference
 
 .. note::
 
-   We released **gpi_pack** version 0.1.0 on February 27th, 2025. This is the first version of the package, and we currently only support the setting of Text-as-Treatment based on `our paper <https://arxiv.org/abs/2410.00903>`_. We have been working hard to make this package as useful and user-friendly as possible. If you have any feedback or suggestions, please feel free to reach out to `the maintainer <https://k-nakam.github.io/>`_.
+   We released **gpi_pack** version 0.1.1 on July 11th. We currently support (1) Text/Image-as-Confounder and (2) Text/Image-as-Treatment. Please read  `our recent paper <https://arxiv.org/abs/2507.03897>`_ for the application examples. We have been working hard to make this package as useful and user-friendly as possible. If you have any feedback or suggestions, please feel free to reach out to `the maintainer <https://k-nakam.github.io/>`_.
 
 .. toctree::
    :maxdepth: 2
