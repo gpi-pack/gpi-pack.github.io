@@ -1,0 +1,395 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TarNet &mdash; GPI: GenAI-Powered Inference 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=320156fd" />
+
+  
+    <link rel="shortcut icon" href="_static/gpi.png"/>
+    <link rel="canonical" href="https://gpi-pack.github.io/f_TarNet.html" />
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/js/copybutton.js?v=a2f921dd"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="TarNetBase" href="f_TarNetBase.html" />
+    <link rel="prev" title="TarNet_loss" href="f_TarNet_loss.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            GPI: GenAI-Powered Inference
+              <img src="_static/logo_long.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#from-pypi">From PyPI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#from-source">From Source</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gpi.html">What’s GPI?</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gpi.html#generative-ai-powered-inference">Generative-AI Powered Inference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="startgpu.html">How to use GPU</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="startgpu.html#what-s-gpu">What’s GPU?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="startgpu.html#what-if-you-do-not-have-gpu">What if you do not have GPU?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="startgpu.html#id1">Google Colaboratory</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="report.html">Questions and Bug Reports</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Data Generation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="gen_llama.html">Generating Texts with LLaMa3</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gen_llama.html#how-to-use-llama3">How to use LLaMa3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_llama.html#creating-texts">Creating Texts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_llama.html#repeating-texts">Repeating Texts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_llama.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_llama.html#system-prompt">System Prompt</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gen_llm.html">Generating Texts with Other LLMs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gen_llm.html#example-gemma2">Example: Gemma2</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gen_nnsight.html">Generating Texts without GPU</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gen_nnsight.html#nnsight-for-gpi">NNsight for GPI</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gen_diffusion.html">Generating Images with Diffusion Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gen_diffusion.html#what-is-diffusion-model">What is diffusion model?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_diffusion.html#how-to-use-stable-diffusion">How to use Stable Diffusion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_diffusion.html#arguments">Arguments</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Basic Operation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tarnet.html">Text-As-Treatment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tarnet.html#what-is-text-as-treatment">What is Text-As-Treatment?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tarnet.html#how-to-estimate-treatment-effects">How to estimate treatment effects</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tarnet.html#step-1-load-the-internal-representations">Step 1: Load the Internal Representations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tarnet.html#step-2-estimate-the-treatment-effects">Step 2: Estimate the Treatment Effects</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tarnet.html#how-to-control-confounders">How to control confounders</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tarnet.html#method-1-using-a-formula-with-a-dataframe">Method 1: Using a Formula with a DataFrame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tarnet.html#method-2-using-a-design-matrix">Method 2: Using a Design Matrix</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tarnet.html#visualizing-propensity-scores">Visualizing Propensity Scores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tarnet.html#hyperparameters">Hyperparameters</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="text_as_confounder.html">Text-As-Confounder</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="text_as_confounder.html#what-is-text-as-confounder">What is Text-As-Confounder?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="text_as_confounder.html#how-to-estimate-treatment-effects">How to estimate treatment effects</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="image_as_treatment.html">Image-As-Treatment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="image_as_treatment.html#how-to-estimate-treatment-effects">How to estimate treatment effects</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="image_as_treatment.html#step-1-load-the-internal-representations">Step 1: Load the Internal Representations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="image_as_treatment.html#step-2-estimate-the-treatment-effects">Step 2: Estimate the Treatment Effects</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Operations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hyperparameter.html">Hyperparameter Tuning</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hyperparameter.html#automated-hyperparameter-tuning">Automated Hyperparameter Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hyperparameter.html#list-of-hyperparameters">List of Hyperparameters</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="custom_imp.html">Customizing Your Analysis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="custom_imp.html#tarnet">TarNet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="custom_imp.html#propensity-score-model">Propensity Score Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="custom_imp.html#estimation-workflow">Estimation Workflow</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quantization.html">When LLM is too big</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quantization.html#model-quantization">Model Quantization</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="f_dml_score.html">dml_score</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_dml_score.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_dml_score.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_dml_score.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_dml_score.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_estimate_k_ate.html">estimate_k_ate</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ate.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ate.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ate.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ate.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_estimate_psi_split.html">estimate_psi_split</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_psi_split.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_psi_split.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_psi_split.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_psi_split.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_extract_and_save_hiddens.html">extract_and_save_hiddens</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_and_save_hiddens.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_and_save_hiddens.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_and_save_hiddens.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_and_save_hiddens.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_generate_text.html">generate_text</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_generate_text.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_generate_text.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_generate_text.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_generate_text.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_get_instructions.html">get_instruction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_get_instructions.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_get_instructions.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_get_instructions.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_get_instructions.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_load_hiddens.html">load_hiddens</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_load_hiddens.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_load_hiddens.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_load_hiddens.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_load_hiddens.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_save_generated_texts.html">save_generated_texts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_save_generated_texts.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_save_generated_texts.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_save_generated_texts.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_save_generated_texts.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_SpectralNormClassifier.html">SpectralNormClassifier</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_SpectralNormClassifier.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_SpectralNormClassifier.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_SpectralNormClassifier.html#example-usage">Example Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_SpectralNormClassifier.html#methods">Methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="f_SpectralNormClassifier.html#fit">fit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_SpectralNormClassifier.html#predict-proba">predict_proba</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_SpectralNormClassifier.html#predict">predict</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_TarNet_loss.html">TarNet_loss</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNet_loss.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNet_loss.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNet_loss.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNet_loss.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">TarNet</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-usage">Example Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#methods">Methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#fit">fit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#predict">predict</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_TarNetBase.html">TarNetBase</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNetBase.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNetBase.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNetBase.html#example-usage">Example Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNetBase.html#arguments">Arguments:</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_TarNetHyperparameterTuner.html">TarNetHyperparameterTuner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNetHyperparameterTuner.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNetHyperparameterTuner.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNetHyperparameterTuner.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GPI: GenAI-Powered Inference</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">TarNet</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="tarnet">
+<span id="ref-tarnet"></span><h1>TarNet<a class="headerlink" href="#tarnet" title="Link to this heading"></a></h1>
+<section id="description">
+<h2>Description<a class="headerlink" href="#description" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">TarNet</span></code> class is a wrapper for a treatment effect estimation model using a shared representation (deconfounder) and treatment-specific outcome models. It integrates the TarNetBase model, data loading, training, validation, prediction, and evaluation functionality. The class also supports saving and loading model checkpoints.</p>
+</section>
+<section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>epochs</strong> (<em>int</em>, optional): Number of training epochs (default: 200).</p></li>
+<li><p><strong>batch_size</strong> (<em>int</em>, optional): Batch size for training (default: 32).</p></li>
+<li><p><strong>learning_rate</strong> (<em>float</em>, optional): Learning rate for the optimizer (default: 2e-5).</p></li>
+<li><p><strong>architecture_y</strong> (<em>list</em>, optional): Layer sizes for the outcome model (default: [1]).</p></li>
+<li><p><strong>architecture_z</strong> (<em>list</em>, optional): Layer sizes for the shared representation (default: [1024]).</p></li>
+<li><p><strong>dropout</strong> (<em>float</em>, optional): Dropout rate (default: 0.3).</p></li>
+<li><p><strong>step_size</strong> (<em>int</em>, optional): Step size for the learning rate scheduler (default: None).</p></li>
+<li><p><strong>bn</strong> (<em>bool</em>, optional): Whether to use batch normalization (default: False).</p></li>
+<li><p><strong>patience</strong> (<em>int</em>, optional): Number of epochs with no improvement before early stopping (default: 5).</p></li>
+<li><p><strong>min_delta</strong> (<em>float</em>, optional): Minimum improvement threshold for early stopping (default: 0.01).</p></li>
+<li><p><strong>model_dir</strong> (<em>str</em>, optional): Directory to save model checkpoints (default: None).</p></li>
+<li><p><strong>return_probablity</strong> (<em>bool</em>, optional): If True, model outputs probabilities (default: False).</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>, optional): If True, prints additional information during training (default: True).</p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="example-usage">
+<h2>Example Usage<a class="headerlink" href="#example-usage" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">TarNet</span><span class="w"> </span><span class="kn">import</span> <span class="n">TarNet</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">TarNet</span><span class="p">(</span>
+    <span class="n">epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+    <span class="n">learning_rate</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">,</span>
+    <span class="n">architecture_y</span><span class="o">=</span><span class="p">[</span><span class="mi">200</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+    <span class="n">architecture_z</span><span class="o">=</span><span class="p">[</span><span class="mi">2048</span><span class="p">],</span>
+    <span class="n">dropout</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+    <span class="n">bn</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">model_dir</span><span class="o">=</span><span class="s2">&quot;./model_checkpoint&quot;</span>
+<span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">valid_perc</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">plot_loss</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">y0_preds</span><span class="p">,</span> <span class="n">y1_preds</span><span class="p">,</span> <span class="n">frs</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">R</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Link to this heading"></a></h2>
+<section id="fit">
+<h3>fit<a class="headerlink" href="#fit" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>Purpose and Description:</dt><dd><p>Trains the TarNet model using internal representations (R), outcomes (Y), and treatment indicators (T). It performs a train/validation split, trains the model with early stopping and optional learning rate scheduling, and optionally plots the training and validation loss curves.</p>
+</dd>
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p><strong>R</strong> (<em>np.ndarray</em> or <em>torch.Tensor</em>): Internal representations for all samples.</p></li>
+<li><p><strong>Y</strong> (<em>np.ndarray</em> or <em>torch.Tensor</em>): Outcome values.</p></li>
+<li><p><strong>T</strong> (<em>np.ndarray</em> or <em>torch.Tensor</em>): Treatment indicators.</p></li>
+<li><p><strong>valid_perc</strong> (<em>float</em>, optional): Fraction of the data used for validation.</p></li>
+<li><p><strong>plot_loss</strong> (<em>bool</em>, optional): If True, plots the loss curves (default: True).</p></li>
+</ul>
+</dd>
+</dl>
+<p>Example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">TarNet</span><span class="p">(</span><span class="n">epochs</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">valid_perc</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">plot_loss</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="predict">
+<h3>predict<a class="headerlink" href="#predict" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>Purpose and Description:</dt><dd><p>Processes internal representation data in batches and returns predictions. It outputs the predicted outcomes for the control (T=0) and treated (T=1) groups, as well as the latent representation extracted by the model.</p>
+</dd>
+<dt>Arguments:</dt><dd><ul class="simple">
+<li><p><strong>r</strong> (<em>np.ndarray</em> or <em>torch.Tensor</em>): Internal representation data for prediction.</p></li>
+</ul>
+</dd>
+<dt>Returns:</dt><dd><ul class="simple">
+<li><p><strong>y0_preds</strong> (<em>torch.Tensor</em>): Predicted outcomes for the control group.</p></li>
+<li><p><strong>y1_preds</strong> (<em>torch.Tensor</em>): Predicted outcomes for the treated group.</p></li>
+<li><p><strong>frs</strong> (<em>torch.Tensor</em>): Deconfounder extracted by the model.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">y0</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">fr</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">R</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Control predictions:&quot;</span><span class="p">,</span> <span class="n">y0</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Treated predictions:&quot;</span><span class="p">,</span> <span class="n">y1</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="f_TarNet_loss.html" class="btn btn-neutral float-left" title="TarNet_loss" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="f_TarNetBase.html" class="btn btn-neutral float-right" title="TarNetBase" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Kentaro Nakamura, Kosuke Imai.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
