@@ -30,6 +30,7 @@ GPI: Generative-AI Powered Inference
    installation
    gpi
    startgpu
+   report
 
 .. toctree::
    :maxdepth: 2
