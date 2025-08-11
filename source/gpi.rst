@@ -15,10 +15,3 @@ The GPI procedure consists of two main steps:
 In some cases, an additional step — **Representation Learning** — is necessary. Unstructured objects often contain a multitude of complex features, and it may be essential to extract the specific variable of interest from the internal representation. For example, in a Text-as-Treatment scenario where survey participants are randomly assigned various texts to infer the causal effect of a particular feature, other features within the texts may act as confounders. Controlling for the entire internal representation directly could lead to an overlap violation. Therefore, it is crucial to learn a representation of the confounding features, thereby preserving the positivity assumption.
 
 This package implements the entire GPI procedure, including generating internal representations, conducting statistical inference, and performing representation learning. It is designed to be user-friendly and accessible to researchers and practitioners across various disciplines.
-
-Contribute to GPI
----------
-We welcome your feedback, comments, suggestions, code contributions, and bug reports. You can contribute to GPI by:
-
-- Submitting bug reports and feature requests on `Github Issues <https://github.com/gpi-pack/gpi_pack/issues>`_
-- Emailing the maintainer at `knakamura [at] g.harvard.edu <mailto:knakamura@g.harvard.edu>`_.
