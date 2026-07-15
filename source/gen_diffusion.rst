@@ -9,21 +9,6 @@ implementation uses the component layout of Stable Diffusion 1.x and 2.x: one
 VAE, one CLIP tokenizer and text encoder, a conditional UNet, and a DDIM
 scheduler.
 
-.. warning::
-
-   The current extractor does not implement the dual text encoders and added
-   UNet conditioning required by Stable Diffusion XL, or the transformer
-   architectures used by Stable Diffusion 3 and 3.5. A checkpoint must provide
-   compatible ``vae``, ``tokenizer``, ``text_encoder``, ``unet``, and
-   ``scheduler`` subfolders. It is not sufficient for a checkpoint merely to
-   be loadable by some Diffusers pipeline.
-
-.. warning::
-
-   This custom extractor does not load or run the safety checker used by the
-   official Stable Diffusion pipeline. Review the checkpoint license, model
-   card, and output-handling requirements before using generated images.
-
 How the Image Representation Is Constructed
 --------------------------------------------
 
