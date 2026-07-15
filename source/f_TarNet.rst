@@ -1,88 +1,69 @@
 .. _ref_TarNet:
 
 TarNet
-===========
+======
 
 Description
-----------------------------
-The ``TarNet`` class is a wrapper for a treatment effect estimation model using a shared representation (deconfounder) and treatment-specific outcome models. It integrates the TarNetBase model, data loading, training, validation, prediction, and evaluation functionality. The class also supports saving and loading model checkpoints.
+-----------
+
+The ``TarNet`` class is a training wrapper around :ref:`ref_TarNetBase`. It creates training and validation loaders, performs early stopping, optionally saves the best model state, and predicts outcomes and learned representations for user-supplied treatment values.
 
 Parameters
--------
-  - **epochs** (*int*, optional): Number of training epochs (default: 200).
-  - **batch_size** (*int*, optional): Batch size for training (default: 32).
-  - **learning_rate** (*float*, optional): Learning rate for the optimizer (default: 2e-5).
-  - **architecture_y** (*list*, optional): Layer sizes for the outcome model (default: [1]).
-  - **architecture_z** (*list*, optional): Layer sizes for the shared representation (default: [1024]).
-  - **dropout** (*float*, optional): Dropout rate (default: 0.3).
-  - **step_size** (*int*, optional): Step size for the learning rate scheduler (default: None).
-  - **bn** (*bool*, optional): Whether to use batch normalization (default: False).
-  - **patience** (*int*, optional): Number of epochs with no improvement before early stopping (default: 5).
-  - **min_delta** (*float*, optional): Minimum improvement threshold for early stopping (default: 0.01).
-  - **model_dir** (*str*, optional): Directory to save model checkpoints (default: None).
-  - **return_probablity** (*bool*, optional): If True, model outputs probabilities (default: False).
-  - **verbose** (*bool*, optional): If True, prints additional information during training (default: True).
+----------
+
+- ``epochs`` (*int*, optional): maximum training epochs. The default is 200.
+- ``batch_size`` (*int*, optional): batch size. The default is 32.
+- ``learning_rate`` (*float*, optional): AdamW learning rate. The default is ``2e-5``.
+- ``architecture_y`` (*list of int*, optional): outcome-network widths. The default is ``[1]``.
+- ``architecture_z`` (*list of int*, optional): representation-network widths. The default is ``[1024]``.
+- ``conv_layers`` (*list of dict*, optional): optional convolutional front-end specifications for image-shaped inputs.
+- ``conv_activation`` (*callable*, optional): convolutional activation factory. The default is ``torch.nn.ReLU``.
+- ``dropout`` (*float*, optional): dropout probability. The default is 0.3.
+- ``step_size`` (*int*, optional): reduce-on-plateau scheduler patience. ``None`` disables the scheduler.
+- ``bn`` (*bool*, optional): whether to use batch normalization. The default is ``False``.
+- ``patience`` (*int*, optional): early-stopping patience. The default is 5.
+- ``min_delta`` (*float*, optional): required validation-loss improvement. The default is 0.01.
+- ``model_dir`` (*str*, optional): directory where the best state is saved as ``best_TarNet.pth``.
+- ``verbose`` (*bool*, optional): whether to print progress. The default is ``True``.
+- ``random_state`` (*int*, optional): split and training seed. The default is 42.
 
 Example Usage
--------
+-------------
 
 .. code-block:: python
 
-    from TarNet import TarNet
+   import numpy as np
+   from gpi_pack.TarNet import TarNet
 
-    model = TarNet(
-        epochs=100,
-        batch_size=32,
-        learning_rate=1e-4,
-        architecture_y=[200, 1],
-        architecture_z=[2048],
-        dropout=0.2,
-        bn=True,
-        model_dir="./model_checkpoint"
-    )
-    model.fit(R, Y, T, valid_perc=0.2, plot_loss=True)
-    y0_preds, y1_preds, frs = model.predict(R)
+   model = TarNet(
+       architecture_y=[200, 1],
+       architecture_z=[2048],
+       epochs=100,
+   )
+   best_loss = model.fit(R, Y, T, valid_perc=0.2)
+
+   y0, representation = model.predict(R, t=np.zeros(len(R)))
+   y1, _ = model.predict(R, t=np.ones(len(R)))
 
 Methods
 -------
 
+create_dataloaders
+^^^^^^^^^^^^^^^^^^
+
+``create_dataloaders(r_train, r_test, y_train, y_test, t_train, t_test, c_train=None, c_test=None)`` converts NumPy arrays when necessary and stores the training and validation loaders.
+
 fit
 ^^^
-Purpose and Description:
-  Trains the TarNet model using internal representations (R), outcomes (Y), and treatment indicators (T). It performs a train/validation split, trains the model with early stopping and optional learning rate scheduling, and optionally plots the training and validation loss curves.
 
-Arguments:
-  - **R** (*np.ndarray* or *torch.Tensor*): Internal representations for all samples.
-  - **Y** (*np.ndarray* or *torch.Tensor*): Outcome values.
-  - **T** (*np.ndarray* or *torch.Tensor*): Treatment indicators.
-  - **valid_perc** (*float*, optional): Fraction of the data used for validation.
-  - **plot_loss** (*bool*, optional): If True, plots the loss curves (default: True).
+``fit(R, Y, T, C=None, valid_perc=0.2, plot_loss=True, epoch_callback=None)`` trains the model with an internal validation split and returns the best validation loss as a float. ``epoch_callback`` is a keyword-only hook used by the tuner.
 
-Example:
+validate_step
+^^^^^^^^^^^^^
 
-.. code-block:: python
-
-    model = TarNet(epochs=50)
-    model.fit(R, Y, T, valid_perc=0.2, plot_loss=True)
-
+``validate_step(use_confounder=False)`` calculates validation MSE and returns a scalar tensor.
 
 predict
 ^^^^^^^
-Purpose and Description:
-  Processes internal representation data in batches and returns predictions. It outputs the predicted outcomes for the control (T=0) and treated (T=1) groups, as well as the latent representation extracted by the model.
 
-Arguments:
-  - **r** (*np.ndarray* or *torch.Tensor*): Internal representation data for prediction.
-
-Returns:
-  - **y0_preds** (*torch.Tensor*): Predicted outcomes for the control group.
-  - **y1_preds** (*torch.Tensor*): Predicted outcomes for the treated group.
-  - **frs** (*torch.Tensor*): Deconfounder extracted by the model.
-
-Example:
-
-.. code-block:: python
-
-    y0, y1, fr = model.predict(R)
-    print("Control predictions:", y0)
-    print("Treated predictions:", y1)
+``predict(r, t, c=None, grad_required=False)`` predicts the outcome for the supplied treatment value and returns ``(y_preds, frs)``. ``y_preds`` has shape ``[N, architecture_y[-1]]``; without additional confounders, ``frs`` has shape ``[N, architecture_z[-1]]``. To obtain both potential outcomes, call the method once with an all-zero treatment vector and once with an all-one treatment vector, as in the example above.

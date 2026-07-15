@@ -20,7 +20,7 @@ Returns
 - **instruction** (*str*): The instruction string corresponding to the provided task type.
 
 Example Usage
--------
+-------------
 .. code-block:: python
 
     from gpi_pack.llm import get_instruction
@@ -29,4 +29,3 @@ Example Usage
     instruction = get_instruction("create")
     print(instruction)
     # Output: "You are a text generator who always produces the texts suggested by the prompts."
-

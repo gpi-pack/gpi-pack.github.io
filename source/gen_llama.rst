@@ -103,7 +103,7 @@ The function ``extract_and_save_hidden_states`` has the following arguments.
 - ``prefix_hidden``: prefix of the hidden states files. The default is ``hidden_``.
 - ``tokenizer_config``: configuration of tokenizer (optional)
 - ``model_config``: configuration of model (optional)
-- ``pooling``: pooling method to extract the internal representation. The default is "last". You can also use "mean" or "max".
+- ``pooling``: pooling method to extract the internal representation. The default is "last". You can also use "mean".
 
 System Prompt
 ---------

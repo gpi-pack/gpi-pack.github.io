@@ -1,66 +1,64 @@
 .. _ref_TarNetHyperparameterTuner:
 
 TarNetHyperparameterTuner
-===========
+=========================
 
 Description
--------
+-----------
 
-The ``TarNetHyperparameterTuner`` class is used for hyperparameter tuning of the TarNet model. It leverages a hyperparameter optimization framework (e.g., Optuna) to explore different model configurations and determine the best set of hyperparameters based on validation loss.
+The ``TarNetHyperparameterTuner`` class uses Optuna to tune the static TarNet outcome model. It minimizes the best held-out factual-outcome MSE reached by each trial and can refit the best configuration.
 
-Arguments
--------
+Parameters
+----------
 
-  - **T**: Treatment variables.
-  - **Y**: Outcome variables.
-  - **R**: Internal representations.
-  - **epoch** (*list of str*, optional): Epoch options as strings (default: ["100", "200"]).
-  - **batch_size** (*int*, optional): Batch size for tuning (default: 64).
-  - **valid_perc** (*float*, optional): Fraction of data for validation (default: 0.2).
-  - **learning_rate** (*list of float*, optional): Range of learning rates (default: [1e-4, 1e-5]).
-  - **dropout** (*list of float*, optional): Range of dropout rates (default: [0.1, 0.2]).
-  - **step_size** (*list of int*, optional): List of step sizes (default: [5, 10]).
-  - **architecture_y** (*list of list of str*, optional): Outcome model architecture options (default: ["[1]"]).
-  - **architecture_z** (*list of list of str*, optional): Deconfounder architecture options (default: ["[1024]", "[2048]", "[4096]"]).
-  - **bn** (*list of bool*, optional): Options for batch normalization (default: [True, False]).
-  - **patience_min** (*int*, optional): Minimum patience value (default: 5).
-  - **patience_max** (*int*, optional): Maximum patience value (default: 20).
+- ``T``, ``Y``, and ``R``: treatment, outcome, and representation arrays (**required**).
+- ``C`` (*array-like*, optional): observed confounder matrix.
+- ``formula_C`` (*str*, optional): Patsy formula used with ``data`` to construct confounders. Supply either ``C`` or ``formula_C``.
+- ``data`` (*pandas.DataFrame*, optional): data used by ``formula_C``.
+- ``epoch`` (*value or sequence*, optional): epoch candidates. The default is ``(100, 200)``.
+- ``batch_size`` (*value or sequence*, optional): batch-size candidates. The default is 64.
+- ``valid_perc`` (*float*, optional): validation fraction. The default is 0.2.
+- ``learning_rate`` (*value or sequence*, optional): fixed value or continuous lower and upper search bounds. The default bounds are ``(1e-5, 1e-4)``.
+- ``dropout`` (*value or sequence*, optional): fixed value or continuous lower and upper search bounds. The default bounds are ``(0.1, 0.2)``.
+- ``step_size`` (*value or sequence*, optional): scheduler-patience candidates. The default is ``(None,)``.
+- ``architecture_y`` (*sequence of architectures*, optional): outcome-network candidates. The default is ``((1,),)``.
+- ``architecture_z`` (*sequence of architectures*, optional): representation-network candidates. The default is ``((1024,), (2048,), (4096,))``.
+- ``conv_layers`` (*list of dict*, optional): fixed convolutional front-end configuration.
+- ``conv_activation`` (*callable*, optional): convolutional activation factory. The default is ``torch.nn.ReLU``.
+- ``bn`` (*value or sequence*, optional): batch-normalization candidates. The default is ``(False,)``.
+- ``patience_min`` and ``patience_max`` (*int*, optional): inclusive early-stopping patience bounds. The defaults are 5 and 20.
+- ``model_dir`` (*str*, optional): checkpoint directory used when refitting.
+- ``random_state`` (*int*, optional): seed. The default is 42.
+- ``verbose`` (*bool*, optional): whether to print model progress. The default is ``False``.
+
+Native Python values and architectures are preferred. Legacy strings such as ``"100"`` and ``"[200, 1]"`` remain accepted.
 
 Example Usage
--------
+-------------
 
 .. code-block:: python
 
-    from gpi_pack.TarNet import TarNetHyperparameterTuner
-    import optuna
+   from gpi_pack.TarNet import TarNetHyperparameterTuner
 
-    # Load data and set hyperparameters
-    obj = TarNetHyperparameterTuner(
-        # Data
-        T = df['TreatmentVar'].values,
-        Y = df['OutcomeVar'].values,
-        R = hidden_states,
+   tuner = TarNetHyperparameterTuner(
+       T=T,
+       Y=Y,
+       R=R,
+       epoch=(100, 200),
+       learning_rate=(1e-5, 1e-4),
+       architecture_y=((200, 1), (100, 1)),
+       architecture_z=((1024,), (2048,)),
+   )
 
-        # Hyperparameters
-        epoch = ["100", "200"], #try either 100 epochs or 200 epochs
-        learning_rate = [1e-4, 1e-5], #draw learning rate in the range (1e-4, 1e-5)
-        dropout = [0.1, 0.2], #draw dropout rate in the range (1e-4, 1e-5)
+   study = tuner.tune(n_trials=100, refit=True)
+   print(tuner.best_params_)
+   best_model = tuner.best_model_
 
-        # Outcome model architecture:
-        # [100, 1] means that the deconfounder is passed to the intermediate layer with size 100,
-        # and then it passes to the output layer with size 1.
-        architecture_y = ["[200, 1]", "[100,1]"], #either [200, 1] or [100, 1] (size of layers)
+Methods
+-------
 
-        #Deconfounder model architecture:
-        # [1024] means that the input (hidden states) is passed to the intermediate layer with size 1024.
-        # The size of last layer (last number in the list) corresponds to the dimension of the deconfounder.
-        architecture_z = ["[1024]", "[2048]"] #either [1024] or [2048]
-    )
+- ``objective(trial)`` samples one configuration, trains it on the fixed split, and returns its best validation loss.
+- ``tune(n_trials=50, timeout=None, study=None, sampler=None, pruner=None, n_jobs=1, refit=False, **optimize_kwargs)`` creates or uses a minimizing Optuna study, runs optimization, optionally refits, and returns the study.
+- ``fit_best(study=None)`` fits and returns a :ref:`ref_TarNet` with the best resolved parameters.
 
-    # Hyperparameter tuning with Optuna
-    study = optuna.create_study(direction='minimize')
-    study.optimize(obj.objective, n_trials=100) #runs 100 trials to seek the best hyperparameter
-
-    #Print the best hyperparameters
-    print("Best hyperparameters: ", study.best_params)
-
+Install the optional dependency with ``pip install "gpi_pack[tune]"``. For causal estimation, tune on an independent sample or within each outer training fold when possible.

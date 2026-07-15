@@ -1,7 +1,7 @@
 .. _ref_SpectralNormClassifier:
 
 SpectralNormClassifier
-===========
+======================
 
 Description
 -------------------------
@@ -16,7 +16,7 @@ Parameters
 - **dropout** (*float*, optional): Dropout probability for each layer. If ``0.0``, no dropout is applied. Defaults to ``0.0``.
 - **batch_norm** (*bool*, optional): Whether to add a batch normalization layer after each linear layer. Defaults to ``False``.
 - **lr** (*float*, optional): Learning rate for the Adam optimizer. Defaults to ``2e-6``.
-- **nepoch** (*int*, optional): Maximum number of training epochs. Defaults to ``20``.
+- **nepoch** (*int*, optional): Maximum number of training epochs. Defaults to ``200``.
 - **batch_size** (*int*, optional): Batch size used during training. Defaults to ``32``.
 - **patience** (*int*, optional): Patience (in epochs) for early stopping on the validation set. Defaults to ``5``.
 - **min_delta** (*float*, optional): Minimum improvement in validation loss required to reset patience. Defaults to ``1e-4``.
@@ -49,6 +49,17 @@ Example Usage
 Methods
 -------
 
+forward
+^^^^^^^
+Purpose and Description:
+  Applies the spectrally normalized network to an input tensor and returns one logit for every class.
+
+Arguments:
+  - **x** (*torch.Tensor*): Input tensor with shape ``[batch_size, input_dim]``.
+
+Returns:
+  - **logits** (*torch.Tensor*): Tensor with shape ``[batch_size, num_classes]``.
+
 fit
 ^^^
 Purpose and Description:
@@ -57,6 +68,9 @@ Purpose and Description:
 Arguments:
   - **X** (*np.ndarray*): Input data of shape [n_samples, input_dim].
   - **y** (*np.ndarray*): Target class labels of shape [n_samples] (values in [0, num_classes-1]).
+
+Returns:
+  - **None**: The method updates the model in place.
 
 Example:
 

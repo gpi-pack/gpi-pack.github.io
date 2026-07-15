@@ -1,7 +1,7 @@
 .. _ref_ImageAsTreatment:
 
 Image-As-Treatment
-===========
+==================
 
 Our framework **gpi_pack** also supports other modalities than texts, such as images. In this section, we describe how to use **gpi_pack** for image data, specifically focusing on the Image-as-Treatment setting. This setting is useful when you are interested in estimating the treatment effects of some image features while controlling the other confounding features. While image data has a unique characteristic, most of the estimation procedures are similar to Text-as-Treatment setting. Below, we describe how to use **gpi_pack** for Image-as-Treatment setting.
 
@@ -10,11 +10,11 @@ Our framework **gpi_pack** also supports other modalities than texts, such as im
 
 
 How to estimate treatment effects
----------
+---------------------------------
 
 **gpi_pack** offers the wrapper function ``estimate_k_ate`` to streamline the estimation of treatment effects using generative models' internal representations. This function handles all the necessary steps, including deconfounder estimation and propensity score estimation, so you only need to provide the data.
 
-Suppose you have a DataFrame ``df`` containing the treatment variable, outcome variable, and texts, and you have already extracted the internal representations of the LLMs (saved as .pt files). Below is an example demonstrating how to use ``estimate_k_ate`` .
+Suppose you have a DataFrame ``df`` containing the treatment variable, outcome variable, and image IDs, and you have already extracted the internal representations of an image model (saved as ``.pt`` files). Below is an example demonstrating how to use ``estimate_k_ate``.
 
 .. code-block:: python
 
@@ -40,7 +40,7 @@ First, load the internal representations using the ``load_hiddens`` function:
     from gpi_pack.TarNet import estimate_k_ate, load_hiddens
 
     # load hidden states stored as .pt files
-    hidden_dir = <YOUR-DIRECTORY> # directory containing hidden states (e.g., "hidden_last_1.pt" for text indexed 1)
+    hidden_dir = <YOUR-DIRECTORY> # directory containing hidden states (e.g., "hidden_1.pt" for image indexed 1)
 
     hidden_states = load_hiddens(
         directory = hidden_dir,
@@ -52,15 +52,49 @@ First, load the internal representations using the ``load_hiddens`` function:
 
     If you have not extracted internal representation, please refer to the section :ref:`generate_images`.
 
-Note that in the case of images, the internal representations are typically not 1-dimensional like texts, so you need to flatten the internal representations before passing them to the ``estimate_k_ate`` function.
+Unlike text representations, image representations often retain spatial dimensions. **gpi_pack** provides two ways to use them. You can flatten each representation and use the default feed-forward network, or preserve the spatial structure and add a convolutional neural network (CNN).
+
+
+Using Flattened Representations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The simplest approach is to flatten each image representation before passing it to the ``estimate_k_ate`` function.
 
 .. code-block:: python
 
     # flatten the hidden states
-    hidden_states = [state.flatten() for state in hidden_states]
+    hidden_states_flat = hidden_states.reshape(hidden_states.shape[0], -1)
 
-    # convert to numpy array
-    hidden_states = np.array(hidden_states)
+
+Using a Convolutional Neural Network
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A CNN can be useful when the location of features within the image representation is important. Instead of flattening the representations in advance, the CNN learns local spatial patterns before passing its output to the deconfounder and outcome networks.
+
+For this approach, ``hidden_states`` must have the shape ``(N, C, H, W)``, where ``N`` is the number of observations, ``C`` is the number of channels, and ``H`` and ``W`` are the height and width. Then, define the convolutional layers as follows:
+
+.. code-block:: python
+
+    # keep the spatial structure of the image representations
+    assert hidden_states.ndim == 4
+
+    conv_layers = [
+        {
+            "in_channels": hidden_states.shape[1],
+            "out_channels": 32,
+            "kernel_size": 3,
+            "padding": 1,
+            "pool": {"type": "max", "kernel_size": 2},
+        },
+        {
+            "out_channels": 64,
+            "kernel_size": 3,
+            "padding": 1,
+            "pool": {"type": "max", "kernel_size": 2},
+        },
+    ]
+
+The first layer must specify ``in_channels``. Each layer must specify ``out_channels`` and can also include standard ``torch.nn.Conv2d`` options, such as ``kernel_size``, ``stride``, and ``padding``. The optional ``pool`` dictionary adds max pooling; set ``"type": "avg"`` to use average pooling. By default, **gpi_pack** applies a ReLU activation after each convolutional layer and flattens the final feature maps internally.
 
 
 
@@ -74,7 +108,7 @@ Once the internal representations are loaded, use ``estimate_k_ate`` to estimate
     # estimate treatment effects
     ate, se = estimate_k_ate(
         # Data (Inputs)
-        R= hidden_states,
+        R= hidden_states_flat,
         Y= df['OutcomeVar'].values,
         T= df['TreatmentVar'].values,
 
@@ -84,6 +118,30 @@ Once the internal representations are loaded, use ``estimate_k_ate`` to estimate
         architecture_y = [200, 1], #outcome model architecture
         architecture_z = [2048], #deconfounder architecture
     )
+
+
+To use the CNN defined above, pass the unflattened image representations and ``conv_layers`` to the same function:
+
+.. code-block:: python
+
+    # estimate treatment effects using a CNN
+    ate, se = estimate_k_ate(
+        # Data (Inputs)
+        R=hidden_states,
+        Y=df['OutcomeVar'].values,
+        T=df['TreatmentVar'].values,
+
+        # CNN and other hyperparameters (optional)
+        conv_layers=conv_layers,
+        K=2,
+        lr=2e-5,
+        architecture_y=[200, 1],
+        architecture_z=[2048],
+    )
+
+.. note::
+
+    All image representations in ``R`` must have the same shape. The CNN configuration is a hyperparameter choice, so you should adjust the number of layers, channels, and pooling operations for the size of your representations and validate the choices on held-out data.
 
 
 To compute a 95% confidence interval for the treatment effect estimate, use the following code:
@@ -98,4 +156,4 @@ To compute a 95% confidence interval for the treatment effect estimate, use the 
     # ATE: 0.5, SE: 0.1, 95% CI: (0.3, 0.7)
 
 
-For more details on the arguments of ``estimate_k_ate``, please refer to :ref:`ref_TextAsTreatment`
+For more details on the arguments of ``estimate_k_ate``, please refer to :ref:`ref_estimate_k_ate`.

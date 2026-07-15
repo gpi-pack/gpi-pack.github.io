@@ -4,31 +4,40 @@ TarNetBase
 ===========
 
 Description
--------------------------
-The ``TarNetBase`` class implements the core neural network architecture used for treatment effect estimation. It consists of a shared representation network (deconfounder) and two outcome prediction networks—one for the untreated (control) and one for the treated group. The network supports optional dropout and batch normalization. The forward pass computes a latent representation from input data and then generates predictions for both treatment scenarios. Optionally, if ``return_prob`` is set to ``True``, the network applies a softmax activation to return predicted probabilities.
+-----------
+
+The ``TarNetBase`` class implements the neural architecture used for static treatment-effect estimation. It learns a shared representation from the input, optionally appends observed confounders, concatenates the requested treatment value, and predicts the corresponding outcome with one treatment-conditioned outcome network. An optional convolutional front end supports image-shaped inputs.
 
 Parameters
 ----------
-- **sizes_z** (*tuple*, optional): Sizes of the hidden layers for the shared representation model (deconfounder). Default is ``[2048]``.
-- **sizes_y** (*tuple*, optional): Sizes of the hidden layers for the outcome prediction models (for both treated and control groups). Default is ``[200, 1]``.
-- **dropout** (*float*, optional): Dropout rate applied to hidden layers. If not provided (``None``), dropout is not applied.
-- **bn** (*bool*, optional): Whether to use batch normalization after each linear layer. Defaults to ``False``.
-- **return_prob** (*bool*, optional): If ``True``, the model returns predicted probabilities (via softmax) for the outcomes; otherwise, raw outputs are returned. Defaults to ``False``.
+
+- ``sizes_z`` (*sequence of int*, optional): layer widths of the shared representation network. The default is ``[2048]``.
+- ``sizes_y`` (*sequence of int*, optional): layer widths of the outcome network. The default is ``[200, 1]``.
+- ``dropout`` (*float*, optional): dropout probability. The default is ``None``.
+- ``bn`` (*bool*, optional): whether to use batch normalization. The default is ``False``.
+- ``conv_layers`` (*list of dict*, optional): convolutional layer specifications applied before the shared representation. The first entry must include ``in_channels``; each entry includes ``out_channels`` and can include standard ``Conv2d`` options, ``spectral_norm``, and a pooling specification.
+- ``conv_activation`` (*callable*, optional): activation factory for convolutional blocks. The default is ``torch.nn.ReLU``.
+
+forward
+-------
+
+``forward(inputs, treatments, confounders=None)`` returns ``(y, fr)``. ``y`` has shape ``[B, sizes_y[-1]]`` and contains the outcome prediction under each supplied treatment value. Without additional confounders, ``fr`` has shape ``[B, sizes_z[-1]]``; supplied confounders are appended to its last dimension.
 
 Example Usage
 -------------
+
 .. code-block:: python
 
-    from TNutil import TarNetBase
+   import torch
+   from gpi_pack.TNutil import TarNetBase
 
-    # Initialize the TarNetBase model with custom parameters.
-    model = TarNetBase(sizes_z=[2048], sizes_y=[200, 1], dropout=0.3, bn=True, return_prob=False)
+   model = TarNetBase(
+       sizes_z=[2048],
+       sizes_y=[200, 1],
+       dropout=0.2,
+   )
 
-
-Arguments:
--------
-  - **sizes_z** (*tuple*, optional): Hidden layer sizes for deconfounder. Default: ``[2048]``.
-  - **sizes_y** (*tuple*, optional): Hidden layer sizes for the outcome models. Default: ``[200, 1]``.
-  - **dropout** (*float*, optional): Dropout rate to use (default: ``None``).
-  - **bn** (*bool*, optional): Flag to enable batch normalization (default: ``False``).
-  - **return_prob** (*bool*, optional): Flag to determine whether to return probabilities (default: ``False``).
+   y_pred, representation = model(
+       inputs=torch.randn(16, 4096),
+       treatments=torch.zeros(16, 1),
+   )

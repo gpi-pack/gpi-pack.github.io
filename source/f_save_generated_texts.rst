@@ -1,7 +1,7 @@
 .. _ref_save_generated_texts:
 
 save_generated_texts
-===========
+====================
 
 Description
 ----------------------------
@@ -18,7 +18,7 @@ Returns
 - **None**: Saves the texts to a file named ``<save_name>.pkl`` and does not return a value.
 
 Example Usage
--------
+-------------
 .. code-block:: python
 
     from gpi_pack.llm import save_generated_texts

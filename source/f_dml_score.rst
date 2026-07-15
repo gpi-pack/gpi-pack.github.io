@@ -20,7 +20,7 @@ Returns
 - **psi** (*np.ndarray*): The computed influence function for the ATE.
 
 Example Usage
--------
+-------------
 .. code-block:: python
 
     from gpi_pack.TNutil import dml_score
