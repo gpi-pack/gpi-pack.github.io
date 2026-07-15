@@ -1,119 +1,140 @@
 Generating Texts with Other LLMs
-===========
+=================================
+
+The high-level ``extract_and_save_hidden_states`` function currently reshapes
+representations to width 4096. A checkpoint with another hidden width therefore
+requires a small manual generation loop. This page uses the open-weight
+`Gemma-2-2B instruction-tuned checkpoint
+<https://huggingface.co/google/gemma-2-2b-it>`_ as an example.
+
+The same pattern can be adapted to another Transformers causal language model,
+but first check its model card for access conditions, chat-template roles,
+precision, and generation requirements. A model having
+``output_hidden_states`` does not by itself guarantee the same statistical
+meaning as another model's representation, so keep the checkpoint and
+extraction rule fixed across observations.
+
+Loading Gemma 2
+---------------
+
+Accept the Gemma usage license on Hugging Face before loading the files. The
+following example lets Transformers choose the checkpoint's configured
+precision and distribute the model over available devices:
+
+.. code-block:: python
+
+   from transformers import AutoModelForCausalLM, AutoTokenizer
+
+   checkpoint = "google/gemma-2-2b-it"
+   tokenizer = AutoTokenizer.from_pretrained(checkpoint)
+   model = AutoModelForCausalLM.from_pretrained(
+       checkpoint,
+       device_map="auto",
+       torch_dtype="auto",
+   )
+
+Gemma's instruction chat template uses ``user`` and ``model`` roles rather
+than a separate ``system`` role. The example therefore places the task
+instruction and observation-specific prompt in one user message.
+
+Generating and Saving Representations
+--------------------------------------
+
+Process prompts separately so that the generation for one observation cannot
+depend on other observations in the same batch:
+
+.. code-block:: python
+
+   from pathlib import Path
+
+   import pandas as pd
+   import torch
+
+   prompts = [
+       "Create a biography of an American politician named Nathaniel C. Gilchrist",
+       "Create a biography of an American politician named John Doe",
+       "Create a biography of an American politician named Jane Smith",
+   ]
+   instruction = (
+       "Create the text requested below. Return only the requested text."
+   )
+
+   save_hidden = Path("outputs/gemma_hidden")
+   save_hidden.mkdir(parents=True, exist_ok=True)
+   generated_texts = []
+
+   for k, prompt in enumerate(prompts):
+       messages = [
+           {
+               "role": "user",
+               "content": f"{instruction}\n\n{prompt}",
+           }
+       ]
+       inputs = tokenizer.apply_chat_template(
+           messages,
+           add_generation_prompt=True,
+           tokenize=True,
+           return_dict=True,
+           return_tensors="pt",
+       ).to(model.device)
+
+       with torch.inference_mode():
+           outputs = model.generate(
+               **inputs,
+               max_new_tokens=256,
+               do_sample=False,
+               num_beams=1,
+               pad_token_id=tokenizer.eos_token_id,
+               output_hidden_states=True,
+               return_dict_in_generate=True,
+           )
+
+       generated_ids = outputs.sequences[
+           0, inputs["input_ids"].shape[-1]:
+       ]
+       generated_texts.append(
+           tokenizer.decode(generated_ids, skip_special_tokens=True)
+       )
+
+       # Last layer, last token position, final generation step.
+       representation = outputs.hidden_states[-1][-1][:, -1, :]
+       torch.save(
+           representation.float().cpu(),
+           save_hidden / f"hidden_{k}.pt",
+       )
+
+   pd.DataFrame({"X": generated_texts, "P": prompts}).to_pickle(
+       "outputs/gemma_generated.pkl"
+   )
+
+``outputs.hidden_states`` is organized first by generation step and then by
+model layer. The expression ``[-1][-1][:, -1, :]`` selects the final step,
+final layer, and final token position while retaining the batch dimension. It
+does not hard-code the hidden width.
+
+Mean Pooling Across Generation Steps
+------------------------------------
+
+To mirror the package's ``pooling="mean"`` rule, replace the representation
+line with:
+
+.. code-block:: python
+
+   generation_steps = outputs.hidden_states[1:]
+   if not generation_steps:
+       raise RuntimeError("Mean pooling requires more than one generation step.")
+
+   representation = torch.stack(
+       [step[-1][:, -1, :] for step in generation_steps]
+   ).mean(dim=0)
+
+The first entry is excluded because it represents the initial forward pass
+over the full prompt. Save the resulting tensor using the same ``float().cpu()``
+conversion shown above.
 
 .. note::
-    For data generation, we recommend users to use GPUs. See :ref:`gpu_usage_section` for how to use GPUs.
 
-Sometimes, you may want to use other LLMs than LLaMa3. While the function ``extract_and_save_hidden_states`` can be compatible with some other LLM by changing the checkpoint, this function is not guaranteed to work with all LLMs. In this section, we will show how to use other LLMs.
-
-Below, we use `Gemma2 <https://huggingface.co/google/gemma-2-2b-it>`_ as an example. Gemma2 is a large language model developed by Google. It is designed to be efficient and effective for a wide range of natural language processing tasks.
-
-.. note::
-    You need to use open-source LLMs to use GPI. You can pick up your favorite LLMs from the list of open-source LLMs, and `Huggingface <https://huggingface.co/>`_ has a list of open-source LLMs for various tasks.
-
-Example: Gemma2
----------
-
-Firstly, you load the LLM and its tokenizer. You can use the following code to load Gemma2.
-
-.. code-block:: python
-
-    # loading required packages
-    from transformers import AutoTokenizer, AutoModelForCausalLM
-    import torch
-
-    ## Specify checkpoint (load Gemma2)
-    checkpoint = 'google/gemma-2-2b-it' #model checkpoint of Gemma2
-
-    ## Load tokenizer and pretrained model
-    tokenizer = AutoTokenizer.from_pretrained(
-        checkpoint,
-    )
-    model = AutoModelForCausalLM.from_pretrained(
-        checkpoint,
-        torch_dtype=torch.bfloat16,
-        device_map="auto",
-    )
-
-Suppose that you have the following list of prompts.
-
-.. code-block:: python
-
-    prompts = [
-        'Create a biography of an American politician named Nathaniel C. Gilchrist',
-        'Create a biography of an American politician named John Doe',
-        'Create a biography of an American politician named Jane Smith',
-        'Create a biography of an American politician named Mary Johnson',
-        'Create a biography of an American politician named Robert Brown',
-    ]
-
-
-You can generate texts and extract the internal representation of Gemma2 using the following code. You need to specify the directory to save the hidden states and the file name to save the generated texts.
-
-.. note::
-    We recommend users to use loop to process each prompt rather than giving the batch of prompts to LLM. This is because LLM may generate responses based on all the prompts in the batch, which can invalidate the independent assumptions of the generated texts.
-
-.. code-block:: python
-
-    # define the system prompt
-    # the system prompt is a text that instructs the LLM to generate texts
-    instruction = "You are a text generator who always produces the texts suggested by the prompts."
-
-    # the generated texts are saved in the list
-    generated_texts = []
-
-    for k, prompt in enumerate(prompts):
-        ######### STEP 1: Generate texts #########
-        ## define the input messages
-        messages = [
-            {"role": "system", "content": instruction},
-            {"role": "user", "content": prompt},
-        ]
-
-        # tokenize the messages
-        # to(model.device): load the tokenized messages onto the device (GPU or CPU) where the model is located
-        # this is necessary to ensure that the model can process the input data
-        input = tokenizer.apply_chat_template(
-            messages,
-            # tokenizers option
-            add_generation_prompt=False,
-            return_dict = True,
-            return_tensors = "pt",
-        ).to(model.device)
-        input_ids = input['input_ids'].to(model.device)
-        attention_mask = input['attention_mask'].to(model.device)
-
-        outputs = model.generate(
-            input_ids,
-            attention_mask=attention_mask,
-            # generation options
-            max_new_tokens=512, # maximum number of tokens to generate
-
-            # For deterministic decoding
-            do_sample=False,
-            top_p = None,
-            temperature = None,
-
-            # Padding Token (depends on the model)
-            pad_token_id=tokenizer.eos_token_id,
-
-            # For extracting the internal representation
-            output_hidden_states=True,
-            return_dict_in_generate=True,
-        )
-
-        # Save Texts
-        response = outputs.sequences[0][input_ids.shape[-1]:]
-        text = tokenizer.decode(response, skip_special_tokens=True)
-        generated_texts.append(text)
-
-        ######### STEP 2: Extract Hidden States #########
-        hidden_all = outputs.hidden_states[-1][-1].flatten()
-        torch.save(hidden_all, f"{save_hidden}/{prefix_hidden}{k}.pt")
-
-In the previous code, we save the internal representations of the last layer corresponding to the **last token**. You can also save the hidden states of other layers by changing the index of ``outputs.hidden_states``. For example, if you want to save the hidden states of the first layer, you can use ``outputs.hidden_states[0][-1]``. You can also save the mean of al the hidden states in the last layer by the following code.
-
-.. code-block:: python
-
-    hidden_all = torch.stack([item[-1] for item in outputs.hidden_states[1:]]).view(-1, 4096)
-    hidden_all = hidden_all.mean(dim=0).view(-1, 4096)
+   These examples use greedy decoding for reproducibility. Deterministic
+   decoding does not guarantee identical results across different model,
+   library, precision, device, or kernel versions. Record that environment
+   together with the checkpoint revision and extraction rule.

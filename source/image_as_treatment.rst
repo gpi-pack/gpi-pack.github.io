@@ -28,6 +28,8 @@ Suppose you have a DataFrame ``df`` containing the treatment variable, outcome v
         'Image_id': [0, 1, 2, 3, 4] # Image IDs corresponding to the internal representations you saved (e.g., "hidden_1.pt" for image indexed 1)
     })
 
+This five-row data frame illustrates the required organization only. Neural-network fitting and causal estimation require a substantively adequate sample.
+
 
 Step 1: Load the Internal Representations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -37,10 +39,10 @@ First, load the internal representations using the ``load_hiddens`` function:
 .. code-block:: python
 
     # loading required packages
-    from gpi_pack.TarNet import estimate_k_ate, load_hiddens
+    from gpi_pack import estimate_k_ate, load_hiddens
 
     # load hidden states stored as .pt files
-    hidden_dir = <YOUR-DIRECTORY> # directory containing hidden states (e.g., "hidden_1.pt" for image indexed 1)
+    hidden_dir = "outputs/image_hidden" # directory containing files such as "hidden_1.pt"
 
     hidden_states = load_hiddens(
         directory = hidden_dir,
@@ -50,7 +52,7 @@ First, load the internal representations using the ``load_hiddens`` function:
 
 .. note::
 
-    If you have not extracted internal representation, please refer to the section :ref:`generate_images`.
+    If you have not extracted the internal representations, please refer to :ref:`generate_images`.
 
 Unlike text representations, image representations often retain spatial dimensions. **gpi_pack** provides two ways to use them. You can flatten each representation and use the default feed-forward network, or preserve the spatial structure and add a convolutional neural network (CNN).
 
@@ -69,13 +71,17 @@ The simplest approach is to flatten each image representation before passing it 
 Using a Convolutional Neural Network
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-A CNN can be useful when the location of features within the image representation is important. Instead of flattening the representations in advance, the CNN learns local spatial patterns before passing its output to the deconfounder and outcome networks.
+A CNN can be useful when the location of features within the image representation is important. Instead of flattening the representations in advance, the CNN learns local spatial patterns before passing its output to the deconfounder and treatment-conditioned outcome network.
 
 For this approach, ``hidden_states`` must have the shape ``(N, C, H, W)``, where ``N`` is the number of observations, ``C`` is the number of channels, and ``H`` and ``W`` are the height and width. Then, define the convolutional layers as follows:
 
 .. code-block:: python
 
     # keep the spatial structure of the image representations
+    # load_hiddens removes a singleton second dimension; restore a
+    # one-channel image axis when each saved tensor was [1, H, W].
+    if hidden_states.ndim == 3:
+        hidden_states = hidden_states[:, None, :, :]
     assert hidden_states.ndim == 4
 
     conv_layers = [
@@ -94,7 +100,16 @@ For this approach, ``hidden_states`` must have the shape ``(N, C, H, W)``, where
         },
     ]
 
-The first layer must specify ``in_channels``. Each layer must specify ``out_channels`` and can also include standard ``torch.nn.Conv2d`` options, such as ``kernel_size``, ``stride``, and ``padding``. The optional ``pool`` dictionary adds max pooling; set ``"type": "avg"`` to use average pooling. By default, **gpi_pack** applies a ReLU activation after each convolutional layer and flattens the final feature maps internally.
+The first layer must specify ``in_channels``. Each layer must specify
+``out_channels``. The current implementation recognizes exactly
+``kernel_size``, ``stride``, ``padding``, ``dilation``, ``groups``, and
+``bias`` as additional ``torch.nn.Conv2d`` options; other keys such as
+``padding_mode`` are ignored. The optional ``pool`` dictionary adds max
+pooling; set ``"type": "avg"`` to use average pooling. Set
+``"spectral_norm": True`` on a layer to apply spectral normalization. By
+default, **gpi_pack** applies a ReLU activation after each convolutional layer
+and flattens the final feature maps internally. Pass ``conv_activation=None``
+to omit the convolutional activations.
 
 
 
@@ -153,7 +168,6 @@ To compute a 95% confidence interval for the treatment effect estimate, use the 
     upper_bound = ate + 1.96 * se
 
     print(f"ATE: {ate}, SE: {se}, 95% CI: ({lower_bound}, {upper_bound})")
-    # ATE: 0.5, SE: 0.1, 95% CI: (0.3, 0.7)
 
 
 For more details on the arguments of ``estimate_k_ate``, please refer to :ref:`ref_estimate_k_ate`.

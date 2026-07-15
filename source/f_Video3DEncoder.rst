@@ -6,7 +6,7 @@ Video3DEncoder
 Description
 -----------
 
-The ``Video3DEncoder`` class uses 3D convolutions and adaptive pooling to map one video latent volume to a fixed-width segment embedding. It is the video branch used by multimodal ``DynamicTarNetBase``.
+The ``Video3DEncoder`` class uses 3D convolutions and adaptive pooling to map one video latent volume to a fixed-width segment embedding. It is the video branch used by multimodal ``DynamicTarNetBase``. Every convolution uses a ``3 x 3 x 3`` kernel with padding and ReLU. Max pooling follows every convolution except the last, and adaptive average pooling reduces the remaining volume before the final projection.
 
 Parameters
 ----------
@@ -19,7 +19,7 @@ Parameters
 Returns
 -------
 
-``forward(x)`` accepts ``[B, C, D, H, W]`` and returns a tensor with shape ``[B, out_dim]``.
+``forward(x)`` accepts ``[B, C, D, H, W]`` and returns a nonnegative tensor with shape ``[B, out_dim]`` after the projection, ReLU, and optional dropout. ``C`` must equal ``in_channels``. All channel and output widths must be positive, and ``channels`` must contain at least one width. Because there are ``len(channels) - 1`` max-pooling operations, each of ``D``, ``H``, and ``W`` should be at least ``2 ** (len(channels) - 1)``.
 
 Example Usage
 -------------

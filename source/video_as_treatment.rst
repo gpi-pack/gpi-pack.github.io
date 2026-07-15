@@ -171,7 +171,7 @@ Below is an example of the estimated intervention curve for a scalar outcome. Th
    :align: center
 
 Real-Time Outcomes
------------------
+------------------
 
 In some applications, the outcome is measured for each video segment. In this setting, prepare ``Y`` with the same shape ``[N, T]`` as ``W``. Use ``NaN`` when a unit does not have an outcome at a segment, including padded positions.
 

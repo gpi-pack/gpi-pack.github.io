@@ -14,7 +14,15 @@ Videos often contain spoken information that is not represented by the image fra
 What is Whisper?
 ----------------
 
-Whisper is an encoder-decoder Transformer trained on 680,000 hours of multilingual and multitask audio data. It converts audio into a log-Mel spectrogram, encodes the acoustic information, and predicts text tokens with a decoder. The model can transcribe speech in its original language, identify the spoken language, and, with supported multilingual models, translate speech into English. See the `Whisper paper <https://arxiv.org/abs/2212.04356>`_ for the model and training details.
+Whisper is an encoder-decoder Transformer. The original model series described
+in the Whisper paper was trained on 680,000 hours of multilingual and multitask
+audio data; the repository now also includes later ``large-v2``, ``large-v3``,
+and ``turbo`` releases. Whisper converts audio into a log-Mel spectrogram,
+encodes the acoustic information, and predicts text tokens with a decoder. It
+can transcribe speech in its original language, identify the spoken language,
+and, with supported multilingual models, translate speech into English. See
+the `Whisper paper <https://arxiv.org/abs/2212.04356>`_ and the official model
+card for the release details.
 
 The high-level ``transcribe`` method processes a complete media file using a sliding 30-second window. It returns the complete text together with timestamped segments and other decoding information.
 
@@ -123,7 +131,20 @@ When ``word_timestamps=True``, every segment also contains a ``words`` list with
 Transcribing Audio from a Video
 -------------------------------
 
-Use the original video rather than a Cosmos reconstruction, because the reconstructed files do not contain audio. You can first extract the audio track with ``ffmpeg``:
+Use the original video rather than a Cosmos reconstruction, because the
+reconstructed files do not contain audio. Whisper can read the original video
+directly through ffmpeg:
+
+.. code-block:: python
+
+   result = model.transcribe(
+       "path/to/source_video.mp4",
+       task="transcribe",
+       word_timestamps=True,
+       verbose=False,
+   )
+
+You can alternatively extract its audio track first:
 
 .. code-block:: bash
 
@@ -136,20 +157,39 @@ Then pass ``source_audio.wav`` to either the command-line or Python example abov
 Aligning Transcripts with Video Segments
 ----------------------------------------
 
-For Video-as-Treatment, use the same ``segment_seconds`` value for the transcript and Cosmos workflows. The following example assigns each recognized word to a video segment according to the midpoint of its Whisper timestamp. Here, ``outputs`` is the list returned by ``extract_videos`` for the same source video.
+For Video-as-Treatment, align timestamps to the segment metadata written by
+Cosmos. This is more precise than calculating ``timestamp // segment_seconds``
+because the package converts the requested duration to an integer number of
+frames using the video's nominal frame rate. Here, ``outputs`` is the list
+returned by ``extract_videos`` for the same source video.
 
 .. code-block:: python
 
-   segment_seconds = 5
-   n_video_segments = len(outputs)
-   words_by_segment = [[] for _ in range(n_video_segments)]
+   import torch
+
+   boundaries = []
+   for output in outputs:
+       payload = torch.load(
+           output.representation_path,
+           map_location="cpu",
+           weights_only=True,
+       )
+       boundaries.append(
+           (
+               float(payload["start_time_sec"]),
+               float(payload["end_time_sec"]),
+           )
+       )
+
+   words_by_segment = [[] for _ in outputs]
 
    for whisper_segment in result["segments"]:
        for word in whisper_segment.get("words", []):
            midpoint = (float(word["start"]) + float(word["end"])) / 2
-           segment_id = int(midpoint // segment_seconds)
-           if segment_id < n_video_segments:
-               words_by_segment[segment_id].append(word["word"])
+           for segment_id, (start, end) in enumerate(boundaries):
+               if start <= midpoint < end:
+                   words_by_segment[segment_id].append(word["word"])
+                   break
 
    transcript_segments = [
        "".join(words).strip()

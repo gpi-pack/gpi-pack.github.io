@@ -1,32 +1,32 @@
 .. _ref_TextAsTreatment:
 
 Text-As-Treatment
-===========
+=================
 
 Text-As-Treatment is a key setting where **gpi_pack** is especially useful. Instead of directly modeling texts, we use the internal representations of LLMs to estimate treatment effects. This approach improves accuracy and computational efficiency. In this section, we provide an overview of the Text-As-Treatment setting and demonstrate how to use gpi_pack to estimate treatment effects with the internal representations of LLMs.
 
 .. note::
-    This part is based on our paper `Causal Representation Learning with Generative Artificial Intelligence: Application to Texts as Treatments <https://arxiv.org/abs/2410.00903>`_. Please refer to the paper for the technical details.
+    This part is based on our paper `Causal Inference with Generative Artificial Intelligence: Application to Texts as Treatments <https://arxiv.org/abs/2410.00903>`_. Please refer to the paper for the technical details.
 
 What is Text-As-Treatment?
----------
+--------------------------
 Text-As-Treatment refers to scenarios where participants receive various texts, and the goal is to determine how one specific feature of the texts (e.g., topics or sentiments) influences downstream outcomes. A primary challenge in this setting is that texts inherently contain other features that might confound the relationship between the feature of interest and the outcome.
 
-To address this challenge, `our paper <https://arxiv.org/abs/2410.00903>`_ proposes using LLMs’ internal representations to bypass the direct modeling of texts. We introduce a representation learning method called  **deconfounder**, which enables us to estimate the treatment effects of the feature of interest without directly observing all confounding features. The deconfounder is estimated using `TarNet`, which takes the internal representations as input and predicts outcomes under both treatment and control conditions using a shared deconfounder. The following figure illustrates the architecture of `TarNet`:
+To address this challenge, `our paper <https://arxiv.org/abs/2410.00903>`_ proposes using LLMs’ internal representations to bypass the direct modeling of texts. We introduce a representation learning method called the **deconfounder**, which enables us to estimate the treatment effects of the feature of interest without directly observing all confounding features. The current ``TarNet`` implementation learns this shared representation, appends a user-supplied treatment value, and uses one treatment-conditioned outcome network. Potential outcomes under control and treatment are obtained by evaluating that network with treatment values zero and one. The following figure illustrates the conceptual architecture:
 
 .. image:: /_static/images/tarnet.png
    :alt: TarNet architecture
    :width: 600px
    :align: center
 
-Once the deconfounder and the outcome models are estimated, a propensity score model is built based on the deconfounder. Finally, the estimated outcome models and propensity score model are used together with double machine learning techniques to estimate treatment effects.
+Once the deconfounder and the treatment-conditioned outcome model are estimated, a propensity score model is built based on the deconfounder. Finally, the estimated nuisance functions are combined with a doubly robust score to estimate the treatment effect.
 
 How to estimate treatment effects
----------
+---------------------------------
 
 **gpi_pack** offers the wrapper function ``estimate_k_ate`` to streamline the estimation of treatment effects using LLMs’ internal representations. This function handles all the necessary steps, including deconfounder estimation and propensity score estimation, so you only need to provide the data.
 
-Suppose you have a DataFrame ``df`` containing the treatment variable, outcome variable, and texts, and you have already extracted the internal representations of the LLMs (saved as .pt files). Below is an example demonstrating how to use ``estimate_k_ate`` .
+Suppose you have a DataFrame ``df`` containing the treatment variable, outcome variable, and texts, and you have already extracted the internal representations of the LLMs as tensor-only ``.pt`` files. Below is an example demonstrating how to use ``estimate_k_ate``.
 
 .. code-block:: python
 
@@ -46,6 +46,8 @@ Suppose you have a DataFrame ``df`` containing the treatment variable, outcome v
         ]
     })
 
+This five-row data frame illustrates the required organization only. Neural-network fitting and causal estimation require a substantively adequate sample.
+
 
 Step 1: Load the Internal Representations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -55,10 +57,10 @@ First, load the internal representations using the ``load_hiddens`` function:
 .. code-block:: python
 
     # loading required packages
-    from gpi_pack.TarNet import estimate_k_ate, load_hiddens
+    from gpi_pack import estimate_k_ate, load_hiddens
 
     # load hidden states stored as .pt files
-    hidden_dir = <YOUR-DIRECTORY> # directory containing hidden states (e.g., "hidden_last_1.pt" for text indexed 1)
+    hidden_dir = "outputs/hidden" # directory containing the .pt files
 
     hidden_states = load_hiddens(
         directory = hidden_dir,
@@ -68,7 +70,7 @@ First, load the internal representations using the ``load_hiddens`` function:
 
 .. note::
 
-    If you have not extracted internal representation, please refer to the section :ref:`generate_texts`.
+    If you have not extracted the internal representations, please refer to :ref:`generate_texts`.
 
 Step 2: Estimate the Treatment Effects
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -103,17 +105,16 @@ To compute a 95% confidence interval for the treatment effect estimate, use the 
     upper_bound = ate + 1.96 * se
 
     print(f"ATE: {ate}, SE: {se}, 95% CI: ({lower_bound}, {upper_bound})")
-    # ATE: 0.5, SE: 0.1, 95% CI: (0.3, 0.7)
 
 How to control confounders
----------
+--------------------------
 
 In some cases, you may want to control for confounders that are not included in the texts. **gpi_pack** supports this via the ``estimate_k_ate`` function in two ways:
 
 Method 1: Using a Formula with a DataFrame
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If your DataFrame includes confounders as columns, specify a formula (e.g., ``formula_c = "conf1 + conf2"``) along with the DataFrame in the function call:
+If your DataFrame includes confounders as columns, specify ``formula_C`` (for example, ``"conf1 + conf2"``) along with the DataFrame. The argument name uses an uppercase ``C``.
 
 .. code-block:: python
 
@@ -122,22 +123,14 @@ If your DataFrame includes confounders as columns, specify a formula (e.g., ``fo
         R= hidden_states,
         Y= df['OutcomeVar'].values,
         T= df['TreatmentVar'].values,
-        formula_c="conf1 + conf2",
+        formula_C="conf1 + conf2",
         data=df,
         K=2, #K-fold cross-fitting
         lr = 2e-5, #learning rate
-        #Outcome model architecture
-        # [100, 1] means that the deconfounder is passed to the intermediate layer with size 100,
-        # and then it passes to the output layer with size 1.
-
-        #Outcome model architecture
-        # [100, 1] means that the deconfounder is passed to the intermediate layer with size 100,
-        # and then it passes to the output layer with size 1.
+        # Outcome-network widths; the final width is the outcome dimension
         architecture_y = [200, 1],
 
-        #Deconfounder model architecture:
-        # [2048] means that the input (hidden states) is passed to the intermediate layer with size 2048.
-        # The size of last layer (last number in the list) corresponds to the dimension of the deconfounder.
+        # Shared-representation widths; the final width is the deconfounder dimension
         architecture_z = [2048],
     )
 
@@ -147,7 +140,7 @@ Method 2: Using a Design Matrix
 Alternatively, create a design matrix of confounders and pass it to the ``C`` argument:
 
 .. note::
-    The design matrix should be a NumPy array or a list of values.
+    The design matrix must have one row per observation. ``TarNet`` appends these covariates to the learned deconfounder; it does not concatenate them to the raw input representation.
 
 
 .. code-block:: python
@@ -164,23 +157,26 @@ Alternatively, create a design matrix of confounders and pass it to the ``C`` ar
         K=2, #K-fold cross-fitting
         lr = 2e-5, #learning rate
 
-        #Outcome model architecture
-        # [100, 1] means that the deconfounder is passed to the intermediate layer with size 100,
-        # and then it passes to the output layer with size 1.
+        # Outcome-network widths
         architecture_y = [200, 1],
 
-        #Deconfounder model architecture:
-        # [2048] means that the input (hidden states) is passed to the intermediate layer with size 2048.
-        # The size of last layer (last number in the list) corresponds to the dimension of the deconfounder.
+        # Shared-representation widths
         architecture_z = [2048],
     )
 
 Visualizing Propensity Scores
----------
+-----------------------------
 
 For the Text-As-Treatment setting, it is crucial to assume that the textual feature and the confounding features are disentangled—a property known as **separability**. Visualizing the propensity scores can help diagnose whether this assumption holds. If the propensity scores are extreme (close to 0 or 1), it may indicate that confounding features are entangled with the treatment feature of interest.
 
-By default, the ``estimate_k_ate`` function allows you to visualize the propensity scores by setting ``plot_propensity=True``. Below is an example:
+By default, ``estimate_k_ate`` displays a Matplotlib histogram of the
+cross-fitted propensity scores for each outer fold. Set
+``plot_propensity=False`` to suppress those histograms. In version 0.2.1, the
+wrapper still calls ``TarNet.fit`` with its default ``plot_loss=True`` and
+does not expose that argument, so it also displays one training/validation
+loss figure per outer fold. Use the lower-level workflow when those loss
+figures must be disabled. Below is an example that explicitly enables the
+propensity plot:
 
 .. code-block:: python
 
@@ -201,48 +197,54 @@ By default, the ``estimate_k_ate`` function allows you to visualize the propensi
    :width: 600px
 
 Hyperparameters
----------
+---------------
 
 The ``estimate_k_ate`` function accepts the following parameters:
 
 - ``R``: list or np.ndarray
-    A list or NumPy array of hidden states extracted from LLM. Shape: (N, d_R) where N is the number of samples and d_R is the dimension of hidden states. You can load the stored hidden states using `load_hiddens` function.
+    Hidden representations with shape ``[N, d_R]``. Image-shaped ``[N, C, H, W]`` inputs are also accepted when ``conv_layers`` is supplied.
 - ``Y``: list or np.ndarray
     A list or NumPy array of outcomes, shape: (N,).
 - ``T``: list or np.ndarray
     A list or NumPy array of treatments, shape: (N,). Typically binary (0 or 1).
 - ``C``: list or np.ndarray, optional
-    A matrix of additional confounders, shape: (N, d_C). If provided, these will be concatenated to R along axis=1. You can pass either this parameter directly or use `formula_c` and `data`.
-- ``formula_c``: str, optional
-    A Patsy-style formula (e.g., `"conf1 + conf2"`) that specifies how to build the confounder matrix from a DataFrame. If this is provided, `data` must also be provided, and `C` will be constructed via `dmatrix(formula_c, data)`. Intercept is removed from the design matrix.
+    Additional confounders with shape ``[N, d_C]``. They are appended to the learned representation and consequently enter both the outcome and propensity models.
+- ``formula_C``: str, optional
+    A Patsy-style formula such as ``"conf1 + conf2"`` used to construct ``C`` from ``data``. The implementation removes the intercept.
 - ``data``: pandas.DataFrame, optional
-    The DataFrame containing the columns used in `formula_c`. If `formula_c` is set, this parameter is required. The resulting design matrix is then concatenated to R as additional confounders.
+    The DataFrame containing the columns used in ``formula_C``.
 - ``K``: int, default=2
     Number of cross-fitting folds (K-fold split).
 - ``valid_perc``: float, default=0.2
     Proportion of the training set to use for validation when fitting TarNet in each fold.
 - ``plot_propensity``: bool, default=True
-    Whether to plot the propensity score distribution in the console or a graphing interface (implementation-specific).
-- ``ps_model``: object, optional
-    A model/classifier used to estimate the propensity score. By default, we use a neural network with Spectral Normalization (to ensure Lipshitz continuity).
+    Whether to display a Matplotlib histogram of the estimated propensity scores. This does not control the per-fold TarNet loss figures in version 0.2.1.
+- ``ps_model``: class, optional
+    Propensity-model class implementing ``fit`` and ``predict_proba``. The default is :ref:`ref_SpectralNormClassifier`.
 - ``ps_model_params``: dict, optional
-    Hyperparameters for `ps_model`. For example, `{"input_dim": 2048}` if using a custom model requiring an input dimension.
+    Constructor arguments for ``ps_model``. For the default classifier, ``input_dim`` is inferred from the returned representation when it is omitted.
 - ``batch_size``: int, default=32
     Batch size for TarNet training.
 - ``nepoch``: int, default=200
     Number of epochs to train TarNet.
 - ``step_size``: int, optional
-    Step size for the learning rate scheduler (if applicable).
+    Patience of the ``ReduceLROnPlateau`` learning-rate scheduler. ``None`` disables the scheduler.
 - ``lr``: float, default=2e-5
     Learning rate for TarNet.
+- ``cluster``: list, optional
+    Cluster identifiers for clustered standard errors. Version 0.2.1 can misalign these identifiers with reordered cross-fitted scores; see the warning in :ref:`ref_estimate_k_ate` before using it.
 - ``dropout``: float, default=0.2
     Dropout rate for TarNet layers.
 - ``architecture_y``: list, default=[200, 1]
-    List specifying the layer sizes for the outcome heads (treatment-specific networks or final layers). For example, [200, 1] means that the outcome model has two hidden layers, the first with 200 units and the second with 1 unit.
+    Additional widths of the treatment-conditioned outcome network. The final value is the outcome dimension and is normally 1. Internally, the implementation prepends an outcome layer whose width is ``architecture_z[-1]``.
 - ``architecture_z``: list, default=[2048]
-    List specifying the layer sizes for the deconfounder. For example, [2048, 2048] means that the deconfounder has two hidden layers, each with 2048 units.
-- ``trim``: list, default=[0.01, 0.99]
-    Trimming bounds for the propensity score. Propensity scores outside this range will be replaced with the nearest bound.
+    Widths of the shared representation network. The final value is the learned deconfounder dimension before optional ``C`` is appended.
+- ``conv_layers``: list of dict, optional
+    Fixed ``Conv2d`` front-end used for image-shaped ``R``. See :ref:`ref_ImageAsTreatment`.
+- ``conv_activation``: callable, optional
+    Activation factory for the convolutional blocks. The default is ``torch.nn.ReLU``; use ``None`` to omit convolutional activations.
+- ``trim``: list or None, default=[0.01, 0.99]
+    Clipping bounds for the propensity score. Scores outside this range are replaced with the nearest bound. Use ``None`` to disable clipping.
 - ``bn``: bool, default=False
     Whether to apply batch normalization in TarNet.
 - ``patience``: int, default=5
@@ -250,6 +252,8 @@ The ``estimate_k_ate`` function accepts the following parameters:
 - ``min_delta``: float, default=0
     Minimum improvement threshold for early stopping.
 - ``model_dir``: str, optional
-    Directory path where the model checkpoints might be saved. If provided, the best model will be saved here and loaded for predictions.
+    Directory in which each TarNet fit saves its best state as ``best_TarNet.pth``. The best state is also restored in memory before prediction.
 - ``verbose``: bool, default=True
-    Whether to print additional information during training.
+    Whether TarNet prints its device and epoch progress. The propensity classifier, held-out accuracy, and final ATE/SE are still printed when this is ``False``.
+
+For the complete signature and return values, see :ref:`ref_estimate_k_ate`.

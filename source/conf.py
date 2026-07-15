@@ -9,7 +9,7 @@ copyright = f'{datetime.datetime.now().year}, Kentaro Nakamura, Kosuke Imai'
 author = 'Kentaro Nakamura, Kosuke Imai'
 
 # The full version, including alpha/beta/rc tags
-release = '0.2.0'
+release = '0.2.1'
 
 # -- General configuration ---------------------------------------------------
 extensions = [
@@ -17,7 +17,7 @@ extensions = [
     # 'sphinx.ext.viewcode',  # Disabled to remove "View page source" links
     'sphinx.ext.napoleon',
     'sphinx.ext.mathjax',
-    'sphinx_rtd_theme',
+    'citation',
 ]
 
 # Explicitly set the master document
@@ -46,7 +46,6 @@ html_sidebars = {
 # Force the global toctree to be included on every page
 html_theme_options = {
     'logo_only': False,
-    'display_version': True,
     'prev_next_buttons_location': 'bottom',
     'style_external_links': False,
     'style_nav_header_background': '#2980B9',
@@ -56,9 +55,6 @@ html_theme_options = {
     'navigation_depth': 4,
     'includehidden': False,
     'titles_only': False,
-    # Disable view source link
-    'display_github': False,
-    'viewcode_enable': False,
     # Show global navigation
     'globaltoc_collapse': False,
     'globaltoc_includehidden': False
@@ -73,12 +69,13 @@ html_js_files = [
     'js/copybutton.js',
 ]
 
-sys.path.insert(0, os.path.abspath('.'))
-
-# Add the citation extension to your extensions list
-extensions = [
-    'citation',  # Our custom citation extension
+# The publisher blocks Sphinx's automated HEAD/GET request after resolving this
+# DOI even though the DOI is valid in a browser.
+linkcheck_ignore = [
+    r'https://doi\.org/10\.1080/01621459\.2026\.2689629',
 ]
+
+sys.path.insert(0, os.path.abspath('.'))
 
 # Add these settings for GitHub Pages
 html_context = {

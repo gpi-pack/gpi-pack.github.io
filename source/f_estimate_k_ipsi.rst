@@ -15,7 +15,7 @@ Data Arguments
 - ``W`` (*np.ndarray*): binary treatment history ``[N, T]``. Observed entries must be 0 or 1; trailing ``NaN`` entries indicate padding.
 - ``Y`` (*np.ndarray*): one scalar outcome per unit, with shape ``[N]`` or ``[N, 1]``, or repeated outcomes with shape ``[N, T]`` exactly matching ``W``. Repeated outcomes can contain ``NaN`` where measurements are unavailable.
 - ``delta_seq`` (*array-like*): positive treatment-odds multipliers. A scalar or ``[J]`` applies each multiplier at every segment; ``[J, T]`` supplies segment-specific paths.
-- ``H`` (*np.ndarray*, optional): precomputed longitudinal representations with shape ``[N, T, d_z]`` or ``[d_z, N, T]``. Supplying ``H`` skips Dynamic TarNet representation learning.
+- ``H`` (*np.ndarray*, optional): precomputed longitudinal representations with shape ``[N, T, d_z]`` or ``[d_z, N, T]``. Supplying ``H`` skips Dynamic TarNet training and uses the observed scalar outcome as its outcome prediction. ``R`` remains a required, validated argument even in this mode.
 - ``C`` (*np.ndarray*, optional): static covariates ``[N, P]`` or ``[N]``, or segment-varying covariates ``[N, T, P]``, ``[P, N, T]``, or ``[N, T]``.
 - ``R_video`` (*np.ndarray*, optional): aligned video representations with shape ``[N, T, D, H, W]`` or ``[N, T, C_video, D, H, W]``. Supplying this argument enables multimodal mode.
 
@@ -35,7 +35,7 @@ Dynamic TarNet Arguments
 - ``nepoch`` (*int*, optional): maximum training epochs per fold. The default is 200.
 - ``batch_size`` (*int*, optional): training batch size. The default is 32.
 - ``lr`` (*float*, optional): learning rate. The default is ``2e-5``.
-- ``dropout`` (*float*, optional): dropout probability. The default is 0.3.
+- ``dropout`` (*float*, optional): dropout probability in the Dynamic TarNet representation and outcome networks and, in multimodal mode, both modality encoders. The default is 0.3.
 - ``valid_perc`` (*float*, optional): validation fraction within each training fold. The default is 0.2.
 - ``step_size`` (*int*, optional): reduce-on-plateau scheduler patience. ``None`` disables this scheduler.
 - ``bn`` (*bool*, optional): whether to use batch normalization. The default is ``False``.
@@ -52,13 +52,13 @@ Downstream Nuisance-Model Arguments
 - ``nn_hidden`` (*sequence of int*, optional): hidden widths of the propensity and regression MLPs. The default is ``(64, 32)``.
 - ``nn_alpha`` (*float*, optional): downstream weight decay. The default is ``1e-4``.
 - ``nn_lr`` (*float*, optional): downstream learning rate. The default is ``1e-3``.
-- ``nn_lr_scheduler`` (*str*, optional): ``"none"`` or ``"adaptive"``. The aliases ``"plateau"`` and ``"reduce_on_plateau"`` are also accepted.
+- ``nn_lr_scheduler`` (*str*, optional): ``"none"`` or ``"adaptive"``. ``""``, ``"off"``, ``"false"``, and ``"constant"`` also disable the scheduler; ``"plateau"`` and ``"reduce_on_plateau"`` enable the adaptive scheduler.
 - ``nn_lr_scheduler_factor`` (*float*, optional): adaptive scheduler reduction factor. The default is 0.5.
 - ``nn_lr_scheduler_patience`` (*int*, optional): adaptive scheduler patience. The default is 2.
 - ``nn_lr_scheduler_min_lr`` (*float*, optional): minimum downstream learning rate. The default is ``1e-6``.
 - ``nn_max_iter`` (*int*, optional): maximum downstream training epochs. The default is 300.
 - ``nn_patience`` (*int*, optional): downstream early-stopping patience. The default is 5.
-- ``nn_batch_size`` (*int* or *str*, optional): downstream batch size. The default is ``"auto"``.
+- ``nn_batch_size`` (*int* or *str*, optional): downstream batch size. The default ``"auto"`` uses at most 200 training observations per batch.
 - ``nn_dropout`` (*float*, optional): downstream dropout probability. The default is 0.
 
 Multimodal Encoder Arguments
@@ -71,6 +71,8 @@ Multimodal Encoder Arguments
 - ``video_channels`` (*sequence of int*, optional): 3D video-encoder widths. The default is ``(8, 16, 32)``.
 - ``video_out_dim`` (*int*, optional): encoded video width. The default is 128.
 
+Supplying ``R_video`` is what activates multimodal mode; there is no separate ``multimodal`` argument. In that mode, ``text_input_dim`` must equal the final dimension of ``R`` and ``video_in_channels`` must equal the explicit channel dimension of six-dimensional ``R_video``. Five-dimensional ``R_video`` receives a singleton channel automatically. Because the video encoder applies ``len(video_channels) - 1`` max-pooling operations, each of ``D``, ``H``, and ``W`` should be at least ``2 ** (len(video_channels) - 1)``.
+
 Inference Argument
 ------------------
 
@@ -81,7 +83,7 @@ Returns
 
 The function returns a dictionary with the following entries:
 
-- ``delta``: intervention values supplied by the user.
+- ``delta``: intervention values supplied by the user, represented as ``[J]`` for scalar or one-dimensional input and ``[J, T]`` for intervention schedules.
 - ``delta_paths``: intervention values expanded to ``[J, T]``.
 - ``est``: estimated intervention curve.
 - ``sigma``: estimated influence-function standard deviation.
@@ -96,6 +98,8 @@ For scalar ``Y`` and ``J`` interventions, ``est``, ``sigma``, ``se``, and the in
 For repeated ``Y``, the estimator runs once for each outcome segment ``s``. It retains units with an observed treatment and finite outcome at ``s`` and uses histories only through ``s``. ``est``, ``sigma``, ``se``, and the interval arrays have shape ``[T, J]``; ``ifvals`` has shape ``[N, T, J]``; and ``n_eff`` has shape ``[T]``. Ineligible ``ifvals`` entries are ``NaN``. Every outcome segment must contain at least ``K`` eligible units.
 
 A one-dimensional ``delta_seq`` defines constant interventions. For one time-varying schedule, supply ``[1, T]`` rather than ``[T]``. When ``delta_seq`` has shape ``[J, T]``, the estimate at outcome segment ``s`` uses the path prefix through ``s``.
+
+Observed treatment entries must be finite zero or one, every unit must have at least one observed treatment, and ``NaN`` padding in ``W`` must be trailing. The mask is inferred from ``W``; the function has no separate ``mask`` argument. Observed ``R``, ``H``, time-varying ``C``, and ``R_video`` entries must be finite, while padded entries are replaced with zero. A two-dimensional ``C`` whose shape is exactly ``[N, T]`` is interpreted as a scalar time-varying covariate.
 
 Example Usage
 -------------

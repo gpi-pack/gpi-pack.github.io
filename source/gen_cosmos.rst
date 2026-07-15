@@ -29,9 +29,19 @@ Install the optional packages for reading and writing videos:
 
 .. code-block:: bash
 
-   pip install "gpi_pack[video]"
+   python -m pip install --upgrade "gpi-pack[video]"
+
+Version 0.2.1 and its video dependencies are available from PyPI.
 
 The default Cosmos checkpoint requires you to accept its access conditions on Hugging Face. If the checkpoint is not already available in your cache, log in to Hugging Face before running the example.
+
+The upstream model card specifies at most 121 input frames and a minimum
+shorter-side resolution of 256 pixels. ``extract_videos`` applies the
+121-frame default, but it does not enforce the spatial minimum; choose
+``frame_size`` accordingly. NVIDIA reports BF16 validation on Ampere and
+Hopper GPUs. The package also permits FP32 and CPU execution, but those
+configurations do not have the same upstream hardware validation and are
+usually much slower.
 
 How to use Cosmos Tokenizer
 ---------------------------
@@ -99,7 +109,7 @@ The function ``extract_videos`` has the following arguments:
 
 - ``frame_size``: optional ``(height, width)`` used to resize every frame. No resizing is applied by default. Use a common size when you need to stack representations from videos with different resolutions.
 
-- ``max_frames``: maximum number of frames passed to the model for one segment. Longer segments are sampled uniformly while retaining both endpoints. The default is 121; use ``None`` to disable sampling.
+- ``max_frames``: maximum number of frames passed to the model for one segment. Longer segments are sampled uniformly; both endpoints are retained when at least two frames are selected. The default is 121; use ``None`` to disable sampling.
 
 - ``pad_multiple``: spatial padding multiple required by the model. If ``None``, the function uses the VAE's spatial compression ratio, which is normally 8.
 

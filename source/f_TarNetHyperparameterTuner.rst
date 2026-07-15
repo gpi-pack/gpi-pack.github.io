@@ -11,8 +11,9 @@ The ``TarNetHyperparameterTuner`` class uses Optuna to tune the static TarNet ou
 Parameters
 ----------
 
-- ``T``, ``Y``, and ``R``: treatment, outcome, and representation arrays (**required**).
-- ``C`` (*array-like*, optional): observed confounder matrix.
+- ``T`` and ``Y`` (*array-like*): one treatment and scalar outcome per observation (**required**).
+- ``R`` (*array-like*): representations with leading observation dimension (**required**). These are usually ``[N, F]``, or ``[N, C, H, W]`` when a convolutional front end is configured.
+- ``C`` (*array-like*, optional): observed confounders. A one-dimensional input is reshaped to ``[N, 1]``.
 - ``formula_C`` (*str*, optional): Patsy formula used with ``data`` to construct confounders. Supply either ``C`` or ``formula_C``.
 - ``data`` (*pandas.DataFrame*, optional): data used by ``formula_C``.
 - ``epoch`` (*value or sequence*, optional): epoch candidates. The default is ``(100, 200)``.
@@ -24,7 +25,7 @@ Parameters
 - ``architecture_y`` (*sequence of architectures*, optional): outcome-network candidates. The default is ``((1,),)``.
 - ``architecture_z`` (*sequence of architectures*, optional): representation-network candidates. The default is ``((1024,), (2048,), (4096,))``.
 - ``conv_layers`` (*list of dict*, optional): fixed convolutional front-end configuration.
-- ``conv_activation`` (*callable*, optional): convolutional activation factory. The default is ``torch.nn.ReLU``.
+- ``conv_activation`` (*callable*, optional): fixed convolutional activation factory. The default is ``torch.nn.ReLU``; use ``None`` to omit convolutional activations.
 - ``bn`` (*value or sequence*, optional): batch-normalization candidates. The default is ``(False,)``.
 - ``patience_min`` and ``patience_max`` (*int*, optional): inclusive early-stopping patience bounds. The defaults are 5 and 20.
 - ``model_dir`` (*str*, optional): checkpoint directory used when refitting.
@@ -61,4 +62,17 @@ Methods
 - ``tune(n_trials=50, timeout=None, study=None, sampler=None, pruner=None, n_jobs=1, refit=False, **optimize_kwargs)`` creates or uses a minimizing Optuna study, runs optimization, optionally refits, and returns the study.
 - ``fit_best(study=None)`` fits and returns a :ref:`ref_TarNet` with the best resolved parameters.
 
-Install the optional dependency with ``pip install "gpi_pack[tune]"``. For causal estimation, tune on an independent sample or within each outer training fold when possible.
+``best_params_`` uses the :ref:`ref_TarNet` constructor names ``epochs`` and
+``learning_rate`` rather than the tuner input name ``epoch`` or the
+:ref:`ref_estimate_k_ate` names ``nepoch`` and ``lr``. It should not be
+unpacked into ``estimate_k_ate`` without renaming those keys. Prefer
+``fit_best`` when you need the selected ``TarNet``. If you construct it
+manually from ``best_params_``, also pass the tuner's fixed ``conv_layers``,
+``conv_activation``, ``min_delta=0``, ``verbose``, ``random_state``, and any
+``model_dir``; these settings are not included in the dictionary.
+
+Install version 0.2.1 with its ``tune`` extra as described in
+:doc:`installation`. For causal estimation, tune on an independent sample or
+within each outer training fold when possible. Use the default ``n_jobs=1``
+for reproducible PyTorch trials; thread-parallel trials share random-number-
+generator and accelerator state.

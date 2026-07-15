@@ -7,7 +7,7 @@ Text Generation
 ---------------
 
 - :doc:`f_get_instructions`: creates the built-in system instruction for creating or repeating text, or returns a custom instruction.
-- :doc:`f_generate_text`: generates text deterministically and saves a pooled LLM hidden state for every prompt.
+- :doc:`f_generate_text`: generates text with non-sampling decoding and saves a pooled LLM hidden state for every prompt.
 - :doc:`f_save_generated_texts`: saves generated texts and their prompts in a pickle file.
 - :doc:`f_extract_and_save_hiddens`: runs the complete text-generation, hidden-state extraction, and output-saving workflow.
 
@@ -18,7 +18,7 @@ Image Generation
 - :doc:`f_StableDiffusionImg2ImgExtractor`: loads the Stable Diffusion components and provides preprocessing, encoding, transformation, decoding, and saving methods.
 - :doc:`f_extract_images`: processes one or more image-prompt pairs and saves the final diffusion latents and optional generated images.
 
-Video Generation
+Video Processing
 ----------------
 
 - :doc:`f_CosmosVideoExtractor`: loads the Cosmos VAE and provides in-memory encoding, reconstruction, representation extraction, and file-processing methods.
@@ -44,7 +44,7 @@ Dynamic Inference
 - :doc:`f_TextMLPEncoder`: maps each vector or text representation to a fixed-width segment embedding.
 - :doc:`f_Video3DEncoder`: maps each video latent volume to a fixed-width segment embedding with 3D convolutions.
 - :doc:`f_DynamicTarNetBase`: implements the masked sequential representation and outcome networks used by Dynamic GPI.
-- :doc:`f_mse_loss`: calculates mean squared error for two tensors.
+- :doc:`f_mse_loss`: calculates the scalar mean squared error for two compatible tensors.
 - :doc:`f_DynamicTarNet`: trains, validates, and predicts one scalar outcome with the dynamic sequence model in vector-only or multimodal mode.
 - :doc:`f_DynamicGPIHyperparameterTuner`: tunes and refits the scalar-outcome ``DynamicTarNet`` with Optuna. ``DynamicTarNetHyperparameterTuner`` is an alias of the same class.
 - :doc:`f_estimate_k_ipsi`: estimates cross-fitted longitudinal incremental-intervention curves and uncertainty for scalar or repeated outcomes.

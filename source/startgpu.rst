@@ -1,50 +1,81 @@
 .. _gpu_usage_section:
 
-How to use GPU
-===============
+How to Use a GPU
+================
 
-**gpi_pack** is built upon PyTorch, which is a popular deep learning framework that supports GPU acceleration. The use of GPU is not essential for the statistical inference, but to use LLM to extract the hidden states, you must need to use GPU. The GPU can significantly speed up the computation of the model, especially for large models and datasets.
+**gpi_pack** uses PyTorch for its neural models. A GPU is not required: the
+statistical estimators, LLM workflow, Stable Diffusion extractor, and Cosmos
+extractor can all select CPU execution. In practice, generating
+representations with a large language, image, or video model is usually much
+faster on a compatible accelerator and may require more memory than a laptop
+provides.
 
-What's GPU?
-----------
-GPU (Graphics Processing Unit) is a specialized hardware designed to accelerate the computation of deep learning models. You need to install the GPU driver and CUDA toolkit to use GPU.
+The device rules depend on the interface:
 
-The easy way to check the availability of GPU is to run the following command in Python:
+- ``TarNet`` and the image and video extractors select CUDA when it is
+  available and otherwise use the CPU.
+- Dynamic GPI with ``device="auto"`` tries CUDA, then Apple MPS, then CPU.
+- A Transformers language model uses the device selected when you load it.
+
+Checking CUDA
+-------------
+
+An NVIDIA GPU uses CUDA. Check whether the installed PyTorch build can access
+one with:
 
 .. code-block:: python
 
-    import torch
-    print(torch.cuda.is_available())
+   import torch
 
-If the output is ``True``, you can use GPU. If the output is ``False`` but your machine has GPU, you need to install the GPU driver and CUDA toolkit. You can find the instructions for installing the GPU driver and CUDA toolkit on `the NVIDIA website <https://docs.nvidia.com/cuda/cuda-installation-guide-microsoft-windows/>`_.
+   print(torch.cuda.is_available())
+   if torch.cuda.is_available():
+       print(torch.cuda.get_device_name(0))
 
-What if you do not have GPU?
-----------
-In many cases, your laptop or desktop does not have GPU. In that case, you can use the cloud service such as `Google Colaboratory <https://colab.research.google.com/>`_ or `Amazon SageMaker <https://aws.amazon.com/sagemaker/>`_. These services provide a virtual environment with GPU support, and you can use them to run your code. Below I show how to use Google Colaboratory.
+If this prints ``False`` on a machine with an NVIDIA GPU, install a PyTorch
+build compatible with the machine's driver by following the `PyTorch
+installation selector <https://pytorch.org/get-started/locally/>`_. Installing
+the CUDA toolkit alone does not change a CPU-only PyTorch installation.
 
-Google Colaboratory
--------------------
-Google Colaboratory is a free cloud service that provides a virtual environment with GPU support. You can use it to run your code without installing anything on your local machine. To use Google Colaboratory, you need to have a Google account.
+Using a Hosted GPU
+------------------
 
-1. Go to `Google Colaboratory <https://colab.research.google.com/>`_ and sign in with your Google account.
+If you do not have a local GPU, you can use a hosted notebook such as `Google
+Colab <https://colab.research.google.com/>`_ or a cloud service such as Amazon
+SageMaker. Colab offers optional GPU runtimes, but the available hardware and
+usage limits can change.
 
-2. Create a new notebook by clicking on the "New Notebook" button. In the notebook, you can write and run Python code just like you would on your local machine.
+To use a Colab GPU:
 
-3. To use GPU, you need to enable it by clicking on the "Runtime" button and selecting "Change runtime type". Then, select "GPU (e.g., T4GPU, A100 GPU)" You can now run your code on the GPU.
+1. Create a notebook and select **Runtime > Change runtime type**.
+
+2. Select a GPU hardware accelerator and reconnect the runtime.
+
+3. Run ``torch.cuda.is_available()`` in the notebook to verify that PyTorch
+   can see the device.
+
+4. Install **gpi_pack** from PyPI. For example, include both video and tuning
+   dependencies with:
+
+   .. code-block:: bash
+
+      !python -m pip install --upgrade "gpi-pack[video,tune]"
 
 .. image:: /_static/images/google_cloud.gif
-   :alt: Screenshot of Google Colaboratory
+   :alt: Selecting a GPU runtime in Google Colab
    :width: 600px
 
-4. To install **gpi_pack** on Google Colaboratory, you can use the following command (you can run this directly on the notebook):
-
-.. code-block:: bash
-
-    !pip install gpi_pack
-
-5. To connect your Google Colaboratory notebook to your Google Drive, you need to run the following command:
+If your data are in Google Drive, mount it separately:
 
 .. code-block:: python
 
-    from google.colab import drive
-    drive.mount('/content/drive')
+   from google.colab import drive
+
+   drive.mount("/content/drive")
+
+Using Remote Model Execution
+----------------------------
+
+A local GPU is not the only option for LLM representations. The :doc:`NNsight
+guide <gen_nnsight>` explains how to run a supported open-weight model on the
+remote NDIF service and download only the values explicitly saved by the
+trace.

@@ -19,6 +19,10 @@ Returns
 
 - *PIL.Image.Image*: the original image when no padding is needed, or an RGB image with the required padding.
 
+When padding is applied, the function prints the original dimensions and the
+new padded dimensions. It does not print anything when the input dimensions
+are already divisible by eight.
+
 Example Usage
 -------------
 

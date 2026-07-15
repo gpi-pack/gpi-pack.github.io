@@ -6,7 +6,7 @@ TextMLPEncoder
 Description
 -----------
 
-The ``TextMLPEncoder`` class maps each vector or text representation to a fixed-width embedding with a multilayer perceptron. It is the text branch used by multimodal ``DynamicTarNetBase``.
+The ``TextMLPEncoder`` class maps each vector or text representation to a fixed-width embedding with a multilayer perceptron. It is the text branch used by multimodal ``DynamicTarNetBase``. Each hidden layer is followed by ReLU and optional dropout; the final projection to ``out_dim`` is linear.
 
 Parameters
 ----------
@@ -19,7 +19,7 @@ Parameters
 Returns
 -------
 
-``forward(x)`` maps the tensor's last dimension from ``input_dim`` to ``out_dim`` while preserving the leading dimensions.
+``forward(x)`` maps the tensor's last dimension from ``input_dim`` to ``out_dim`` while preserving all leading dimensions. For example, both ``[B, input_dim]`` and ``[B, T, input_dim]`` inputs are accepted by the underlying linear layers. All input, hidden, and output widths must be positive; ``hidden_dims=()`` gives a single direct linear projection.
 
 Example Usage
 -------------

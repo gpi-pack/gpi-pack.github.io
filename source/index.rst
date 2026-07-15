@@ -21,7 +21,7 @@ GPI: Generative-AI Powered Inference
 
 .. note::
 
-   We released **gpi_pack** version 0.2.0 on July 14th. We currently support (1) Text/Image-as-Confounder, (2) Text/Image-as-Treatment, and (3) Video-as-Treatment with scalar or repeated outcomes. Please read `our recent paper <https://arxiv.org/abs/2607.06126>`_ for the application examples. We have been working hard to make this package as useful and user-friendly as possible. If you have any feedback or suggestions, please feel free to reach out to `the maintainer <https://k-nakam.github.io/>`_.
+   **gpi_pack** version 0.2.1 is available from PyPI. It supports (1) Text/Image-as-Confounder, (2) Text/Image-as-Treatment, and (3) Video-as-Treatment with scalar or repeated outcomes. Please read `our recent paper <https://arxiv.org/abs/2607.06126>`_ for the video application and technical details. If you have feedback or suggestions, please reach out to `the maintainer <https://k-nakam.github.io/>`_.
 
 .. toctree::
    :maxdepth: 2
@@ -95,15 +95,17 @@ GPI: Generative-AI Powered Inference
 
 How to cite
 -----------
-- Imai, Kosuke and Nakamura, Kentaro (2024). Causal Representation Learning with Generative Artificial Intelligence: Application to Texts as Treatments. arXiv preprint arXiv:2410.00903. `[Paper] <https://arxiv.org/abs/2410.00903>`_
+- Imai, Kosuke and Nakamura, Kentaro (2026). Causal Inference with Generative Artificial Intelligence: Application to Texts as Treatments. *Journal of the American Statistical Association*, forthcoming. `[Published article] <https://doi.org/10.1080/01621459.2026.2689629>`_ `[Preprint] <https://arxiv.org/abs/2410.00903>`_
 
 .. code-block:: bibtex
 
-   @article{imai2024causal,
-     title={Causal Representation Learning with Generative Artificial Intelligence: Application to Texts as Treatments},
+   @article{imai2026causal,
+     title={Causal Inference with Generative Artificial Intelligence: Application to Texts as Treatments},
      author={Imai, Kosuke and Nakamura, Kentaro},
-     journal={arXiv preprint arXiv:2410.00903},
-     year={2024}
+     journal={Journal of the American Statistical Association},
+     year={2026},
+     note={Forthcoming},
+     doi={10.1080/01621459.2026.2689629}
    }
 
 - Imai, Kosuke and Nakamura, Kentaro (2025). GenAI-Powered Inference. arXiv preprint arXiv:2507.03897. `[Paper] <https://arxiv.org/abs/2507.03897>`_

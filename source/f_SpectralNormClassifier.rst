@@ -4,7 +4,7 @@ SpectralNormClassifier
 ======================
 
 Description
--------------------------
+-----------
 The ``SpectralNormClassifier`` class implements a feed-forward neural network for multi-class classification with spectral normalization. It also works for binary classification when ``num_classes`` is set to 2. This classifier applies spectral normalization to each linear layer in order to control the Lipschitz constant and improve training stability. Its architecture is a multi-layer perceptron (MLP) that can optionally include batch normalization and dropout in each hidden layer.
 
 Parameters
@@ -13,8 +13,8 @@ Parameters
 - **hidden_sizes** (*list of int*, optional): Sizes of the hidden layers. Defaults to ``[128, 64]``.
 - **num_classes** (*int*, optional): Number of output classes. Defaults to ``2`` (binary classification).
 - **n_power_iterations** (*int*, optional): Number of power iterations for computing the spectral norm in each layer. Defaults to ``1``.
-- **dropout** (*float*, optional): Dropout probability for each layer. If ``0.0``, no dropout is applied. Defaults to ``0.0``.
-- **batch_norm** (*bool*, optional): Whether to add a batch normalization layer after each linear layer. Defaults to ``False``.
+- **dropout** (*float*, optional): Dropout probability for each hidden layer. If ``0.0``, no dropout is applied. Defaults to ``0.0``.
+- **batch_norm** (*bool*, optional): Whether to add batch normalization after each hidden linear layer. Defaults to ``False``.
 - **lr** (*float*, optional): Learning rate for the Adam optimizer. Defaults to ``2e-6``.
 - **nepoch** (*int*, optional): Maximum number of training epochs. Defaults to ``200``.
 - **batch_size** (*int*, optional): Batch size used during training. Defaults to ``32``.
@@ -32,18 +32,25 @@ Example Usage
 
     from gpi_pack.TNutil import SpectralNormClassifier
 
-    # Initialize the classifier
-    model = SpectralNormClassifier(input_dim=20, hidden_sizes=[64, 32], num_classes=2)
+    # fit expects a NumPy matrix; convert a TarNet tensor first
+    deconfounder_np = deconfounder.detach().cpu().numpy()
+
+    # Initialize the classifier with the actual representation width
+    model = SpectralNormClassifier(
+        input_dim=deconfounder_np.shape[1],
+        hidden_sizes=[64, 32],
+        num_classes=2,
+    )
 
     # Train the classifier
-    model.fit(deconfounder, T)
+    model.fit(deconfounder_np, T)
 
     # Predict class probabilities
-    probs = model.predict_proba(deconfounder)
+    probs = model.predict_proba(deconfounder_np)
     print("Predicted probabilities:", probs)
 
     # Predict hard classes
-    predictions = model.predict(deconfounder)
+    predictions = model.predict(deconfounder_np)
     print("Predicted classes:", predictions)
 
 Methods
@@ -72,6 +79,8 @@ Arguments:
 Returns:
   - **None**: The method updates the model in place.
 
+The current implementation stops after validation loss fails to improve for ``patience`` epochs, but it does not restore an earlier minimum-loss state. The validation split uses the global PyTorch random-number generator; the class has no ``random_state`` argument.
+
 Example:
 
 .. code-block:: python
@@ -85,7 +94,7 @@ Purpose and Description:
   Computes the class probabilities for each sample by performing a forward pass and then applying softmax to the output logits.
 
 Arguments:
-  - **X** (*np.ndarray*): Input data of shape [n_samples, input_dim].
+  - **X** (*np.ndarray* or *torch.Tensor*): Input data of shape [n_samples, input_dim].
 
 Returns:
   - **probs** (*np.ndarray*): Array of shape [n_samples, num_classes] containing the predicted class probabilities.
@@ -103,7 +112,7 @@ Purpose and Description:
   Provides hard class predictions by selecting the class with the highest predicted probability for each sample.
 
 Arguments:
-  - **X** (*np.ndarray*): Input data of shape [n_samples, input_dim].
+  - **X** (*np.ndarray* or *torch.Tensor*): Input data of shape [n_samples, input_dim].
 
 Returns:
   - **predictions** (*np.ndarray*): Array of shape [n_samples] with predicted class labels (ranging from 0 to num_classes-1).

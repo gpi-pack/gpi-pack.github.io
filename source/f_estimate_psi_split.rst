@@ -4,25 +4,25 @@ estimate_psi_split
 ==================
 
 Description
-----------------------------
-The ``estimate_psi_split`` function estimates propensity scores from deconfounder using cross-fitting. It splits the data into two halves, trains a propensity model on each half, and then computes the influence function (psi) for each fold. The final psi values and the combined propensity scores are returned.
+-----------
+The ``estimate_psi_split`` function estimates propensity scores from the deconfounder using two-fold cross-fitting. It splits row indices with ``random_state=42``, trains a propensity model on each half, predicts the opposite half, and computes doubly robust score contributions. It also prints the average held-out treatment-classification accuracy.
 
 Arguments
 ---------
-- **fr** (*np.ndarray* or *torch.Tensor*): Estimated Deconfounders.
-- **t** (*np.ndarray* or *torch.Tensor*): Treatment indicators.
+- **fr** (*np.ndarray* or *torch.Tensor*): Estimated deconfounders with shape ``[N, F]``.
+- **t** (*np.ndarray* or *torch.Tensor*): Binary treatment indicators.
 - **y** (*np.ndarray* or *torch.Tensor*): Observed outcomes.
 - **y0** (*np.ndarray* or *torch.Tensor*): Predicted outcomes for the control group.
 - **y1** (*np.ndarray* or *torch.Tensor*): Predicted outcomes for the treated group.
-- **ps_model** (optional): The propensity score model class (default: ``SpectralNormClassifier``).
-- **ps_model_params** (*dict*, optional): Hyperparameters for the propensity score model.
-- **trim** (*list*, optional): Absolute lower and upper bounds used to clip propensity scores (default: ``[0.01, 0.99]``).
+- **ps_model** (*class*, optional): Propensity-model class implementing ``fit`` and ``predict_proba``. The probability of class 1 is used. The default is :ref:`ref_SpectralNormClassifier`.
+- **ps_model_params** (*dict*, optional): Constructor arguments for the propensity score model. Direct use of the default classifier requires ``{"input_dim": fr.shape[1]}``.
+- **trim** (*list* or *None*, optional): Absolute lower and upper bounds used to clip propensity scores (default: ``[0.01, 0.99]``). Use ``None`` to disable clipping.
 - **plot_propensity** (*bool*, optional): Whether to plot the propensity score distribution (default: ``False``).
 
 Returns
 -------
-- **psi** (*np.ndarray*): The influence function values from both folds.
-- **tpreds** (*np.ndarray*): The estimated propensity scores for all the samples.
+- **psi** (*np.ndarray*): Doubly robust score contributions from both folds.
+- **tpreds** (*np.ndarray*): Cross-fitted propensity scores in the original input row order, clipped unless ``trim=None``.
 
 The propensity scores are restored to the original row order. The influence scores are concatenated in held-out fold order, so users calling this lower-level function directly should not assume that ``psi`` follows the original row order.
 
@@ -39,5 +39,6 @@ Example Usage
         y = outcome,
         y0 = y0_pred,
         y1 = y1_pred,
+        ps_model_params={"input_dim": deconfounder.shape[1]},
         plot_propensity=True
     )
