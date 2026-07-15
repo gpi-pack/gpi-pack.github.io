@@ -1,0 +1,747 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hyperparameter Tuning &mdash; GPI: GenAI-Powered Inference 0.2.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=320156fd" />
+
+  
+    <link rel="shortcut icon" href="_static/gpi.png"/>
+    <link rel="canonical" href="https://gpi-pack.github.io/hyperparameter.html" />
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=37f418d5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/js/copybutton.js?v=a2f921dd"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Customizing Your Analysis" href="custom_imp.html" />
+    <link rel="prev" title="Video-as-Treatment" href="video_as_treatment.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            GPI: GenAI-Powered Inference
+              <img src="_static/logo_long.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#from-pypi-version-0-2-1">From PyPI (Version 0.2.1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#from-source">From Source</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gpi.html">What Is GPI?</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gpi.html#gpi-workflow">GPI Workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gpi.html#current-package-scope">Current Package Scope</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="startgpu.html">How to Use a GPU</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="startgpu.html#checking-cuda">Checking CUDA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="startgpu.html#using-a-hosted-gpu">Using a Hosted GPU</a></li>
+<li class="toctree-l2"><a class="reference internal" href="startgpu.html#using-remote-model-execution">Using Remote Model Execution</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="report.html">Questions and Bug Reports</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Data Generation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="gen_llama.html">Generating Texts with Llama 3</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gen_llama.html#loading-llama-3-1">Loading Llama 3.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_llama.html#creating-texts">Creating Texts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_llama.html#repeating-existing-texts">Repeating Existing Texts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_llama.html#pooling">Pooling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_llama.html#custom-system-instruction">Custom System Instruction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_llama.html#additional-arguments">Additional Arguments</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gen_llm.html">Generating Texts with Other LLMs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gen_llm.html#loading-gemma-2">Loading Gemma 2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_llm.html#generating-and-saving-representations">Generating and Saving Representations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_llm.html#mean-pooling-across-generation-steps">Mean Pooling Across Generation Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gen_nnsight.html">Generating Texts without a Local GPU</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gen_nnsight.html#installing-and-authenticating">Installing and Authenticating</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_nnsight.html#choosing-an-available-model">Choosing an Available Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_nnsight.html#remote-generation-and-hidden-states">Remote Generation and Hidden States</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_nnsight.html#important-notes">Important Notes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gen_diffusion.html">Generating Images with Stable Diffusion</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gen_diffusion.html#how-the-image-representation-is-constructed">How the Image Representation Is Constructed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_diffusion.html#using-extract-images">Using <code class="docutils literal notranslate"><span class="pre">extract_images</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_diffusion.html#transforming-multiple-images">Transforming Multiple Images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_diffusion.html#arguments">Arguments</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gen_cosmos.html">Generating Videos using Cosmos Tokenizer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gen_cosmos.html#what-is-cosmos-tokenizer">What is Cosmos Tokenizer?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_cosmos.html#installing-the-video-dependencies">Installing the Video Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_cosmos.html#how-to-use-cosmos-tokenizer">How to use Cosmos Tokenizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_cosmos.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_cosmos.html#output-files">Output Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_cosmos.html#command-line-interface">Command-Line Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_cosmos.html#important-notes">Important Notes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gen_whisper.html">Transcribing Audio using Whisper</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gen_whisper.html#what-is-whisper">What is Whisper?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_whisper.html#installing-whisper">Installing Whisper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_whisper.html#choosing-a-whisper-model">Choosing a Whisper Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_whisper.html#command-line-usage">Command-Line Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_whisper.html#python-usage">Python Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_whisper.html#transcribing-audio-from-a-video">Transcribing Audio from a Video</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_whisper.html#aligning-transcripts-with-video-segments">Aligning Transcripts with Video Segments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_whisper.html#important-notes">Important Notes</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Basic Operations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tarnet.html">Text-As-Treatment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tarnet.html#what-is-text-as-treatment">What is Text-As-Treatment?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tarnet.html#how-to-estimate-treatment-effects">How to estimate treatment effects</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tarnet.html#step-1-load-the-internal-representations">Step 1: Load the Internal Representations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tarnet.html#step-2-estimate-the-treatment-effects">Step 2: Estimate the Treatment Effects</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tarnet.html#how-to-control-confounders">How to control confounders</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tarnet.html#method-1-using-a-formula-with-a-dataframe">Method 1: Using a Formula with a DataFrame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tarnet.html#method-2-using-a-design-matrix">Method 2: Using a Design Matrix</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tarnet.html#visualizing-propensity-scores">Visualizing Propensity Scores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tarnet.html#hyperparameters">Hyperparameters</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="text_as_confounder.html">Text-As-Confounder</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="text_as_confounder.html#what-is-text-as-confounder">What is Text-As-Confounder?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="text_as_confounder.html#how-to-estimate-treatment-effects">How to estimate treatment effects</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="image_as_treatment.html">Image-As-Treatment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="image_as_treatment.html#how-to-estimate-treatment-effects">How to estimate treatment effects</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="image_as_treatment.html#step-1-load-the-internal-representations">Step 1: Load the Internal Representations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="image_as_treatment.html#using-flattened-representations">Using Flattened Representations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="image_as_treatment.html#using-a-convolutional-neural-network">Using a Convolutional Neural Network</a></li>
+<li class="toctree-l3"><a class="reference internal" href="image_as_treatment.html#step-2-estimate-the-treatment-effects">Step 2: Estimate the Treatment Effects</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="video_as_treatment.html">Video-as-Treatment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="video_as_treatment.html#overview-of-the-data">Overview of the Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="video_as_treatment.html#step-1-extract-the-video-representations">Step 1: Extract the Video Representations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="video_as_treatment.html#step-2-align-and-pad-the-sequences">Step 2: Align and Pad the Sequences</a></li>
+<li class="toctree-l2"><a class="reference internal" href="video_as_treatment.html#step-3-estimate-the-intervention-curve">Step 3: Estimate the Intervention Curve</a></li>
+<li class="toctree-l2"><a class="reference internal" href="video_as_treatment.html#real-time-outcomes">Real-Time Outcomes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="video_as_treatment.html#segment-specific-interventions">Segment-Specific Interventions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="video_as_treatment.html#modality-and-audio-support">Modality and Audio Support</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Operations</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Hyperparameter Tuning</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#automated-hyperparameter-tuning">Automated Hyperparameter Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#static-hyperparameter-tuning">Static Hyperparameter Tuning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#static-search-space">Static Search Space</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#dynamic-hyperparameter-tuning">Dynamic Hyperparameter Tuning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#dynamic-search-space">Dynamic Search Space</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#repeated-outcomes">Repeated Outcomes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#important-notes">Important Notes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="custom_imp.html">Customizing Your Analysis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="custom_imp.html#tarnet">TarNet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="custom_imp.html#propensity-score-model">Propensity Score Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="custom_imp.html#cross-fitted-score-contributions">Cross-Fitted Score Contributions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="custom_imp.html#complete-cross-fitting">Complete Cross-Fitting</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quantization.html">When an LLM Is Too Large</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quantization.html#installing-bitsandbytes">Installing bitsandbytes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantization.html#loading-a-4-bit-model">Loading a 4-bit Model</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Function Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#text-generation">Text Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#image-generation">Image Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#video-processing">Video Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#static-inference">Static Inference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#dynamic-inference">Dynamic Inference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_dml_score.html">dml_score</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_dml_score.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_dml_score.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_dml_score.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_dml_score.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_estimate_k_ate.html">estimate_k_ate</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ate.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ate.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ate.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ate.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_estimate_psi_split.html">estimate_psi_split</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_psi_split.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_psi_split.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_psi_split.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_psi_split.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_extract_and_save_hiddens.html">extract_and_save_hidden_states</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_and_save_hiddens.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_and_save_hiddens.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_and_save_hiddens.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_and_save_hiddens.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_generate_text.html">generate_text</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_generate_text.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_generate_text.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_generate_text.html#pooling-behavior">Pooling Behavior</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_generate_text.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_generate_text.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_get_instructions.html">get_instruction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_get_instructions.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_get_instructions.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_get_instructions.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_get_instructions.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_load_hiddens.html">load_hiddens</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_load_hiddens.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_load_hiddens.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_load_hiddens.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_load_hiddens.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_save_generated_texts.html">save_generated_texts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_save_generated_texts.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_save_generated_texts.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_save_generated_texts.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_save_generated_texts.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_pad_to_multiple_of_8.html">pad_to_multiple_of_8</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_pad_to_multiple_of_8.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_pad_to_multiple_of_8.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_pad_to_multiple_of_8.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_pad_to_multiple_of_8.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_StableDiffusionImg2ImgExtractor.html">StableDiffusionImg2ImgExtractor</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_StableDiffusionImg2ImgExtractor.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_StableDiffusionImg2ImgExtractor.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_StableDiffusionImg2ImgExtractor.html#example-usage">Example Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_StableDiffusionImg2ImgExtractor.html#methods">Methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="f_StableDiffusionImg2ImgExtractor.html#preprocess-image">preprocess_image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_StableDiffusionImg2ImgExtractor.html#encode-prompt">encode_prompt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_StableDiffusionImg2ImgExtractor.html#get-hidden-states">get_hidden_states</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_StableDiffusionImg2ImgExtractor.html#decode-latents">decode_latents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_StableDiffusionImg2ImgExtractor.html#transform-image">transform_image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_StableDiffusionImg2ImgExtractor.html#save-image">save_image</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_extract_images.html">extract_images</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_images.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_images.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_images.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_images.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_CosmosVideoExtractor.html">CosmosVideoExtractor</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_CosmosVideoExtractor.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_CosmosVideoExtractor.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_CosmosVideoExtractor.html#example-usage">Example Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_CosmosVideoExtractor.html#methods">Methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="f_CosmosVideoExtractor.html#preprocess-video">preprocess_video</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_CosmosVideoExtractor.html#encode-video">encode_video</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_CosmosVideoExtractor.html#decode-latents">decode_latents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_CosmosVideoExtractor.html#reconstruct-video">reconstruct_video</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_CosmosVideoExtractor.html#transform-video">transform_video</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_CosmosVideoExtractor.html#save-video">save_video</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_CosmosVideoExtractor.html#process-video">process_video</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_VideoExtractionResult.html">VideoExtractionResult</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_VideoExtractionResult.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_VideoExtractionResult.html#attributes">Attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_VideoExtractionResult.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_VideoSegmentOutput.html">VideoSegmentOutput</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_VideoSegmentOutput.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_VideoSegmentOutput.html#attributes">Attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_VideoSegmentOutput.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_extract_videos.html">extract_videos</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_videos.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_videos.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_videos.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_videos.html#example-usage">Example Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_videos.html#saved-payload">Saved Payload</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_videos.html#command-line-interface">Command-Line Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_videos.html#related-module-utilities">Related Module Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_TextMLPEncoder.html">TextMLPEncoder</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_TextMLPEncoder.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TextMLPEncoder.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TextMLPEncoder.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TextMLPEncoder.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_Video3DEncoder.html">Video3DEncoder</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_Video3DEncoder.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_Video3DEncoder.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_Video3DEncoder.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_Video3DEncoder.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_DynamicTarNetBase.html">DynamicTarNetBase</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicTarNetBase.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicTarNetBase.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicTarNetBase.html#forward">forward</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicTarNetBase.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_mse_loss.html">mse_loss</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_mse_loss.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_mse_loss.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_mse_loss.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_mse_loss.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_DynamicTarNet.html">DynamicTarNet</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicTarNet.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicTarNet.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicTarNet.html#example-usage">Example Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicTarNet.html#methods">Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_DynamicGPIHyperparameterTuner.html">DynamicGPIHyperparameterTuner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicGPIHyperparameterTuner.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicGPIHyperparameterTuner.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicGPIHyperparameterTuner.html#search-space-behavior">Search-Space Behavior</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicGPIHyperparameterTuner.html#example-usage">Example Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicGPIHyperparameterTuner.html#methods">Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_estimate_k_ipsi.html">estimate_k_ipsi</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ipsi.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ipsi.html#data-arguments">Data Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ipsi.html#cross-fitting-arguments">Cross-Fitting Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ipsi.html#dynamic-tarnet-arguments">Dynamic TarNet Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ipsi.html#downstream-nuisance-model-arguments">Downstream Nuisance-Model Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ipsi.html#multimodal-encoder-arguments">Multimodal Encoder Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ipsi.html#inference-argument">Inference Argument</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ipsi.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ipsi.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_SpectralNormClassifier.html">SpectralNormClassifier</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_SpectralNormClassifier.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_SpectralNormClassifier.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_SpectralNormClassifier.html#example-usage">Example Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_SpectralNormClassifier.html#methods">Methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="f_SpectralNormClassifier.html#forward">forward</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_SpectralNormClassifier.html#fit">fit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_SpectralNormClassifier.html#predict-proba">predict_proba</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_SpectralNormClassifier.html#predict">predict</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_TarNet.html">TarNet</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNet.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNet.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNet.html#example-usage">Example Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNet.html#methods">Methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="f_TarNet.html#create-dataloaders">create_dataloaders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_TarNet.html#fit">fit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_TarNet.html#validate-step">validate_step</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_TarNet.html#predict">predict</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_TarNetBase.html">TarNetBase</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNetBase.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNetBase.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNetBase.html#forward">forward</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNetBase.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_TarNetHyperparameterTuner.html">TarNetHyperparameterTuner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNetHyperparameterTuner.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNetHyperparameterTuner.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNetHyperparameterTuner.html#example-usage">Example Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNetHyperparameterTuner.html#methods">Methods</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GPI: GenAI-Powered Inference</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Hyperparameter Tuning</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="hyperparameter-tuning">
+<span id="ref-hyperparametertuning"></span><h1>Hyperparameter Tuning<a class="headerlink" href="#hyperparameter-tuning" title="Link to this heading"></a></h1>
+<p>If you use our representation learning method, we recommend tuning the neural-network hyperparameters. Hyperparameters are set before training and can affect both predictive performance and the learned deconfounder. <strong>gpi_pack</strong> provides Optuna-based tuners for the static TarNet and the Dynamic TarNet used for sequential data.</p>
+<section id="automated-hyperparameter-tuning">
+<h2>Automated Hyperparameter Tuning<a class="headerlink" href="#automated-hyperparameter-tuning" title="Link to this heading"></a></h2>
+<p><a class="reference external" href="https://optuna.org/">Optuna</a> is a framework for automated hyperparameter optimization. Install the optional tuning dependencies with:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span><span class="s2">&quot;gpi-pack[tune]&quot;</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">tune</span></code> extra and the 0.2.1 tuner interfaces are available from PyPI.</p>
+<p>For each trial, the <strong>gpi_pack</strong> tuners sample one configuration, fit the corresponding outcome model, and minimize its best held-out factual-outcome mean squared error. When the tuner creates the Optuna study, it uses a seeded TPE sampler and a median pruner by default.</p>
+<p>Native Python values are recommended. For example, use <code class="docutils literal notranslate"><span class="pre">(100,</span> <span class="pre">200)</span></code> for two epoch candidates and <code class="docutils literal notranslate"><span class="pre">((16,</span> <span class="pre">1),</span> <span class="pre">(32,</span> <span class="pre">16,</span> <span class="pre">1))</span></code> for two outcome-network architectures. A single value fixes that hyperparameter instead of tuning it.</p>
+</section>
+<section id="static-hyperparameter-tuning">
+<h2>Static Hyperparameter Tuning<a class="headerlink" href="#static-hyperparameter-tuning" title="Link to this heading"></a></h2>
+<p>Use <code class="docutils literal notranslate"><span class="pre">TarNetHyperparameterTuner</span></code> for the static Text-as-Treatment, Text-as-Confounder, and Image-as-Treatment settings. Supply the same treatment, outcome, representation, and optional covariate arrays that you use for static estimation.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">gpi_pack.TarNet</span><span class="w"> </span><span class="kn">import</span> <span class="n">TarNetHyperparameterTuner</span>
+
+<span class="n">tuner</span> <span class="o">=</span> <span class="n">TarNetHyperparameterTuner</span><span class="p">(</span>
+    <span class="c1"># Data</span>
+    <span class="n">T</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;TreatmentVar&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+    <span class="n">Y</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;OutcomeVar&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+    <span class="n">R</span><span class="o">=</span><span class="n">hidden_states</span><span class="p">,</span>
+
+    <span class="c1"># Search space</span>
+    <span class="n">epoch</span><span class="o">=</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">),</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">64</span><span class="p">),</span>
+    <span class="n">learning_rate</span><span class="o">=</span><span class="p">(</span><span class="mf">1e-5</span><span class="p">,</span> <span class="mf">1e-4</span><span class="p">),</span>
+    <span class="n">dropout</span><span class="o">=</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">),</span>
+    <span class="n">step_size</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+    <span class="n">architecture_y</span><span class="o">=</span><span class="p">((</span><span class="mi">200</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+    <span class="n">architecture_z</span><span class="o">=</span><span class="p">((</span><span class="mi">1024</span><span class="p">,),</span> <span class="p">(</span><span class="mi">2048</span><span class="p">,)),</span>
+    <span class="n">bn</span><span class="o">=</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+    <span class="n">patience_min</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">patience_max</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+    <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">study</span> <span class="o">=</span> <span class="n">tuner</span><span class="o">.</span><span class="n">tune</span><span class="p">(</span><span class="n">n_trials</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">refit</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Best validation loss:&quot;</span><span class="p">,</span> <span class="n">tuner</span><span class="o">.</span><span class="n">best_score_</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Best hyperparameters:&quot;</span><span class="p">,</span> <span class="n">tuner</span><span class="o">.</span><span class="n">best_params_</span><span class="p">)</span>
+<span class="n">best_model</span> <span class="o">=</span> <span class="n">tuner</span><span class="o">.</span><span class="n">best_model_</span>
+</pre></div>
+</div>
+<p>Setting <code class="docutils literal notranslate"><span class="pre">refit=True</span></code> fits <code class="docutils literal notranslate"><span class="pre">best_model_</span></code> with the selected configuration after tuning. You can instead call <code class="docutils literal notranslate"><span class="pre">tuner.fit_best()</span></code> later. This creates a fresh fit with the same validation design; it does not remove the validation split and train on every observation. The returned <code class="docutils literal notranslate"><span class="pre">study</span></code> is the Optuna study and can be used with Optuna’s visualization and analysis tools.</p>
+<section id="static-search-space">
+<h3>Static Search Space<a class="headerlink" href="#static-search-space" title="Link to this heading"></a></h3>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 22.0%" />
+<col style="width: 48.0%" />
+<col style="width: 30.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Interpretation</p></th>
+<th class="head"><p>Example</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">epoch</span></code></p></td>
+<td><p>Categorical candidates for the maximum number of training epochs.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">(100,</span> <span class="pre">200)</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">batch_size</span></code></p></td>
+<td><p>Categorical training batch-size candidates.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">(32,</span> <span class="pre">64)</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">learning_rate</span></code></p></td>
+<td><p>Log-scale continuous bounds. One value fixes the learning rate.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">(1e-5,</span> <span class="pre">1e-4)</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">dropout</span></code></p></td>
+<td><p>Continuous bounds for the dropout probability.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">(0.1,</span> <span class="pre">0.3)</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">step_size</span></code></p></td>
+<td><p>Categorical scheduler-patience candidates. <code class="docutils literal notranslate"><span class="pre">None</span></code> disables the scheduler.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">(None,</span> <span class="pre">5)</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">architecture_y</span></code></p></td>
+<td><p>Candidate outcome-network architectures. The final width is the outcome dimension.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">((200,</span> <span class="pre">1),</span> <span class="pre">(100,</span> <span class="pre">1))</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">architecture_z</span></code></p></td>
+<td><p>Candidate deconfounder architectures. The final width is the learned representation dimension.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">((1024,),</span> <span class="pre">(2048,))</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">bn</span></code></p></td>
+<td><p>Categorical batch-normalization choices.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">(False,</span> <span class="pre">True)</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">patience_min</span></code>, <code class="docutils literal notranslate"><span class="pre">patience_max</span></code></p></td>
+<td><p>Inclusive integer bounds for early-stopping patience.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">5,</span> <span class="pre">20</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<p>The optional <code class="docutils literal notranslate"><span class="pre">conv_layers</span></code> and <code class="docutils literal notranslate"><span class="pre">conv_activation</span></code> arguments configure a fixed CNN front end for image representations; they are not sampled by Optuna. For the complete static API, see <a class="reference internal" href="f_TarNetHyperparameterTuner.html#ref-tarnethyperparametertuner"><span class="std std-ref">TarNetHyperparameterTuner</span></a>.</p>
+</section>
+</section>
+<section id="dynamic-hyperparameter-tuning">
+<h2>Dynamic Hyperparameter Tuning<a class="headerlink" href="#dynamic-hyperparameter-tuning" title="Link to this heading"></a></h2>
+<p>Use <code class="docutils literal notranslate"><span class="pre">DynamicGPIHyperparameterTuner</span></code> for sequential treatments, including the Video-as-Treatment setting. <code class="docutils literal notranslate"><span class="pre">DynamicTarNetHyperparameterTuner</span></code> is an alias of the same class. The dynamic tuner uses the following data:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">R</span></code>: vector or text representations with shape <code class="docutils literal notranslate"><span class="pre">[N,</span> <span class="pre">T,</span> <span class="pre">F]</span></code> or <code class="docutils literal notranslate"><span class="pre">[F,</span> <span class="pre">N,</span> <span class="pre">T]</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">W</span></code>: binary treatment histories with shape <code class="docutils literal notranslate"><span class="pre">[N,</span> <span class="pre">T]</span></code>. Observed values are zero or one, and unused trailing positions are <code class="docutils literal notranslate"><span class="pre">NaN</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Y</span></code>: one scalar outcome per unit with shape <code class="docutils literal notranslate"><span class="pre">[N]</span></code> or <code class="docutils literal notranslate"><span class="pre">[N,</span> <span class="pre">1]</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">C</span></code>: optional static covariates with shape <code class="docutils literal notranslate"><span class="pre">[N]</span></code> or <code class="docutils literal notranslate"><span class="pre">[N,</span> <span class="pre">P]</span></code>, or segment-varying covariates with shape <code class="docutils literal notranslate"><span class="pre">[N,</span> <span class="pre">T]</span></code>, <code class="docutils literal notranslate"><span class="pre">[N,</span> <span class="pre">T,</span> <span class="pre">P]</span></code>, or <code class="docutils literal notranslate"><span class="pre">[P,</span> <span class="pre">N,</span> <span class="pre">T]</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">R_video</span></code>: optional aligned video representations with shape <code class="docutils literal notranslate"><span class="pre">[N,</span> <span class="pre">T,</span> <span class="pre">D,</span> <span class="pre">H,</span> <span class="pre">W]</span></code> or <code class="docutils literal notranslate"><span class="pre">[N,</span> <span class="pre">T,</span> <span class="pre">C_video,</span> <span class="pre">D,</span> <span class="pre">H,</span> <span class="pre">W]</span></code>.</p></li>
+</ul>
+<p>Every unit must have at least one observed treatment. Representations and segment-varying covariates must be finite at observed positions; their padded values are replaced with zeros according to the mask inferred from <code class="docutils literal notranslate"><span class="pre">W</span></code>. Static covariates must be finite for every unit and are not masked.</p>
+<p>Supplying <code class="docutils literal notranslate"><span class="pre">R_video</span></code> automatically enables multimodal tuning. The tuner then samples the text and video encoder architectures in addition to the shared representation and outcome networks.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">gpi_pack</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">DynamicGPIHyperparameterTuner</span><span class="p">,</span>
+    <span class="n">estimate_k_ipsi</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">tuner</span> <span class="o">=</span> <span class="n">DynamicGPIHyperparameterTuner</span><span class="p">(</span>
+    <span class="c1"># Sequential data</span>
+    <span class="n">R</span><span class="o">=</span><span class="n">R_text</span><span class="p">,</span>
+    <span class="n">R_video</span><span class="o">=</span><span class="n">R_video</span><span class="p">,</span>  <span class="c1"># omit for vector-only representations</span>
+    <span class="n">W</span><span class="o">=</span><span class="n">W</span><span class="p">,</span>
+    <span class="n">Y</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;OutcomeVar&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+
+    <span class="c1"># Dynamic TarNet search space</span>
+    <span class="n">nepoch</span><span class="o">=</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">),</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span>
+    <span class="n">lr</span><span class="o">=</span><span class="p">(</span><span class="mf">1e-5</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">),</span>
+    <span class="n">dropout</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">),</span>
+    <span class="n">architecture_y</span><span class="o">=</span><span class="p">((</span><span class="mi">16</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+    <span class="n">architecture_z</span><span class="o">=</span><span class="p">((</span><span class="mi">64</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span> <span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">64</span><span class="p">)),</span>
+
+    <span class="c1"># Multimodal encoder search space</span>
+    <span class="n">text_hidden_dims</span><span class="o">=</span><span class="p">((</span><span class="mi">512</span><span class="p">,</span> <span class="mi">128</span><span class="p">),</span> <span class="p">(</span><span class="mi">1024</span><span class="p">,</span> <span class="mi">256</span><span class="p">)),</span>
+    <span class="n">text_out_dim</span><span class="o">=</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">128</span><span class="p">),</span>
+    <span class="n">video_channels</span><span class="o">=</span><span class="p">((</span><span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">32</span><span class="p">)),</span>
+    <span class="n">video_out_dim</span><span class="o">=</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">128</span><span class="p">),</span>
+
+    <span class="n">valid_perc</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+    <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
+    <span class="n">device</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">study</span> <span class="o">=</span> <span class="n">tuner</span><span class="o">.</span><span class="n">tune</span><span class="p">(</span><span class="n">n_trials</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Best validation loss:&quot;</span><span class="p">,</span> <span class="n">tuner</span><span class="o">.</span><span class="n">best_score_</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Best hyperparameters:&quot;</span><span class="p">,</span> <span class="n">tuner</span><span class="o">.</span><span class="n">best_params_</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The resolved <code class="docutils literal notranslate"><span class="pre">best_params_</span></code> dictionary uses the same argument names as <code class="docutils literal notranslate"><span class="pre">estimate_k_ipsi</span></code>. For multimodal data, it also contains the inferred <code class="docutils literal notranslate"><span class="pre">text_input_dim</span></code> and <code class="docutils literal notranslate"><span class="pre">video_in_channels</span></code>. You can therefore pass it directly to the estimator:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">estimate_k_ipsi</span><span class="p">(</span>
+    <span class="n">R</span><span class="o">=</span><span class="n">R_text</span><span class="p">,</span>
+    <span class="n">R_video</span><span class="o">=</span><span class="n">R_video</span><span class="p">,</span>
+    <span class="n">W</span><span class="o">=</span><span class="n">W</span><span class="p">,</span>
+    <span class="n">Y</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;OutcomeVar&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+    <span class="n">delta_seq</span><span class="o">=</span><span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">],</span>
+    <span class="n">K</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">tuner</span><span class="o">.</span><span class="n">best_params_</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>If you need the fitted Dynamic TarNet outcome model itself, call <code class="docutils literal notranslate"><span class="pre">tuner.fit_best()</span></code> or set <code class="docutils literal notranslate"><span class="pre">refit=True</span></code> in <code class="docutils literal notranslate"><span class="pre">tune</span></code>. This refit retains the tuner’s validation split rather than training on every observation without validation:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">best_model</span> <span class="o">=</span> <span class="n">tuner</span><span class="o">.</span><span class="n">fit_best</span><span class="p">()</span>
+</pre></div>
+</div>
+<section id="dynamic-search-space">
+<h3>Dynamic Search Space<a class="headerlink" href="#dynamic-search-space" title="Link to this heading"></a></h3>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 22.0%" />
+<col style="width: 48.0%" />
+<col style="width: 30.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Interpretation</p></th>
+<th class="head"><p>Default search space</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">nepoch</span></code></p></td>
+<td><p>Categorical candidates for the maximum number of Dynamic TarNet epochs.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">(100,</span> <span class="pre">200)</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">batch_size</span></code></p></td>
+<td><p>Categorical training batch-size candidates.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">(16,</span> <span class="pre">32)</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">lr</span></code></p></td>
+<td><p>Log-scale continuous learning-rate bounds. One value fixes the rate.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">(1e-5,</span> <span class="pre">1e-3)</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">dropout</span></code></p></td>
+<td><p>Continuous bounds for the dropout probability.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">(0.0,</span> <span class="pre">0.3)</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">architecture_y</span></code></p></td>
+<td><p>Candidate outcome-network architectures. Every candidate must end in 1 for the scalar outcome fitted in each model.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">((16,</span> <span class="pre">1),</span> <span class="pre">(32,</span> <span class="pre">16,</span> <span class="pre">1))</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">architecture_z</span></code></p></td>
+<td><p>Candidate per-segment deconfounder architectures.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">((64,</span> <span class="pre">32),</span> <span class="pre">(128,</span> <span class="pre">64))</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">text_hidden_dims</span></code></p></td>
+<td><p>Candidate text-encoder hidden architectures used only in multimodal mode.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">((1024,</span> <span class="pre">256),)</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">text_out_dim</span></code></p></td>
+<td><p>Categorical encoded-text widths used only in multimodal mode.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">(128,)</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">video_channels</span></code></p></td>
+<td><p>Candidate 3D-convolution channel architectures used only in multimodal mode.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">((8,</span> <span class="pre">16,</span> <span class="pre">32),)</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">video_out_dim</span></code></p></td>
+<td><p>Categorical encoded-video widths used only in multimodal mode.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">(128,)</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<p>The fixed arguments <code class="docutils literal notranslate"><span class="pre">valid_perc</span></code>, <code class="docutils literal notranslate"><span class="pre">random_state</span></code>, <code class="docutils literal notranslate"><span class="pre">device</span></code>, <code class="docutils literal notranslate"><span class="pre">model_dir</span></code>, and <code class="docutils literal notranslate"><span class="pre">verbose</span></code> control validation, reproducibility, execution, and refitting but are not sampled. <code class="docutils literal notranslate"><span class="pre">model_dir</span></code> must already exist when it is used for the best-model refit. The tuner also fixes <code class="docutils literal notranslate"><span class="pre">bn=False</span></code>, <code class="docutils literal notranslate"><span class="pre">patience=5</span></code>, and <code class="docutils literal notranslate"><span class="pre">min_delta=0</span></code>. In vector-only mode, the multimodal encoder options are not included in <code class="docutils literal notranslate"><span class="pre">best_params_</span></code>.</p>
+<p>For a <code class="docutils literal notranslate"><span class="pre">video_channels</span></code> candidate containing <code class="docutils literal notranslate"><span class="pre">L</span></code> convolutional layers, every input video depth and spatial dimension must be at least <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">**</span> <span class="pre">(L</span> <span class="pre">-</span> <span class="pre">1)</span></code> because the encoder pools between layers. For example, <code class="docutils literal notranslate"><span class="pre">(8,</span> <span class="pre">16,</span> <span class="pre">32)</span></code> requires these dimensions to be at least 4.</p>
+</section>
+<section id="repeated-outcomes">
+<h3>Repeated Outcomes<a class="headerlink" href="#repeated-outcomes" title="Link to this heading"></a></h3>
+<p>The dynamic tuner accepts one scalar outcome per unit. It does not accept the repeated-outcome array <code class="docutils literal notranslate"><span class="pre">Y</span></code> with shape <code class="docutils literal notranslate"><span class="pre">[N,</span> <span class="pre">T]</span></code> supported by <a class="reference internal" href="f_estimate_k_ipsi.html#ref-estimate-k-ipsi"><span class="std std-ref">estimate_k_ipsi</span></a>. To tune for a selected repeated-outcome segment <code class="docutils literal notranslate"><span class="pre">s</span></code>, first retain eligible units and truncate every history through that segment:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="n">s</span> <span class="o">=</span> <span class="mi">2</span>  <span class="c1"># zero-based outcome segment</span>
+<span class="n">eligible</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">W</span><span class="p">[:,</span> <span class="n">s</span><span class="p">])</span> <span class="o">&amp;</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">Y_repeated</span><span class="p">[:,</span> <span class="n">s</span><span class="p">])</span>
+
+<span class="n">segment_tuner</span> <span class="o">=</span> <span class="n">DynamicGPIHyperparameterTuner</span><span class="p">(</span>
+    <span class="n">R</span><span class="o">=</span><span class="n">R_text</span><span class="p">[</span><span class="n">eligible</span><span class="p">,</span> <span class="p">:</span> <span class="n">s</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span>
+    <span class="n">R_video</span><span class="o">=</span><span class="n">R_video</span><span class="p">[</span><span class="n">eligible</span><span class="p">,</span> <span class="p">:</span> <span class="n">s</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span>
+    <span class="n">W</span><span class="o">=</span><span class="n">W</span><span class="p">[</span><span class="n">eligible</span><span class="p">,</span> <span class="p">:</span> <span class="n">s</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span>
+    <span class="n">Y</span><span class="o">=</span><span class="n">Y_repeated</span><span class="p">[</span><span class="n">eligible</span><span class="p">,</span> <span class="n">s</span><span class="p">],</span>
+    <span class="n">nepoch</span><span class="o">=</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">),</span>
+    <span class="n">lr</span><span class="o">=</span><span class="p">(</span><span class="mf">1e-5</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">),</span>
+    <span class="n">architecture_y</span><span class="o">=</span><span class="p">((</span><span class="mi">16</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+    <span class="n">architecture_z</span><span class="o">=</span><span class="p">((</span><span class="mi">64</span><span class="p">,</span> <span class="mi">32</span><span class="p">),</span> <span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">64</span><span class="p">)),</span>
+<span class="p">)</span>
+
+<span class="n">segment_tuner</span><span class="o">.</span><span class="n">tune</span><span class="p">(</span><span class="n">n_trials</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You can tune eligible history prefixes separately or reuse a scalar-tuned configuration across the repeated-outcome estimator. One repeated-outcome call to <code class="docutils literal notranslate"><span class="pre">estimate_k_ipsi</span></code> uses one shared hyperparameter configuration for all outcome segments. In either case, keep the tuning design fixed and report it as part of the analysis.</p>
+</section>
+</section>
+<section id="important-notes">
+<h2>Important Notes<a class="headerlink" href="#important-notes" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>The tuners optimize held-out factual-outcome prediction, not the downstream propensity or backward-regression nuisance models and not the final causal estimate.</p></li>
+<li><p>For strict causal cross-fitting, tune on an independent sample or inside each outer training fold. Tuning globally on all outcomes before cross-fitting can leak outcome information into held-out estimates.</p></li>
+<li><p>Use the default <code class="docutils literal notranslate"><span class="pre">n_jobs=1</span></code> for reproducible PyTorch trials. Thread-parallel Optuna trials share random-number-generator and accelerator state; process-isolated workers are safer for parallel tuning.</p></li>
+<li><p>The validation split and model initialization seed are held fixed across trials so configurations are compared on the same split.</p></li>
+</ul>
+<p>For the complete dynamic tuner API, see <a class="reference internal" href="f_DynamicGPIHyperparameterTuner.html#ref-dynamicgpihyperparametertuner"><span class="std std-ref">DynamicGPIHyperparameterTuner</span></a>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="video_as_treatment.html" class="btn btn-neutral float-left" title="Video-as-Treatment" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="custom_imp.html" class="btn btn-neutral float-right" title="Customizing Your Analysis" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Kentaro Nakamura, Kosuke Imai.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

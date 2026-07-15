@@ -1,0 +1,793 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Text-As-Treatment &mdash; GPI: GenAI-Powered Inference 0.2.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=320156fd" />
+
+  
+    <link rel="shortcut icon" href="_static/gpi.png"/>
+    <link rel="canonical" href="https://gpi-pack.github.io/tarnet.html" />
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=37f418d5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/js/copybutton.js?v=a2f921dd"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Text-As-Confounder" href="text_as_confounder.html" />
+    <link rel="prev" title="Transcribing Audio using Whisper" href="gen_whisper.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            GPI: GenAI-Powered Inference
+              <img src="_static/logo_long.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#from-pypi-version-0-2-1">From PyPI (Version 0.2.1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#from-source">From Source</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gpi.html">What Is GPI?</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gpi.html#gpi-workflow">GPI Workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gpi.html#current-package-scope">Current Package Scope</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="startgpu.html">How to Use a GPU</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="startgpu.html#checking-cuda">Checking CUDA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="startgpu.html#using-a-hosted-gpu">Using a Hosted GPU</a></li>
+<li class="toctree-l2"><a class="reference internal" href="startgpu.html#using-remote-model-execution">Using Remote Model Execution</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="report.html">Questions and Bug Reports</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Data Generation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="gen_llama.html">Generating Texts with Llama 3</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gen_llama.html#loading-llama-3-1">Loading Llama 3.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_llama.html#creating-texts">Creating Texts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_llama.html#repeating-existing-texts">Repeating Existing Texts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_llama.html#pooling">Pooling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_llama.html#custom-system-instruction">Custom System Instruction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_llama.html#additional-arguments">Additional Arguments</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gen_llm.html">Generating Texts with Other LLMs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gen_llm.html#loading-gemma-2">Loading Gemma 2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_llm.html#generating-and-saving-representations">Generating and Saving Representations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_llm.html#mean-pooling-across-generation-steps">Mean Pooling Across Generation Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gen_nnsight.html">Generating Texts without a Local GPU</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gen_nnsight.html#installing-and-authenticating">Installing and Authenticating</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_nnsight.html#choosing-an-available-model">Choosing an Available Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_nnsight.html#remote-generation-and-hidden-states">Remote Generation and Hidden States</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_nnsight.html#important-notes">Important Notes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gen_diffusion.html">Generating Images with Stable Diffusion</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gen_diffusion.html#how-the-image-representation-is-constructed">How the Image Representation Is Constructed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_diffusion.html#using-extract-images">Using <code class="docutils literal notranslate"><span class="pre">extract_images</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_diffusion.html#transforming-multiple-images">Transforming Multiple Images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_diffusion.html#arguments">Arguments</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gen_cosmos.html">Generating Videos using Cosmos Tokenizer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gen_cosmos.html#what-is-cosmos-tokenizer">What is Cosmos Tokenizer?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_cosmos.html#installing-the-video-dependencies">Installing the Video Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_cosmos.html#how-to-use-cosmos-tokenizer">How to use Cosmos Tokenizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_cosmos.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_cosmos.html#output-files">Output Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_cosmos.html#command-line-interface">Command-Line Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_cosmos.html#important-notes">Important Notes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gen_whisper.html">Transcribing Audio using Whisper</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gen_whisper.html#what-is-whisper">What is Whisper?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_whisper.html#installing-whisper">Installing Whisper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_whisper.html#choosing-a-whisper-model">Choosing a Whisper Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_whisper.html#command-line-usage">Command-Line Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_whisper.html#python-usage">Python Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_whisper.html#transcribing-audio-from-a-video">Transcribing Audio from a Video</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_whisper.html#aligning-transcripts-with-video-segments">Aligning Transcripts with Video Segments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_whisper.html#important-notes">Important Notes</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Basic Operations</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Text-As-Treatment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#what-is-text-as-treatment">What is Text-As-Treatment?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-estimate-treatment-effects">How to estimate treatment effects</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#step-1-load-the-internal-representations">Step 1: Load the Internal Representations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-2-estimate-the-treatment-effects">Step 2: Estimate the Treatment Effects</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-control-confounders">How to control confounders</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#method-1-using-a-formula-with-a-dataframe">Method 1: Using a Formula with a DataFrame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#method-2-using-a-design-matrix">Method 2: Using a Design Matrix</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#visualizing-propensity-scores">Visualizing Propensity Scores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hyperparameters">Hyperparameters</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="text_as_confounder.html">Text-As-Confounder</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="text_as_confounder.html#what-is-text-as-confounder">What is Text-As-Confounder?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="text_as_confounder.html#how-to-estimate-treatment-effects">How to estimate treatment effects</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="image_as_treatment.html">Image-As-Treatment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="image_as_treatment.html#how-to-estimate-treatment-effects">How to estimate treatment effects</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="image_as_treatment.html#step-1-load-the-internal-representations">Step 1: Load the Internal Representations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="image_as_treatment.html#using-flattened-representations">Using Flattened Representations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="image_as_treatment.html#using-a-convolutional-neural-network">Using a Convolutional Neural Network</a></li>
+<li class="toctree-l3"><a class="reference internal" href="image_as_treatment.html#step-2-estimate-the-treatment-effects">Step 2: Estimate the Treatment Effects</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="video_as_treatment.html">Video-as-Treatment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="video_as_treatment.html#overview-of-the-data">Overview of the Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="video_as_treatment.html#step-1-extract-the-video-representations">Step 1: Extract the Video Representations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="video_as_treatment.html#step-2-align-and-pad-the-sequences">Step 2: Align and Pad the Sequences</a></li>
+<li class="toctree-l2"><a class="reference internal" href="video_as_treatment.html#step-3-estimate-the-intervention-curve">Step 3: Estimate the Intervention Curve</a></li>
+<li class="toctree-l2"><a class="reference internal" href="video_as_treatment.html#real-time-outcomes">Real-Time Outcomes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="video_as_treatment.html#segment-specific-interventions">Segment-Specific Interventions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="video_as_treatment.html#modality-and-audio-support">Modality and Audio Support</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Operations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hyperparameter.html">Hyperparameter Tuning</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hyperparameter.html#automated-hyperparameter-tuning">Automated Hyperparameter Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hyperparameter.html#static-hyperparameter-tuning">Static Hyperparameter Tuning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hyperparameter.html#static-search-space">Static Search Space</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hyperparameter.html#dynamic-hyperparameter-tuning">Dynamic Hyperparameter Tuning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hyperparameter.html#dynamic-search-space">Dynamic Search Space</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hyperparameter.html#repeated-outcomes">Repeated Outcomes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hyperparameter.html#important-notes">Important Notes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="custom_imp.html">Customizing Your Analysis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="custom_imp.html#tarnet">TarNet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="custom_imp.html#propensity-score-model">Propensity Score Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="custom_imp.html#cross-fitted-score-contributions">Cross-Fitted Score Contributions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="custom_imp.html#complete-cross-fitting">Complete Cross-Fitting</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quantization.html">When an LLM Is Too Large</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quantization.html#installing-bitsandbytes">Installing bitsandbytes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantization.html#loading-a-4-bit-model">Loading a 4-bit Model</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Function Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#text-generation">Text Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#image-generation">Image Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#video-processing">Video Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#static-inference">Static Inference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#dynamic-inference">Dynamic Inference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_dml_score.html">dml_score</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_dml_score.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_dml_score.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_dml_score.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_dml_score.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_estimate_k_ate.html">estimate_k_ate</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ate.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ate.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ate.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ate.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_estimate_psi_split.html">estimate_psi_split</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_psi_split.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_psi_split.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_psi_split.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_psi_split.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_extract_and_save_hiddens.html">extract_and_save_hidden_states</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_and_save_hiddens.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_and_save_hiddens.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_and_save_hiddens.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_and_save_hiddens.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_generate_text.html">generate_text</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_generate_text.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_generate_text.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_generate_text.html#pooling-behavior">Pooling Behavior</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_generate_text.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_generate_text.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_get_instructions.html">get_instruction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_get_instructions.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_get_instructions.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_get_instructions.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_get_instructions.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_load_hiddens.html">load_hiddens</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_load_hiddens.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_load_hiddens.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_load_hiddens.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_load_hiddens.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_save_generated_texts.html">save_generated_texts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_save_generated_texts.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_save_generated_texts.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_save_generated_texts.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_save_generated_texts.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_pad_to_multiple_of_8.html">pad_to_multiple_of_8</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_pad_to_multiple_of_8.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_pad_to_multiple_of_8.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_pad_to_multiple_of_8.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_pad_to_multiple_of_8.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_StableDiffusionImg2ImgExtractor.html">StableDiffusionImg2ImgExtractor</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_StableDiffusionImg2ImgExtractor.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_StableDiffusionImg2ImgExtractor.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_StableDiffusionImg2ImgExtractor.html#example-usage">Example Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_StableDiffusionImg2ImgExtractor.html#methods">Methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="f_StableDiffusionImg2ImgExtractor.html#preprocess-image">preprocess_image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_StableDiffusionImg2ImgExtractor.html#encode-prompt">encode_prompt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_StableDiffusionImg2ImgExtractor.html#get-hidden-states">get_hidden_states</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_StableDiffusionImg2ImgExtractor.html#decode-latents">decode_latents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_StableDiffusionImg2ImgExtractor.html#transform-image">transform_image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_StableDiffusionImg2ImgExtractor.html#save-image">save_image</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_extract_images.html">extract_images</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_images.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_images.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_images.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_images.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_CosmosVideoExtractor.html">CosmosVideoExtractor</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_CosmosVideoExtractor.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_CosmosVideoExtractor.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_CosmosVideoExtractor.html#example-usage">Example Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_CosmosVideoExtractor.html#methods">Methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="f_CosmosVideoExtractor.html#preprocess-video">preprocess_video</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_CosmosVideoExtractor.html#encode-video">encode_video</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_CosmosVideoExtractor.html#decode-latents">decode_latents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_CosmosVideoExtractor.html#reconstruct-video">reconstruct_video</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_CosmosVideoExtractor.html#transform-video">transform_video</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_CosmosVideoExtractor.html#save-video">save_video</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_CosmosVideoExtractor.html#process-video">process_video</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_VideoExtractionResult.html">VideoExtractionResult</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_VideoExtractionResult.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_VideoExtractionResult.html#attributes">Attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_VideoExtractionResult.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_VideoSegmentOutput.html">VideoSegmentOutput</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_VideoSegmentOutput.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_VideoSegmentOutput.html#attributes">Attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_VideoSegmentOutput.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_extract_videos.html">extract_videos</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_videos.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_videos.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_videos.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_videos.html#example-usage">Example Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_videos.html#saved-payload">Saved Payload</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_videos.html#command-line-interface">Command-Line Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_videos.html#related-module-utilities">Related Module Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_TextMLPEncoder.html">TextMLPEncoder</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_TextMLPEncoder.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TextMLPEncoder.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TextMLPEncoder.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TextMLPEncoder.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_Video3DEncoder.html">Video3DEncoder</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_Video3DEncoder.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_Video3DEncoder.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_Video3DEncoder.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_Video3DEncoder.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_DynamicTarNetBase.html">DynamicTarNetBase</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicTarNetBase.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicTarNetBase.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicTarNetBase.html#forward">forward</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicTarNetBase.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_mse_loss.html">mse_loss</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_mse_loss.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_mse_loss.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_mse_loss.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_mse_loss.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_DynamicTarNet.html">DynamicTarNet</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicTarNet.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicTarNet.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicTarNet.html#example-usage">Example Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicTarNet.html#methods">Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_DynamicGPIHyperparameterTuner.html">DynamicGPIHyperparameterTuner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicGPIHyperparameterTuner.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicGPIHyperparameterTuner.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicGPIHyperparameterTuner.html#search-space-behavior">Search-Space Behavior</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicGPIHyperparameterTuner.html#example-usage">Example Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicGPIHyperparameterTuner.html#methods">Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_estimate_k_ipsi.html">estimate_k_ipsi</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ipsi.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ipsi.html#data-arguments">Data Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ipsi.html#cross-fitting-arguments">Cross-Fitting Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ipsi.html#dynamic-tarnet-arguments">Dynamic TarNet Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ipsi.html#downstream-nuisance-model-arguments">Downstream Nuisance-Model Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ipsi.html#multimodal-encoder-arguments">Multimodal Encoder Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ipsi.html#inference-argument">Inference Argument</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ipsi.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ipsi.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_SpectralNormClassifier.html">SpectralNormClassifier</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_SpectralNormClassifier.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_SpectralNormClassifier.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_SpectralNormClassifier.html#example-usage">Example Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_SpectralNormClassifier.html#methods">Methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="f_SpectralNormClassifier.html#forward">forward</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_SpectralNormClassifier.html#fit">fit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_SpectralNormClassifier.html#predict-proba">predict_proba</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_SpectralNormClassifier.html#predict">predict</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_TarNet.html">TarNet</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNet.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNet.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNet.html#example-usage">Example Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNet.html#methods">Methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="f_TarNet.html#create-dataloaders">create_dataloaders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_TarNet.html#fit">fit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_TarNet.html#validate-step">validate_step</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_TarNet.html#predict">predict</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_TarNetBase.html">TarNetBase</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNetBase.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNetBase.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNetBase.html#forward">forward</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNetBase.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_TarNetHyperparameterTuner.html">TarNetHyperparameterTuner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNetHyperparameterTuner.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNetHyperparameterTuner.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNetHyperparameterTuner.html#example-usage">Example Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNetHyperparameterTuner.html#methods">Methods</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GPI: GenAI-Powered Inference</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Text-As-Treatment</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="text-as-treatment">
+<span id="ref-textastreatment"></span><h1>Text-As-Treatment<a class="headerlink" href="#text-as-treatment" title="Link to this heading"></a></h1>
+<p>Text-As-Treatment is a key setting where <strong>gpi_pack</strong> is especially useful. Instead of directly modeling texts, we use the internal representations of LLMs to estimate treatment effects. This approach improves accuracy and computational efficiency. In this section, we provide an overview of the Text-As-Treatment setting and demonstrate how to use gpi_pack to estimate treatment effects with the internal representations of LLMs.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This part is based on our paper <a class="reference external" href="https://arxiv.org/abs/2410.00903">Causal Inference with Generative Artificial Intelligence: Application to Texts as Treatments</a>. Please refer to the paper for the technical details.</p>
+</div>
+<section id="what-is-text-as-treatment">
+<h2>What is Text-As-Treatment?<a class="headerlink" href="#what-is-text-as-treatment" title="Link to this heading"></a></h2>
+<p>Text-As-Treatment refers to scenarios where participants receive various texts, and the goal is to determine how one specific feature of the texts (e.g., topics or sentiments) influences downstream outcomes. A primary challenge in this setting is that texts inherently contain other features that might confound the relationship between the feature of interest and the outcome.</p>
+<p>To address this challenge, <a class="reference external" href="https://arxiv.org/abs/2410.00903">our paper</a> proposes using LLMs’ internal representations to bypass the direct modeling of texts. We introduce a representation learning method called the <strong>deconfounder</strong>, which enables us to estimate the treatment effects of the feature of interest without directly observing all confounding features. The current <code class="docutils literal notranslate"><span class="pre">TarNet</span></code> implementation learns this shared representation, appends a user-supplied treatment value, and uses one treatment-conditioned outcome network. Potential outcomes under control and treatment are obtained by evaluating that network with treatment values zero and one. The following figure illustrates the conceptual architecture:</p>
+<a class="reference internal image-reference" href="_images/tarnet.png"><img alt="TarNet architecture" class="align-center" src="_images/tarnet.png" style="width: 600px;" />
+</a>
+<p>Once the deconfounder and the treatment-conditioned outcome model are estimated, a propensity score model is built based on the deconfounder. Finally, the estimated nuisance functions are combined with a doubly robust score to estimate the treatment effect.</p>
+</section>
+<section id="how-to-estimate-treatment-effects">
+<h2>How to estimate treatment effects<a class="headerlink" href="#how-to-estimate-treatment-effects" title="Link to this heading"></a></h2>
+<p><strong>gpi_pack</strong> offers the wrapper function <code class="docutils literal notranslate"><span class="pre">estimate_k_ate</span></code> to streamline the estimation of treatment effects using LLMs’ internal representations. This function handles all the necessary steps, including deconfounder estimation and propensity score estimation, so you only need to provide the data.</p>
+<p>Suppose you have a DataFrame <code class="docutils literal notranslate"><span class="pre">df</span></code> containing the treatment variable, outcome variable, and texts, and you have already extracted the internal representations of the LLMs as tensor-only <code class="docutils literal notranslate"><span class="pre">.pt</span></code> files. Below is an example demonstrating how to use <code class="docutils literal notranslate"><span class="pre">estimate_k_ate</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># loading required packages</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="c1"># create a data frame</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s1">&#39;TreatmentVar&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+    <span class="s1">&#39;OutcomeVar&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+    <span class="s1">&#39;Text&#39;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s1">&#39;Create a biography of an American politician named Nathaniel C. Gilchrist&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Create a biography of an American politician named John Doe&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Create a biography of an American politician named Jane Smith&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Create a biography of an American politician named Mary Johnson&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Create a biography of an American politician named Robert Brown&#39;</span><span class="p">,</span>
+    <span class="p">]</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+<p>This five-row data frame illustrates the required organization only. Neural-network fitting and causal estimation require a substantively adequate sample.</p>
+<section id="step-1-load-the-internal-representations">
+<h3>Step 1: Load the Internal Representations<a class="headerlink" href="#step-1-load-the-internal-representations" title="Link to this heading"></a></h3>
+<p>First, load the internal representations using the <code class="docutils literal notranslate"><span class="pre">load_hiddens</span></code> function:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># loading required packages</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gpi_pack</span><span class="w"> </span><span class="kn">import</span> <span class="n">estimate_k_ate</span><span class="p">,</span> <span class="n">load_hiddens</span>
+
+<span class="c1"># load hidden states stored as .pt files</span>
+<span class="n">hidden_dir</span> <span class="o">=</span> <span class="s2">&quot;outputs/hidden&quot;</span> <span class="c1"># directory containing the .pt files</span>
+
+<span class="n">hidden_states</span> <span class="o">=</span> <span class="n">load_hiddens</span><span class="p">(</span>
+    <span class="n">directory</span> <span class="o">=</span> <span class="n">hidden_dir</span><span class="p">,</span>
+    <span class="n">hidden_list</span><span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="c1"># list of indices for hidden states</span>
+    <span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot;hidden_last_&quot;</span><span class="p">,</span> <span class="c1"># prefix of hidden states (e.g., &quot;hidden_last_&quot; for &quot;hidden_last_1.pt&quot;)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you have not extracted the internal representations, please refer to <a class="reference internal" href="gen_llama.html#generate-texts"><span class="std std-ref">Generating Texts with Llama 3</span></a>.</p>
+</div>
+</section>
+<section id="step-2-estimate-the-treatment-effects">
+<h3>Step 2: Estimate the Treatment Effects<a class="headerlink" href="#step-2-estimate-the-treatment-effects" title="Link to this heading"></a></h3>
+<p>Once the internal representations are loaded, use <code class="docutils literal notranslate"><span class="pre">estimate_k_ate</span></code> to estimate the treatment effects:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># estimate treatment effects</span>
+<span class="n">ate</span><span class="p">,</span> <span class="n">se</span> <span class="o">=</span> <span class="n">estimate_k_ate</span><span class="p">(</span>
+    <span class="c1"># Data (Inputs)</span>
+    <span class="n">R</span><span class="o">=</span> <span class="n">hidden_states</span><span class="p">,</span>
+    <span class="n">Y</span><span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;OutcomeVar&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+    <span class="n">T</span><span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;TreatmentVar&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+
+    <span class="c1"># Hyperparameters (optional)</span>
+    <span class="n">K</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="c1">#K-fold cross-fitting</span>
+    <span class="n">lr</span> <span class="o">=</span> <span class="mf">2e-5</span><span class="p">,</span> <span class="c1">#learning rate</span>
+    <span class="n">architecture_y</span> <span class="o">=</span> <span class="p">[</span><span class="mi">200</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="c1">#outcome model architecture</span>
+    <span class="n">architecture_z</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2048</span><span class="p">],</span> <span class="c1">#deconfounder architecture</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>To compute a 95% confidence interval for the treatment effect estimate, use the following code:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># calculate 95% confidence interval</span>
+<span class="n">lower_bound</span> <span class="o">=</span> <span class="n">ate</span> <span class="o">-</span> <span class="mf">1.96</span> <span class="o">*</span> <span class="n">se</span>
+<span class="n">upper_bound</span> <span class="o">=</span> <span class="n">ate</span> <span class="o">+</span> <span class="mf">1.96</span> <span class="o">*</span> <span class="n">se</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ATE: </span><span class="si">{</span><span class="n">ate</span><span class="si">}</span><span class="s2">, SE: </span><span class="si">{</span><span class="n">se</span><span class="si">}</span><span class="s2">, 95% CI: (</span><span class="si">{</span><span class="n">lower_bound</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">upper_bound</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="how-to-control-confounders">
+<h2>How to control confounders<a class="headerlink" href="#how-to-control-confounders" title="Link to this heading"></a></h2>
+<p>In some cases, you may want to control for confounders that are not included in the texts. <strong>gpi_pack</strong> supports this via the <code class="docutils literal notranslate"><span class="pre">estimate_k_ate</span></code> function in two ways:</p>
+<section id="method-1-using-a-formula-with-a-dataframe">
+<h3>Method 1: Using a Formula with a DataFrame<a class="headerlink" href="#method-1-using-a-formula-with-a-dataframe" title="Link to this heading"></a></h3>
+<p>If your DataFrame includes confounders as columns, specify <code class="docutils literal notranslate"><span class="pre">formula_C</span></code> (for example, <code class="docutils literal notranslate"><span class="pre">&quot;conf1</span> <span class="pre">+</span> <span class="pre">conf2&quot;</span></code>) along with the DataFrame. The argument name uses an uppercase <code class="docutils literal notranslate"><span class="pre">C</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Method 1: supply covariates with a formula and DataFrame</span>
+<span class="n">ate</span><span class="p">,</span> <span class="n">se</span> <span class="o">=</span> <span class="n">estimate_k_ate</span><span class="p">(</span>
+    <span class="n">R</span><span class="o">=</span> <span class="n">hidden_states</span><span class="p">,</span>
+    <span class="n">Y</span><span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;OutcomeVar&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+    <span class="n">T</span><span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;TreatmentVar&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+    <span class="n">formula_C</span><span class="o">=</span><span class="s2">&quot;conf1 + conf2&quot;</span><span class="p">,</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">K</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="c1">#K-fold cross-fitting</span>
+    <span class="n">lr</span> <span class="o">=</span> <span class="mf">2e-5</span><span class="p">,</span> <span class="c1">#learning rate</span>
+    <span class="c1"># Outcome-network widths; the final width is the outcome dimension</span>
+    <span class="n">architecture_y</span> <span class="o">=</span> <span class="p">[</span><span class="mi">200</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+
+    <span class="c1"># Shared-representation widths; the final width is the deconfounder dimension</span>
+    <span class="n">architecture_z</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2048</span><span class="p">],</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="method-2-using-a-design-matrix">
+<h3>Method 2: Using a Design Matrix<a class="headerlink" href="#method-2-using-a-design-matrix" title="Link to this heading"></a></h3>
+<p>Alternatively, create a design matrix of confounders and pass it to the <code class="docutils literal notranslate"><span class="pre">C</span></code> argument:</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The design matrix must have one row per observation. <code class="docutils literal notranslate"><span class="pre">TarNet</span></code> appends these covariates to the learned deconfounder; it does not concatenate them to the raw input representation.</p>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Method 2: supply covariates using a design matrix</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span> <span class="c1">#load numpy module</span>
+<span class="n">C_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;conf1&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;conf2&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">])</span>
+
+<span class="n">ate</span><span class="p">,</span> <span class="n">se</span> <span class="o">=</span> <span class="n">estimate_k_ate</span><span class="p">(</span>
+    <span class="n">R</span><span class="o">=</span> <span class="n">hidden_states</span><span class="p">,</span>
+    <span class="n">Y</span><span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;OutcomeVar&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+    <span class="n">T</span><span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;TreatmentVar&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+    <span class="n">C</span><span class="o">=</span><span class="n">C_mat</span><span class="p">,</span> <span class="c1">#design matrix of confounding variable</span>
+    <span class="n">K</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="c1">#K-fold cross-fitting</span>
+    <span class="n">lr</span> <span class="o">=</span> <span class="mf">2e-5</span><span class="p">,</span> <span class="c1">#learning rate</span>
+
+    <span class="c1"># Outcome-network widths</span>
+    <span class="n">architecture_y</span> <span class="o">=</span> <span class="p">[</span><span class="mi">200</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+
+    <span class="c1"># Shared-representation widths</span>
+    <span class="n">architecture_z</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2048</span><span class="p">],</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="visualizing-propensity-scores">
+<h2>Visualizing Propensity Scores<a class="headerlink" href="#visualizing-propensity-scores" title="Link to this heading"></a></h2>
+<p>For the Text-As-Treatment setting, it is crucial to assume that the textual feature and the confounding features are disentangled—a property known as <strong>separability</strong>. Visualizing the propensity scores can help diagnose whether this assumption holds. If the propensity scores are extreme (close to 0 or 1), it may indicate that confounding features are entangled with the treatment feature of interest.</p>
+<p>By default, <code class="docutils literal notranslate"><span class="pre">estimate_k_ate</span></code> displays a Matplotlib histogram of the
+cross-fitted propensity scores for each outer fold. Set
+<code class="docutils literal notranslate"><span class="pre">plot_propensity=False</span></code> to suppress those histograms. In version 0.2.1, the
+wrapper still calls <code class="docutils literal notranslate"><span class="pre">TarNet.fit</span></code> with its default <code class="docutils literal notranslate"><span class="pre">plot_loss=True</span></code> and
+does not expose that argument, so it also displays one training/validation
+loss figure per outer fold. Use the lower-level workflow when those loss
+figures must be disabled. Below is an example that explicitly enables the
+propensity plot:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># estimate treatment effects</span>
+<span class="n">ate</span><span class="p">,</span> <span class="n">se</span> <span class="o">=</span> <span class="n">estimate_k_ate</span><span class="p">(</span>
+    <span class="n">R</span><span class="o">=</span> <span class="n">hidden_states</span><span class="p">,</span>
+    <span class="n">Y</span><span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;OutcomeVar&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+    <span class="n">T</span><span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;TreatmentVar&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+    <span class="n">K</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="c1">#K-fold cross-fitting</span>
+    <span class="n">lr</span> <span class="o">=</span> <span class="mf">2e-5</span><span class="p">,</span> <span class="c1">#learning rate</span>
+    <span class="n">architecture_y</span> <span class="o">=</span> <span class="p">[</span><span class="mi">200</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="c1">#outcome model architecture</span>
+    <span class="n">architecture_z</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2048</span><span class="p">],</span> <span class="c1">#deconfounder architecture</span>
+    <span class="n">plot_propensity</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="c1">#visualize propensity scores</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/propensity.png"><img alt="propensity score" src="_images/propensity.png" style="width: 600px;" />
+</a>
+</section>
+<section id="hyperparameters">
+<h2>Hyperparameters<a class="headerlink" href="#hyperparameters" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">estimate_k_ate</span></code> function accepts the following parameters:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">R</span></code>: list or np.ndarray</dt><dd><p>Hidden representations with shape <code class="docutils literal notranslate"><span class="pre">[N,</span> <span class="pre">d_R]</span></code>. Image-shaped <code class="docutils literal notranslate"><span class="pre">[N,</span> <span class="pre">C,</span> <span class="pre">H,</span> <span class="pre">W]</span></code> inputs are also accepted when <code class="docutils literal notranslate"><span class="pre">conv_layers</span></code> is supplied.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">Y</span></code>: list or np.ndarray</dt><dd><p>A list or NumPy array of outcomes, shape: (N,).</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">T</span></code>: list or np.ndarray</dt><dd><p>A list or NumPy array of treatments, shape: (N,). Typically binary (0 or 1).</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">C</span></code>: list or np.ndarray, optional</dt><dd><p>Additional confounders with shape <code class="docutils literal notranslate"><span class="pre">[N,</span> <span class="pre">d_C]</span></code>. They are appended to the learned representation and consequently enter both the outcome and propensity models.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">formula_C</span></code>: str, optional</dt><dd><p>A Patsy-style formula such as <code class="docutils literal notranslate"><span class="pre">&quot;conf1</span> <span class="pre">+</span> <span class="pre">conf2&quot;</span></code> used to construct <code class="docutils literal notranslate"><span class="pre">C</span></code> from <code class="docutils literal notranslate"><span class="pre">data</span></code>. The implementation removes the intercept.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">data</span></code>: pandas.DataFrame, optional</dt><dd><p>The DataFrame containing the columns used in <code class="docutils literal notranslate"><span class="pre">formula_C</span></code>.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">K</span></code>: int, default=2</dt><dd><p>Number of cross-fitting folds (K-fold split).</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">valid_perc</span></code>: float, default=0.2</dt><dd><p>Proportion of the training set to use for validation when fitting TarNet in each fold.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">plot_propensity</span></code>: bool, default=True</dt><dd><p>Whether to display a Matplotlib histogram of the estimated propensity scores. This does not control the per-fold TarNet loss figures in version 0.2.1.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">ps_model</span></code>: class, optional</dt><dd><p>Propensity-model class implementing <code class="docutils literal notranslate"><span class="pre">fit</span></code> and <code class="docutils literal notranslate"><span class="pre">predict_proba</span></code>. The default is <a class="reference internal" href="f_SpectralNormClassifier.html#ref-spectralnormclassifier"><span class="std std-ref">SpectralNormClassifier</span></a>.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">ps_model_params</span></code>: dict, optional</dt><dd><p>Constructor arguments for <code class="docutils literal notranslate"><span class="pre">ps_model</span></code>. For the default classifier, <code class="docutils literal notranslate"><span class="pre">input_dim</span></code> is inferred from the returned representation when it is omitted.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">batch_size</span></code>: int, default=32</dt><dd><p>Batch size for TarNet training.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">nepoch</span></code>: int, default=200</dt><dd><p>Number of epochs to train TarNet.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">step_size</span></code>: int, optional</dt><dd><p>Patience of the <code class="docutils literal notranslate"><span class="pre">ReduceLROnPlateau</span></code> learning-rate scheduler. <code class="docutils literal notranslate"><span class="pre">None</span></code> disables the scheduler.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">lr</span></code>: float, default=2e-5</dt><dd><p>Learning rate for TarNet.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">cluster</span></code>: list, optional</dt><dd><p>Cluster identifiers for clustered standard errors. Version 0.2.1 can misalign these identifiers with reordered cross-fitted scores; see the warning in <a class="reference internal" href="f_estimate_k_ate.html#ref-estimate-k-ate"><span class="std std-ref">estimate_k_ate</span></a> before using it.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">dropout</span></code>: float, default=0.2</dt><dd><p>Dropout rate for TarNet layers.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">architecture_y</span></code>: list, default=[200, 1]</dt><dd><p>Additional widths of the treatment-conditioned outcome network. The final value is the outcome dimension and is normally 1. Internally, the implementation prepends an outcome layer whose width is <code class="docutils literal notranslate"><span class="pre">architecture_z[-1]</span></code>.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">architecture_z</span></code>: list, default=[2048]</dt><dd><p>Widths of the shared representation network. The final value is the learned deconfounder dimension before optional <code class="docutils literal notranslate"><span class="pre">C</span></code> is appended.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">conv_layers</span></code>: list of dict, optional</dt><dd><p>Fixed <code class="docutils literal notranslate"><span class="pre">Conv2d</span></code> front-end used for image-shaped <code class="docutils literal notranslate"><span class="pre">R</span></code>. See <a class="reference internal" href="image_as_treatment.html#ref-imageastreatment"><span class="std std-ref">Image-As-Treatment</span></a>.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">conv_activation</span></code>: callable, optional</dt><dd><p>Activation factory for the convolutional blocks. The default is <code class="docutils literal notranslate"><span class="pre">torch.nn.ReLU</span></code>; use <code class="docutils literal notranslate"><span class="pre">None</span></code> to omit convolutional activations.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">trim</span></code>: list or None, default=[0.01, 0.99]</dt><dd><p>Clipping bounds for the propensity score. Scores outside this range are replaced with the nearest bound. Use <code class="docutils literal notranslate"><span class="pre">None</span></code> to disable clipping.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">bn</span></code>: bool, default=False</dt><dd><p>Whether to apply batch normalization in TarNet.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">patience</span></code>: int, default=5</dt><dd><p>Patience for early stopping in TarNet training (number of epochs without improvement).</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">min_delta</span></code>: float, default=0</dt><dd><p>Minimum improvement threshold for early stopping.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">model_dir</span></code>: str, optional</dt><dd><p>Directory in which each TarNet fit saves its best state as <code class="docutils literal notranslate"><span class="pre">best_TarNet.pth</span></code>. The best state is also restored in memory before prediction.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">verbose</span></code>: bool, default=True</dt><dd><p>Whether TarNet prints its device and epoch progress. The propensity classifier, held-out accuracy, and final ATE/SE are still printed when this is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>For the complete signature and return values, see <a class="reference internal" href="f_estimate_k_ate.html#ref-estimate-k-ate"><span class="std std-ref">estimate_k_ate</span></a>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="gen_whisper.html" class="btn btn-neutral float-left" title="Transcribing Audio using Whisper" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="text_as_confounder.html" class="btn btn-neutral float-right" title="Text-As-Confounder" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Kentaro Nakamura, Kosuke Imai.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

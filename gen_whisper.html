@@ -1,0 +1,668 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Transcribing Audio using Whisper &mdash; GPI: GenAI-Powered Inference 0.2.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=320156fd" />
+
+  
+    <link rel="shortcut icon" href="_static/gpi.png"/>
+    <link rel="canonical" href="https://gpi-pack.github.io/gen_whisper.html" />
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=37f418d5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/js/copybutton.js?v=a2f921dd"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Text-As-Treatment" href="tarnet.html" />
+    <link rel="prev" title="Generating Videos using Cosmos Tokenizer" href="gen_cosmos.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            GPI: GenAI-Powered Inference
+              <img src="_static/logo_long.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#from-pypi-version-0-2-1">From PyPI (Version 0.2.1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#from-source">From Source</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gpi.html">What Is GPI?</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gpi.html#gpi-workflow">GPI Workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gpi.html#current-package-scope">Current Package Scope</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="startgpu.html">How to Use a GPU</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="startgpu.html#checking-cuda">Checking CUDA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="startgpu.html#using-a-hosted-gpu">Using a Hosted GPU</a></li>
+<li class="toctree-l2"><a class="reference internal" href="startgpu.html#using-remote-model-execution">Using Remote Model Execution</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="report.html">Questions and Bug Reports</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Data Generation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="gen_llama.html">Generating Texts with Llama 3</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gen_llama.html#loading-llama-3-1">Loading Llama 3.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_llama.html#creating-texts">Creating Texts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_llama.html#repeating-existing-texts">Repeating Existing Texts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_llama.html#pooling">Pooling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_llama.html#custom-system-instruction">Custom System Instruction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_llama.html#additional-arguments">Additional Arguments</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gen_llm.html">Generating Texts with Other LLMs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gen_llm.html#loading-gemma-2">Loading Gemma 2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_llm.html#generating-and-saving-representations">Generating and Saving Representations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_llm.html#mean-pooling-across-generation-steps">Mean Pooling Across Generation Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gen_nnsight.html">Generating Texts without a Local GPU</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gen_nnsight.html#installing-and-authenticating">Installing and Authenticating</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_nnsight.html#choosing-an-available-model">Choosing an Available Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_nnsight.html#remote-generation-and-hidden-states">Remote Generation and Hidden States</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_nnsight.html#important-notes">Important Notes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gen_diffusion.html">Generating Images with Stable Diffusion</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gen_diffusion.html#how-the-image-representation-is-constructed">How the Image Representation Is Constructed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_diffusion.html#using-extract-images">Using <code class="docutils literal notranslate"><span class="pre">extract_images</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_diffusion.html#transforming-multiple-images">Transforming Multiple Images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_diffusion.html#arguments">Arguments</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gen_cosmos.html">Generating Videos using Cosmos Tokenizer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gen_cosmos.html#what-is-cosmos-tokenizer">What is Cosmos Tokenizer?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_cosmos.html#installing-the-video-dependencies">Installing the Video Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_cosmos.html#how-to-use-cosmos-tokenizer">How to use Cosmos Tokenizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_cosmos.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_cosmos.html#output-files">Output Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_cosmos.html#command-line-interface">Command-Line Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_cosmos.html#important-notes">Important Notes</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Transcribing Audio using Whisper</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#what-is-whisper">What is Whisper?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installing-whisper">Installing Whisper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#choosing-a-whisper-model">Choosing a Whisper Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#command-line-usage">Command-Line Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#python-usage">Python Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#transcribing-audio-from-a-video">Transcribing Audio from a Video</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aligning-transcripts-with-video-segments">Aligning Transcripts with Video Segments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#important-notes">Important Notes</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Basic Operations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tarnet.html">Text-As-Treatment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tarnet.html#what-is-text-as-treatment">What is Text-As-Treatment?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tarnet.html#how-to-estimate-treatment-effects">How to estimate treatment effects</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tarnet.html#step-1-load-the-internal-representations">Step 1: Load the Internal Representations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tarnet.html#step-2-estimate-the-treatment-effects">Step 2: Estimate the Treatment Effects</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tarnet.html#how-to-control-confounders">How to control confounders</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tarnet.html#method-1-using-a-formula-with-a-dataframe">Method 1: Using a Formula with a DataFrame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tarnet.html#method-2-using-a-design-matrix">Method 2: Using a Design Matrix</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tarnet.html#visualizing-propensity-scores">Visualizing Propensity Scores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tarnet.html#hyperparameters">Hyperparameters</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="text_as_confounder.html">Text-As-Confounder</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="text_as_confounder.html#what-is-text-as-confounder">What is Text-As-Confounder?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="text_as_confounder.html#how-to-estimate-treatment-effects">How to estimate treatment effects</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="image_as_treatment.html">Image-As-Treatment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="image_as_treatment.html#how-to-estimate-treatment-effects">How to estimate treatment effects</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="image_as_treatment.html#step-1-load-the-internal-representations">Step 1: Load the Internal Representations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="image_as_treatment.html#using-flattened-representations">Using Flattened Representations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="image_as_treatment.html#using-a-convolutional-neural-network">Using a Convolutional Neural Network</a></li>
+<li class="toctree-l3"><a class="reference internal" href="image_as_treatment.html#step-2-estimate-the-treatment-effects">Step 2: Estimate the Treatment Effects</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="video_as_treatment.html">Video-as-Treatment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="video_as_treatment.html#overview-of-the-data">Overview of the Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="video_as_treatment.html#step-1-extract-the-video-representations">Step 1: Extract the Video Representations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="video_as_treatment.html#step-2-align-and-pad-the-sequences">Step 2: Align and Pad the Sequences</a></li>
+<li class="toctree-l2"><a class="reference internal" href="video_as_treatment.html#step-3-estimate-the-intervention-curve">Step 3: Estimate the Intervention Curve</a></li>
+<li class="toctree-l2"><a class="reference internal" href="video_as_treatment.html#real-time-outcomes">Real-Time Outcomes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="video_as_treatment.html#segment-specific-interventions">Segment-Specific Interventions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="video_as_treatment.html#modality-and-audio-support">Modality and Audio Support</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Operations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hyperparameter.html">Hyperparameter Tuning</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hyperparameter.html#automated-hyperparameter-tuning">Automated Hyperparameter Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hyperparameter.html#static-hyperparameter-tuning">Static Hyperparameter Tuning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hyperparameter.html#static-search-space">Static Search Space</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hyperparameter.html#dynamic-hyperparameter-tuning">Dynamic Hyperparameter Tuning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hyperparameter.html#dynamic-search-space">Dynamic Search Space</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hyperparameter.html#repeated-outcomes">Repeated Outcomes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hyperparameter.html#important-notes">Important Notes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="custom_imp.html">Customizing Your Analysis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="custom_imp.html#tarnet">TarNet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="custom_imp.html#propensity-score-model">Propensity Score Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="custom_imp.html#cross-fitted-score-contributions">Cross-Fitted Score Contributions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="custom_imp.html#complete-cross-fitting">Complete Cross-Fitting</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quantization.html">When an LLM Is Too Large</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quantization.html#installing-bitsandbytes">Installing bitsandbytes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantization.html#loading-a-4-bit-model">Loading a 4-bit Model</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Function Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#text-generation">Text Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#image-generation">Image Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#video-processing">Video Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#static-inference">Static Inference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#dynamic-inference">Dynamic Inference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_dml_score.html">dml_score</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_dml_score.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_dml_score.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_dml_score.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_dml_score.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_estimate_k_ate.html">estimate_k_ate</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ate.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ate.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ate.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ate.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_estimate_psi_split.html">estimate_psi_split</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_psi_split.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_psi_split.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_psi_split.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_psi_split.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_extract_and_save_hiddens.html">extract_and_save_hidden_states</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_and_save_hiddens.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_and_save_hiddens.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_and_save_hiddens.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_and_save_hiddens.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_generate_text.html">generate_text</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_generate_text.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_generate_text.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_generate_text.html#pooling-behavior">Pooling Behavior</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_generate_text.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_generate_text.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_get_instructions.html">get_instruction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_get_instructions.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_get_instructions.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_get_instructions.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_get_instructions.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_load_hiddens.html">load_hiddens</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_load_hiddens.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_load_hiddens.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_load_hiddens.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_load_hiddens.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_save_generated_texts.html">save_generated_texts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_save_generated_texts.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_save_generated_texts.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_save_generated_texts.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_save_generated_texts.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_pad_to_multiple_of_8.html">pad_to_multiple_of_8</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_pad_to_multiple_of_8.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_pad_to_multiple_of_8.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_pad_to_multiple_of_8.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_pad_to_multiple_of_8.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_StableDiffusionImg2ImgExtractor.html">StableDiffusionImg2ImgExtractor</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_StableDiffusionImg2ImgExtractor.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_StableDiffusionImg2ImgExtractor.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_StableDiffusionImg2ImgExtractor.html#example-usage">Example Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_StableDiffusionImg2ImgExtractor.html#methods">Methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="f_StableDiffusionImg2ImgExtractor.html#preprocess-image">preprocess_image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_StableDiffusionImg2ImgExtractor.html#encode-prompt">encode_prompt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_StableDiffusionImg2ImgExtractor.html#get-hidden-states">get_hidden_states</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_StableDiffusionImg2ImgExtractor.html#decode-latents">decode_latents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_StableDiffusionImg2ImgExtractor.html#transform-image">transform_image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_StableDiffusionImg2ImgExtractor.html#save-image">save_image</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_extract_images.html">extract_images</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_images.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_images.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_images.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_images.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_CosmosVideoExtractor.html">CosmosVideoExtractor</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_CosmosVideoExtractor.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_CosmosVideoExtractor.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_CosmosVideoExtractor.html#example-usage">Example Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_CosmosVideoExtractor.html#methods">Methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="f_CosmosVideoExtractor.html#preprocess-video">preprocess_video</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_CosmosVideoExtractor.html#encode-video">encode_video</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_CosmosVideoExtractor.html#decode-latents">decode_latents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_CosmosVideoExtractor.html#reconstruct-video">reconstruct_video</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_CosmosVideoExtractor.html#transform-video">transform_video</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_CosmosVideoExtractor.html#save-video">save_video</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_CosmosVideoExtractor.html#process-video">process_video</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_VideoExtractionResult.html">VideoExtractionResult</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_VideoExtractionResult.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_VideoExtractionResult.html#attributes">Attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_VideoExtractionResult.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_VideoSegmentOutput.html">VideoSegmentOutput</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_VideoSegmentOutput.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_VideoSegmentOutput.html#attributes">Attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_VideoSegmentOutput.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_extract_videos.html">extract_videos</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_videos.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_videos.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_videos.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_videos.html#example-usage">Example Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_videos.html#saved-payload">Saved Payload</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_videos.html#command-line-interface">Command-Line Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_videos.html#related-module-utilities">Related Module Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_TextMLPEncoder.html">TextMLPEncoder</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_TextMLPEncoder.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TextMLPEncoder.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TextMLPEncoder.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TextMLPEncoder.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_Video3DEncoder.html">Video3DEncoder</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_Video3DEncoder.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_Video3DEncoder.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_Video3DEncoder.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_Video3DEncoder.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_DynamicTarNetBase.html">DynamicTarNetBase</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicTarNetBase.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicTarNetBase.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicTarNetBase.html#forward">forward</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicTarNetBase.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_mse_loss.html">mse_loss</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_mse_loss.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_mse_loss.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_mse_loss.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_mse_loss.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_DynamicTarNet.html">DynamicTarNet</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicTarNet.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicTarNet.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicTarNet.html#example-usage">Example Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicTarNet.html#methods">Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_DynamicGPIHyperparameterTuner.html">DynamicGPIHyperparameterTuner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicGPIHyperparameterTuner.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicGPIHyperparameterTuner.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicGPIHyperparameterTuner.html#search-space-behavior">Search-Space Behavior</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicGPIHyperparameterTuner.html#example-usage">Example Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicGPIHyperparameterTuner.html#methods">Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_estimate_k_ipsi.html">estimate_k_ipsi</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ipsi.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ipsi.html#data-arguments">Data Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ipsi.html#cross-fitting-arguments">Cross-Fitting Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ipsi.html#dynamic-tarnet-arguments">Dynamic TarNet Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ipsi.html#downstream-nuisance-model-arguments">Downstream Nuisance-Model Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ipsi.html#multimodal-encoder-arguments">Multimodal Encoder Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ipsi.html#inference-argument">Inference Argument</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ipsi.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ipsi.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_SpectralNormClassifier.html">SpectralNormClassifier</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_SpectralNormClassifier.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_SpectralNormClassifier.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_SpectralNormClassifier.html#example-usage">Example Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_SpectralNormClassifier.html#methods">Methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="f_SpectralNormClassifier.html#forward">forward</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_SpectralNormClassifier.html#fit">fit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_SpectralNormClassifier.html#predict-proba">predict_proba</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_SpectralNormClassifier.html#predict">predict</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_TarNet.html">TarNet</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNet.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNet.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNet.html#example-usage">Example Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNet.html#methods">Methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="f_TarNet.html#create-dataloaders">create_dataloaders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_TarNet.html#fit">fit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_TarNet.html#validate-step">validate_step</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_TarNet.html#predict">predict</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_TarNetBase.html">TarNetBase</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNetBase.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNetBase.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNetBase.html#forward">forward</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNetBase.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_TarNetHyperparameterTuner.html">TarNetHyperparameterTuner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNetHyperparameterTuner.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNetHyperparameterTuner.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNetHyperparameterTuner.html#example-usage">Example Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNetHyperparameterTuner.html#methods">Methods</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GPI: GenAI-Powered Inference</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Transcribing Audio using Whisper</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="transcribing-audio-using-whisper">
+<span id="transcribe-audio"></span><h1>Transcribing Audio using Whisper<a class="headerlink" href="#transcribing-audio-using-whisper" title="Link to this heading"></a></h1>
+<p>Videos often contain spoken information that is not represented by the image frames alone. This section describes how to transcribe that information using <a class="reference external" href="https://github.com/openai/whisper">Whisper</a>, an open-source automatic speech-recognition model developed by OpenAI. The resulting transcripts can be aligned with the video segments and used to construct the text representations in a Video-as-Treatment analysis.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Whisper is a separate third-party package and is not installed with <strong>gpi_pack</strong>. The Cosmos video extractor does not encode audio or copy it into reconstructed videos, so you should transcribe the original media file or an audio file extracted from it.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Whisper can run on a CPU, but a CUDA-capable GPU is recommended for faster transcription, particularly with the larger models.</p>
+</div>
+<section id="what-is-whisper">
+<h2>What is Whisper?<a class="headerlink" href="#what-is-whisper" title="Link to this heading"></a></h2>
+<p>Whisper is an encoder-decoder Transformer. The original model series described
+in the Whisper paper was trained on 680,000 hours of multilingual and multitask
+audio data; the repository now also includes later <code class="docutils literal notranslate"><span class="pre">large-v2</span></code>, <code class="docutils literal notranslate"><span class="pre">large-v3</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">turbo</span></code> releases. Whisper converts audio into a log-Mel spectrogram,
+encodes the acoustic information, and predicts text tokens with a decoder. It
+can transcribe speech in its original language, identify the spoken language,
+and, with supported multilingual models, translate speech into English. See
+the <a class="reference external" href="https://arxiv.org/abs/2212.04356">Whisper paper</a> and the official model
+card for the release details.</p>
+<p>The high-level <code class="docutils literal notranslate"><span class="pre">transcribe</span></code> method processes a complete media file using a sliding 30-second window. It returns the complete text together with timestamped segments and other decoding information.</p>
+</section>
+<section id="installing-whisper">
+<h2>Installing Whisper<a class="headerlink" href="#installing-whisper" title="Link to this heading"></a></h2>
+<p>Install the latest released Whisper package in the same Python environment used for your analysis:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span>openai-whisper
+</pre></div>
+</div>
+<p>Whisper also requires the <code class="docutils literal notranslate"><span class="pre">ffmpeg</span></code> command-line program to read audio. For example, install it with Homebrew on macOS or APT on Ubuntu and Debian:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># macOS</span>
+brew<span class="w"> </span>install<span class="w"> </span>ffmpeg
+
+<span class="c1"># Ubuntu or Debian</span>
+sudo<span class="w"> </span>apt<span class="w"> </span>update
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>ffmpeg
+</pre></div>
+</div>
+<p>Confirm that <code class="docutils literal notranslate"><span class="pre">ffmpeg</span></code> is available on your command path:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ffmpeg<span class="w"> </span>-version
+</pre></div>
+</div>
+<p>Whisper downloads the selected model weights the first time you load that model and stores them in the local cache.</p>
+</section>
+<section id="choosing-a-whisper-model">
+<h2>Choosing a Whisper Model<a class="headerlink" href="#choosing-a-whisper-model" title="Link to this heading"></a></h2>
+<p>Whisper provides several model sizes. Larger models generally require more memory and computation, while smaller models are faster.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">turbo</span></code> is an optimized version of <code class="docutils literal notranslate"><span class="pre">large-v3</span></code> and is a useful default for multilingual transcription.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tiny</span></code>, <code class="docutils literal notranslate"><span class="pre">base</span></code>, <code class="docutils literal notranslate"><span class="pre">small</span></code>, and <code class="docutils literal notranslate"><span class="pre">medium</span></code> provide a range of speed and accuracy tradeoffs. English-only variants such as <code class="docutils literal notranslate"><span class="pre">base.en</span></code> are also available.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">large</span></code> provides the largest multilingual model family but requires more memory and computation.</p></li>
+</ul>
+<p>The <code class="docutils literal notranslate"><span class="pre">turbo</span></code> model is intended for transcription and does not perform speech translation reliably. To translate non-English speech into English, use a multilingual model such as <code class="docutils literal notranslate"><span class="pre">medium</span></code> or <code class="docutils literal notranslate"><span class="pre">large</span></code> with the translation task.</p>
+</section>
+<section id="command-line-usage">
+<h2>Command-Line Usage<a class="headerlink" href="#command-line-usage" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">whisper</span></code> command can transcribe one or more audio files. The following command uses the <code class="docutils literal notranslate"><span class="pre">turbo</span></code> model and writes all supported output formats to <code class="docutils literal notranslate"><span class="pre">outputs/transcripts</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>whisper<span class="w"> </span>path/to/audio.mp3<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--model<span class="w"> </span>turbo<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--output_dir<span class="w"> </span>outputs/transcripts<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--output_format<span class="w"> </span>all
+</pre></div>
+</div>
+<p>The available output formats include plain text, JSON, SRT, VTT, and TSV. Whisper detects the spoken language automatically when <code class="docutils literal notranslate"><span class="pre">--language</span></code> is omitted. You can specify it when it is known:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>whisper<span class="w"> </span>japanese.wav<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--model<span class="w"> </span>turbo<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--language<span class="w"> </span>Japanese<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--task<span class="w"> </span>transcribe
+</pre></div>
+</div>
+<p>To translate the same recording into English, use a multilingual model that supports translation:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>whisper<span class="w"> </span>japanese.wav<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--model<span class="w"> </span>medium<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--language<span class="w"> </span>Japanese<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--task<span class="w"> </span>translate
+</pre></div>
+</div>
+<p>Run <code class="docutils literal notranslate"><span class="pre">whisper</span> <span class="pre">--help</span></code> to see the complete list of decoding and output options.</p>
+</section>
+<section id="python-usage">
+<h2>Python Usage<a class="headerlink" href="#python-usage" title="Link to this heading"></a></h2>
+<p>The Python interface is useful when you want to keep the transcript and its timestamps in the same analysis script:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">whisper</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">whisper</span><span class="o">.</span><span class="n">load_model</span><span class="p">(</span><span class="s2">&quot;turbo&quot;</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">transcribe</span><span class="p">(</span>
+    <span class="s2">&quot;path/to/audio.mp3&quot;</span><span class="p">,</span>
+    <span class="n">task</span><span class="o">=</span><span class="s2">&quot;transcribe&quot;</span><span class="p">,</span>
+    <span class="n">word_timestamps</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">segments</span></code> entry contains start and end times in seconds:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">segment</span> <span class="ow">in</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;segments&quot;</span><span class="p">]:</span>
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">segment</span><span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">]</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">--</span><span class="si">{</span><span class="n">segment</span><span class="p">[</span><span class="s2">&quot;end&quot;</span><span class="p">]</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">: &#39;</span>
+        <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">segment</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+<p>When <code class="docutils literal notranslate"><span class="pre">word_timestamps=True</span></code>, every segment also contains a <code class="docutils literal notranslate"><span class="pre">words</span></code> list with approximate word-level start and end times.</p>
+</section>
+<section id="transcribing-audio-from-a-video">
+<h2>Transcribing Audio from a Video<a class="headerlink" href="#transcribing-audio-from-a-video" title="Link to this heading"></a></h2>
+<p>Use the original video rather than a Cosmos reconstruction, because the
+reconstructed files do not contain audio. Whisper can read the original video
+directly through ffmpeg:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">transcribe</span><span class="p">(</span>
+    <span class="s2">&quot;path/to/source_video.mp4&quot;</span><span class="p">,</span>
+    <span class="n">task</span><span class="o">=</span><span class="s2">&quot;transcribe&quot;</span><span class="p">,</span>
+    <span class="n">word_timestamps</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>You can alternatively extract its audio track first:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ffmpeg<span class="w"> </span>-i<span class="w"> </span>path/to/source_video.mp4<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-vn<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>path/to/source_audio.wav
+</pre></div>
+</div>
+<p>Then pass <code class="docutils literal notranslate"><span class="pre">source_audio.wav</span></code> to either the command-line or Python example above.</p>
+</section>
+<section id="aligning-transcripts-with-video-segments">
+<h2>Aligning Transcripts with Video Segments<a class="headerlink" href="#aligning-transcripts-with-video-segments" title="Link to this heading"></a></h2>
+<p>For Video-as-Treatment, align timestamps to the segment metadata written by
+Cosmos. This is more precise than calculating <code class="docutils literal notranslate"><span class="pre">timestamp</span> <span class="pre">//</span> <span class="pre">segment_seconds</span></code>
+because the package converts the requested duration to an integer number of
+frames using the video’s nominal frame rate. Here, <code class="docutils literal notranslate"><span class="pre">outputs</span></code> is the list
+returned by <code class="docutils literal notranslate"><span class="pre">extract_videos</span></code> for the same source video.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+
+<span class="n">boundaries</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">output</span> <span class="ow">in</span> <span class="n">outputs</span><span class="p">:</span>
+    <span class="n">payload</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">representation_path</span><span class="p">,</span>
+        <span class="n">map_location</span><span class="o">=</span><span class="s2">&quot;cpu&quot;</span><span class="p">,</span>
+        <span class="n">weights_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">boundaries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+        <span class="p">(</span>
+            <span class="nb">float</span><span class="p">(</span><span class="n">payload</span><span class="p">[</span><span class="s2">&quot;start_time_sec&quot;</span><span class="p">]),</span>
+            <span class="nb">float</span><span class="p">(</span><span class="n">payload</span><span class="p">[</span><span class="s2">&quot;end_time_sec&quot;</span><span class="p">]),</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+
+<span class="n">words_by_segment</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">outputs</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">whisper_segment</span> <span class="ow">in</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;segments&quot;</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">whisper_segment</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;words&quot;</span><span class="p">,</span> <span class="p">[]):</span>
+        <span class="n">midpoint</span> <span class="o">=</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">word</span><span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="nb">float</span><span class="p">(</span><span class="n">word</span><span class="p">[</span><span class="s2">&quot;end&quot;</span><span class="p">]))</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="k">for</span> <span class="n">segment_id</span><span class="p">,</span> <span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">boundaries</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">start</span> <span class="o">&lt;=</span> <span class="n">midpoint</span> <span class="o">&lt;</span> <span class="n">end</span><span class="p">:</span>
+                <span class="n">words_by_segment</span><span class="p">[</span><span class="n">segment_id</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">word</span><span class="p">[</span><span class="s2">&quot;word&quot;</span><span class="p">])</span>
+                <span class="k">break</span>
+
+<span class="n">transcript_segments</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">words</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">words</span> <span class="ow">in</span> <span class="n">words_by_segment</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>The resulting <code class="docutils literal notranslate"><span class="pre">transcript_segments</span></code> list follows the same order as the video representations. You can pass these texts through your text representation model to construct the aligned <code class="docutils literal notranslate"><span class="pre">R_text</span></code> input described in <a class="reference internal" href="video_as_treatment.html#ref-videoastreatment"><span class="std std-ref">Video-as-Treatment</span></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Timestamp-based alignment is approximate. An utterance can cross a video-segment boundary, so inspect the alignment and choose a consistent assignment rule before constructing the analysis data.</p>
+</div>
+</section>
+<section id="important-notes">
+<h2>Important Notes<a class="headerlink" href="#important-notes" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Transcription accuracy depends on language, accent, recording quality, background noise, and overlapping speech. Review important transcripts before using them to define treatments, outcomes, or confounders.</p></li>
+<li><p>Whisper does not perform speaker diarization, so it does not identify which person produced each utterance.</p></li>
+<li><p>Word and segment timestamps are estimates and should not be treated as exact annotations.</p></li>
+<li><p>The open-source Whisper package performs inference locally after downloading the model weights; make sure your storage and computing environment are appropriate for sensitive audio.</p></li>
+<li><p>Model size should be treated as a preprocessing choice. Use the same model and decoding settings across observations and record them for reproducibility.</p></li>
+</ul>
+<p>For additional options and the current list of models, see the <a class="reference external" href="https://github.com/openai/whisper">official Whisper repository</a>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="gen_cosmos.html" class="btn btn-neutral float-left" title="Generating Videos using Cosmos Tokenizer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tarnet.html" class="btn btn-neutral float-right" title="Text-As-Treatment" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Kentaro Nakamura, Kosuke Imai.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

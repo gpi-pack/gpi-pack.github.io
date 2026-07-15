@@ -1,0 +1,610 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>extract_videos &mdash; GPI: GenAI-Powered Inference 0.2.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=320156fd" />
+
+  
+    <link rel="shortcut icon" href="_static/gpi.png"/>
+    <link rel="canonical" href="https://gpi-pack.github.io/f_extract_videos.html" />
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=37f418d5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/js/copybutton.js?v=a2f921dd"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="TextMLPEncoder" href="f_TextMLPEncoder.html" />
+    <link rel="prev" title="VideoSegmentOutput" href="f_VideoSegmentOutput.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            GPI: GenAI-Powered Inference
+              <img src="_static/logo_long.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#from-pypi-version-0-2-1">From PyPI (Version 0.2.1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#from-source">From Source</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gpi.html">What Is GPI?</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gpi.html#gpi-workflow">GPI Workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gpi.html#current-package-scope">Current Package Scope</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="startgpu.html">How to Use a GPU</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="startgpu.html#checking-cuda">Checking CUDA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="startgpu.html#using-a-hosted-gpu">Using a Hosted GPU</a></li>
+<li class="toctree-l2"><a class="reference internal" href="startgpu.html#using-remote-model-execution">Using Remote Model Execution</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="report.html">Questions and Bug Reports</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Data Generation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="gen_llama.html">Generating Texts with Llama 3</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gen_llama.html#loading-llama-3-1">Loading Llama 3.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_llama.html#creating-texts">Creating Texts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_llama.html#repeating-existing-texts">Repeating Existing Texts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_llama.html#pooling">Pooling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_llama.html#custom-system-instruction">Custom System Instruction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_llama.html#additional-arguments">Additional Arguments</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gen_llm.html">Generating Texts with Other LLMs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gen_llm.html#loading-gemma-2">Loading Gemma 2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_llm.html#generating-and-saving-representations">Generating and Saving Representations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_llm.html#mean-pooling-across-generation-steps">Mean Pooling Across Generation Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gen_nnsight.html">Generating Texts without a Local GPU</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gen_nnsight.html#installing-and-authenticating">Installing and Authenticating</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_nnsight.html#choosing-an-available-model">Choosing an Available Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_nnsight.html#remote-generation-and-hidden-states">Remote Generation and Hidden States</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_nnsight.html#important-notes">Important Notes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gen_diffusion.html">Generating Images with Stable Diffusion</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gen_diffusion.html#how-the-image-representation-is-constructed">How the Image Representation Is Constructed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_diffusion.html#using-extract-images">Using <code class="docutils literal notranslate"><span class="pre">extract_images</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_diffusion.html#transforming-multiple-images">Transforming Multiple Images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_diffusion.html#arguments">Arguments</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gen_cosmos.html">Generating Videos using Cosmos Tokenizer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gen_cosmos.html#what-is-cosmos-tokenizer">What is Cosmos Tokenizer?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_cosmos.html#installing-the-video-dependencies">Installing the Video Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_cosmos.html#how-to-use-cosmos-tokenizer">How to use Cosmos Tokenizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_cosmos.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_cosmos.html#output-files">Output Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_cosmos.html#command-line-interface">Command-Line Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_cosmos.html#important-notes">Important Notes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gen_whisper.html">Transcribing Audio using Whisper</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gen_whisper.html#what-is-whisper">What is Whisper?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_whisper.html#installing-whisper">Installing Whisper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_whisper.html#choosing-a-whisper-model">Choosing a Whisper Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_whisper.html#command-line-usage">Command-Line Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_whisper.html#python-usage">Python Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_whisper.html#transcribing-audio-from-a-video">Transcribing Audio from a Video</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_whisper.html#aligning-transcripts-with-video-segments">Aligning Transcripts with Video Segments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen_whisper.html#important-notes">Important Notes</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Basic Operations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tarnet.html">Text-As-Treatment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tarnet.html#what-is-text-as-treatment">What is Text-As-Treatment?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tarnet.html#how-to-estimate-treatment-effects">How to estimate treatment effects</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tarnet.html#step-1-load-the-internal-representations">Step 1: Load the Internal Representations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tarnet.html#step-2-estimate-the-treatment-effects">Step 2: Estimate the Treatment Effects</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tarnet.html#how-to-control-confounders">How to control confounders</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tarnet.html#method-1-using-a-formula-with-a-dataframe">Method 1: Using a Formula with a DataFrame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tarnet.html#method-2-using-a-design-matrix">Method 2: Using a Design Matrix</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tarnet.html#visualizing-propensity-scores">Visualizing Propensity Scores</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tarnet.html#hyperparameters">Hyperparameters</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="text_as_confounder.html">Text-As-Confounder</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="text_as_confounder.html#what-is-text-as-confounder">What is Text-As-Confounder?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="text_as_confounder.html#how-to-estimate-treatment-effects">How to estimate treatment effects</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="image_as_treatment.html">Image-As-Treatment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="image_as_treatment.html#how-to-estimate-treatment-effects">How to estimate treatment effects</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="image_as_treatment.html#step-1-load-the-internal-representations">Step 1: Load the Internal Representations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="image_as_treatment.html#using-flattened-representations">Using Flattened Representations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="image_as_treatment.html#using-a-convolutional-neural-network">Using a Convolutional Neural Network</a></li>
+<li class="toctree-l3"><a class="reference internal" href="image_as_treatment.html#step-2-estimate-the-treatment-effects">Step 2: Estimate the Treatment Effects</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="video_as_treatment.html">Video-as-Treatment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="video_as_treatment.html#overview-of-the-data">Overview of the Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="video_as_treatment.html#step-1-extract-the-video-representations">Step 1: Extract the Video Representations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="video_as_treatment.html#step-2-align-and-pad-the-sequences">Step 2: Align and Pad the Sequences</a></li>
+<li class="toctree-l2"><a class="reference internal" href="video_as_treatment.html#step-3-estimate-the-intervention-curve">Step 3: Estimate the Intervention Curve</a></li>
+<li class="toctree-l2"><a class="reference internal" href="video_as_treatment.html#real-time-outcomes">Real-Time Outcomes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="video_as_treatment.html#segment-specific-interventions">Segment-Specific Interventions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="video_as_treatment.html#modality-and-audio-support">Modality and Audio Support</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Operations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hyperparameter.html">Hyperparameter Tuning</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hyperparameter.html#automated-hyperparameter-tuning">Automated Hyperparameter Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hyperparameter.html#static-hyperparameter-tuning">Static Hyperparameter Tuning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hyperparameter.html#static-search-space">Static Search Space</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hyperparameter.html#dynamic-hyperparameter-tuning">Dynamic Hyperparameter Tuning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hyperparameter.html#dynamic-search-space">Dynamic Search Space</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hyperparameter.html#repeated-outcomes">Repeated Outcomes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hyperparameter.html#important-notes">Important Notes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="custom_imp.html">Customizing Your Analysis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="custom_imp.html#tarnet">TarNet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="custom_imp.html#propensity-score-model">Propensity Score Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="custom_imp.html#cross-fitted-score-contributions">Cross-Fitted Score Contributions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="custom_imp.html#complete-cross-fitting">Complete Cross-Fitting</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quantization.html">When an LLM Is Too Large</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quantization.html#installing-bitsandbytes">Installing bitsandbytes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantization.html#loading-a-4-bit-model">Loading a 4-bit Model</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Function Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#text-generation">Text Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#image-generation">Image Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#video-processing">Video Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#static-inference">Static Inference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#dynamic-inference">Dynamic Inference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_dml_score.html">dml_score</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_dml_score.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_dml_score.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_dml_score.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_dml_score.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_estimate_k_ate.html">estimate_k_ate</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ate.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ate.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ate.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ate.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_estimate_psi_split.html">estimate_psi_split</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_psi_split.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_psi_split.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_psi_split.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_psi_split.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_extract_and_save_hiddens.html">extract_and_save_hidden_states</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_and_save_hiddens.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_and_save_hiddens.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_and_save_hiddens.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_and_save_hiddens.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_generate_text.html">generate_text</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_generate_text.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_generate_text.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_generate_text.html#pooling-behavior">Pooling Behavior</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_generate_text.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_generate_text.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_get_instructions.html">get_instruction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_get_instructions.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_get_instructions.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_get_instructions.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_get_instructions.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_load_hiddens.html">load_hiddens</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_load_hiddens.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_load_hiddens.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_load_hiddens.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_load_hiddens.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_save_generated_texts.html">save_generated_texts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_save_generated_texts.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_save_generated_texts.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_save_generated_texts.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_save_generated_texts.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_pad_to_multiple_of_8.html">pad_to_multiple_of_8</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_pad_to_multiple_of_8.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_pad_to_multiple_of_8.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_pad_to_multiple_of_8.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_pad_to_multiple_of_8.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_StableDiffusionImg2ImgExtractor.html">StableDiffusionImg2ImgExtractor</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_StableDiffusionImg2ImgExtractor.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_StableDiffusionImg2ImgExtractor.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_StableDiffusionImg2ImgExtractor.html#example-usage">Example Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_StableDiffusionImg2ImgExtractor.html#methods">Methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="f_StableDiffusionImg2ImgExtractor.html#preprocess-image">preprocess_image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_StableDiffusionImg2ImgExtractor.html#encode-prompt">encode_prompt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_StableDiffusionImg2ImgExtractor.html#get-hidden-states">get_hidden_states</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_StableDiffusionImg2ImgExtractor.html#decode-latents">decode_latents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_StableDiffusionImg2ImgExtractor.html#transform-image">transform_image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_StableDiffusionImg2ImgExtractor.html#save-image">save_image</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_extract_images.html">extract_images</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_images.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_images.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_images.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_extract_images.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_CosmosVideoExtractor.html">CosmosVideoExtractor</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_CosmosVideoExtractor.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_CosmosVideoExtractor.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_CosmosVideoExtractor.html#example-usage">Example Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_CosmosVideoExtractor.html#methods">Methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="f_CosmosVideoExtractor.html#preprocess-video">preprocess_video</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_CosmosVideoExtractor.html#encode-video">encode_video</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_CosmosVideoExtractor.html#decode-latents">decode_latents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_CosmosVideoExtractor.html#reconstruct-video">reconstruct_video</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_CosmosVideoExtractor.html#transform-video">transform_video</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_CosmosVideoExtractor.html#save-video">save_video</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_CosmosVideoExtractor.html#process-video">process_video</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_VideoExtractionResult.html">VideoExtractionResult</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_VideoExtractionResult.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_VideoExtractionResult.html#attributes">Attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_VideoExtractionResult.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_VideoSegmentOutput.html">VideoSegmentOutput</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_VideoSegmentOutput.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_VideoSegmentOutput.html#attributes">Attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_VideoSegmentOutput.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">extract_videos</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-usage">Example Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#saved-payload">Saved Payload</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#command-line-interface">Command-Line Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#related-module-utilities">Related Module Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_TextMLPEncoder.html">TextMLPEncoder</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_TextMLPEncoder.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TextMLPEncoder.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TextMLPEncoder.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TextMLPEncoder.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_Video3DEncoder.html">Video3DEncoder</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_Video3DEncoder.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_Video3DEncoder.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_Video3DEncoder.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_Video3DEncoder.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_DynamicTarNetBase.html">DynamicTarNetBase</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicTarNetBase.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicTarNetBase.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicTarNetBase.html#forward">forward</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicTarNetBase.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_mse_loss.html">mse_loss</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_mse_loss.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_mse_loss.html#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_mse_loss.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_mse_loss.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_DynamicTarNet.html">DynamicTarNet</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicTarNet.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicTarNet.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicTarNet.html#example-usage">Example Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicTarNet.html#methods">Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_DynamicGPIHyperparameterTuner.html">DynamicGPIHyperparameterTuner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicGPIHyperparameterTuner.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicGPIHyperparameterTuner.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicGPIHyperparameterTuner.html#search-space-behavior">Search-Space Behavior</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicGPIHyperparameterTuner.html#example-usage">Example Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_DynamicGPIHyperparameterTuner.html#methods">Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_estimate_k_ipsi.html">estimate_k_ipsi</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ipsi.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ipsi.html#data-arguments">Data Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ipsi.html#cross-fitting-arguments">Cross-Fitting Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ipsi.html#dynamic-tarnet-arguments">Dynamic TarNet Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ipsi.html#downstream-nuisance-model-arguments">Downstream Nuisance-Model Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ipsi.html#multimodal-encoder-arguments">Multimodal Encoder Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ipsi.html#inference-argument">Inference Argument</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ipsi.html#returns">Returns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_estimate_k_ipsi.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_SpectralNormClassifier.html">SpectralNormClassifier</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_SpectralNormClassifier.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_SpectralNormClassifier.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_SpectralNormClassifier.html#example-usage">Example Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_SpectralNormClassifier.html#methods">Methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="f_SpectralNormClassifier.html#forward">forward</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_SpectralNormClassifier.html#fit">fit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_SpectralNormClassifier.html#predict-proba">predict_proba</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_SpectralNormClassifier.html#predict">predict</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_TarNet.html">TarNet</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNet.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNet.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNet.html#example-usage">Example Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNet.html#methods">Methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="f_TarNet.html#create-dataloaders">create_dataloaders</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_TarNet.html#fit">fit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_TarNet.html#validate-step">validate_step</a></li>
+<li class="toctree-l3"><a class="reference internal" href="f_TarNet.html#predict">predict</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_TarNetBase.html">TarNetBase</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNetBase.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNetBase.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNetBase.html#forward">forward</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNetBase.html#example-usage">Example Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="f_TarNetHyperparameterTuner.html">TarNetHyperparameterTuner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNetHyperparameterTuner.html#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNetHyperparameterTuner.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNetHyperparameterTuner.html#example-usage">Example Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="f_TarNetHyperparameterTuner.html#methods">Methods</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GPI: GenAI-Powered Inference</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">extract_videos</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="extract-videos">
+<span id="ref-extract-videos"></span><h1>extract_videos<a class="headerlink" href="#extract-videos" title="Link to this heading"></a></h1>
+<section id="description">
+<h2>Description<a class="headerlink" href="#description" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">extract_videos</span></code> function is the high-level Cosmos pipeline. It discovers video files, divides each file into segments, extracts a deterministic Cosmos representation for every selected segment, and saves a metadata-rich <code class="docutils literal notranslate"><span class="pre">.pt</span></code> payload. Supplying an output video directory also saves visual-only reconstructions.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>extract_videos(
+    videos,
+    output_hidden_dir,
+    *,
+    segment_seconds,
+    output_video_dir=None,
+    segment=None,
+    model_id=&quot;nvidia/Cosmos-1.0-Tokenizer-CV8x8x8&quot;,
+    device=None,
+    cache_dir=None,
+    dtype=&quot;auto&quot;,
+    frame_size=None,
+    max_frames=121,
+    pad_multiple=None,
+    temporal_pooling=&quot;temporal_mean&quot;,
+    drop_last=False,
+    save_latent=False,
+    save_decoder_input=False,
+    overwrite=False,
+    extractor=None,
+    pretrained_kwargs=None,
+    verbose=True,
+)
+</pre></div>
+</div>
+</section>
+<section id="arguments">
+<h2>Arguments<a class="headerlink" href="#arguments" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">videos</span></code> (<em>path or sequence of paths</em>): video file, recursively searched directory, or a sequence containing either type (<strong>required</strong>). Supported extensions are <code class="docutils literal notranslate"><span class="pre">.avi</span></code>, <code class="docutils literal notranslate"><span class="pre">.m4v</span></code>, <code class="docutils literal notranslate"><span class="pre">.mkv</span></code>, <code class="docutils literal notranslate"><span class="pre">.mov</span></code>, <code class="docutils literal notranslate"><span class="pre">.mp4</span></code>, and <code class="docutils literal notranslate"><span class="pre">.webm</span></code>, matched case-insensitively.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">output_hidden_dir</span></code> (<em>path</em>): root directory for representation payloads (<strong>required</strong>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">segment_seconds</span></code> (<em>float</em>): finite, positive nominal segment duration in seconds (<strong>required</strong>, keyword-only). The implementation rounds <code class="docutils literal notranslate"><span class="pre">segment_seconds</span> <span class="pre">*</span> <span class="pre">fps</span></code> to choose a fixed number of decoded frames per segment.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">output_video_dir</span></code> (<em>path</em>, optional): reconstruction directory. <code class="docutils literal notranslate"><span class="pre">None</span></code> skips decoding.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">segment</span></code> (<em>int</em> or <em>tuple</em>, optional): non-negative zero-based segment index or inclusive <code class="docutils literal notranslate"><span class="pre">(start,</span> <span class="pre">end)</span></code> range. The end can be <code class="docutils literal notranslate"><span class="pre">None</span></code> for an open range.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">model_id</span></code> (<em>str</em>, optional): Cosmos checkpoint. The default is <code class="docutils literal notranslate"><span class="pre">&quot;nvidia/Cosmos-1.0-Tokenizer-CV8x8x8&quot;</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">device</span></code> (<em>str</em> or <em>torch.device</em>, optional): execution device.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cache_dir</span></code> (<em>path</em>, optional): model cache directory.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dtype</span></code> (<em>str</em> or <em>torch.dtype</em>, optional): model precision. The default is <code class="docutils literal notranslate"><span class="pre">&quot;auto&quot;</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">frame_size</span></code> (<em>tuple of int</em>, optional): common positive <code class="docutils literal notranslate"><span class="pre">(height,</span> <span class="pre">width)</span></code>. The default preserves each source size.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">max_frames</span></code> (<em>int</em> or <em>None</em>, optional): positive maximum number of frames retained per segment. The default is 121; <code class="docutils literal notranslate"><span class="pre">None</span></code> disables sampling in the Python API.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pad_multiple</span></code> (<em>int</em>, optional): positive spatial model-input multiple. The default is read from the VAE.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">temporal_pooling</span></code> (<em>str</em>, optional): <code class="docutils literal notranslate"><span class="pre">&quot;temporal_mean&quot;</span></code> saves <code class="docutils literal notranslate"><span class="pre">[C,</span> <span class="pre">H,</span> <span class="pre">W]</span></code>; <code class="docutils literal notranslate"><span class="pre">&quot;none&quot;</span></code> saves <code class="docutils literal notranslate"><span class="pre">[C,</span> <span class="pre">D,</span> <span class="pre">H,</span> <span class="pre">W]</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">drop_last</span></code> (<em>bool</em>, optional): whether to drop a final segment containing fewer than <code class="docutils literal notranslate"><span class="pre">round(segment_seconds</span> <span class="pre">*</span> <span class="pre">fps)</span></code> decoded frames. The default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">save_latent</span></code> (<em>bool</em>, optional): whether to include the encoder latent. The default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">save_decoder_input</span></code> (<em>bool</em>, optional): whether to include the unpooled decoder input. The default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">overwrite</span></code> (<em>bool</em>, optional): whether to replace existing files. The default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">extractor</span></code> (<a class="reference internal" href="f_CosmosVideoExtractor.html#ref-cosmosvideoextractor"><span class="std std-ref">CosmosVideoExtractor</span></a>, optional): existing model instance to reuse. When supplied, the model and preprocessing options already stored on that instance take effect; the corresponding constructor arguments to <code class="docutils literal notranslate"><span class="pre">extract_videos</span></code> are not reapplied.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pretrained_kwargs</span></code> (<em>mapping</em>, optional): extra model-loading options used only when <code class="docutils literal notranslate"><span class="pre">extractor</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">verbose</span></code> (<em>bool</em>, optional): whether to print progress. The default is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+</ul>
+</section>
+<section id="returns">
+<h2>Returns<a class="headerlink" href="#returns" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><em>list of VideoSegmentOutput</em>: ordered output records containing the source path, segment index, representation path, and optional reconstruction path.</p></li>
+</ul>
+<p>Source paths are de-duplicated and sorted before processing, and segments remain in ascending index order. An error is raised when no supported videos are found, when an input file has an unsupported extension, or when an input directory is also used as an output directory. Existing representation or reconstruction files raise <code class="docutils literal notranslate"><span class="pre">FileExistsError</span></code> unless <code class="docutils literal notranslate"><span class="pre">overwrite=True</span></code>.</p>
+</section>
+<section id="example-usage">
+<h2>Example Usage<a class="headerlink" href="#example-usage" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gpi_pack.video</span><span class="w"> </span><span class="kn">import</span> <span class="n">extract_videos</span>
+
+<span class="n">outputs</span> <span class="o">=</span> <span class="n">extract_videos</span><span class="p">(</span>
+    <span class="n">videos</span><span class="o">=</span><span class="s2">&quot;path/to/videos&quot;</span><span class="p">,</span>
+    <span class="n">output_hidden_dir</span><span class="o">=</span><span class="s2">&quot;outputs/hidden&quot;</span><span class="p">,</span>
+    <span class="n">segment_seconds</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">frame_size</span><span class="o">=</span><span class="p">(</span><span class="mi">320</span><span class="p">,</span> <span class="mi">480</span><span class="p">),</span>
+<span class="p">)</span>
+
+<span class="n">payload</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
+    <span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">representation_path</span><span class="p">,</span>
+    <span class="n">map_location</span><span class="o">=</span><span class="s2">&quot;cpu&quot;</span><span class="p">,</span>
+    <span class="n">weights_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">representation</span> <span class="o">=</span> <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;representation&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="saved-payload">
+<h2>Saved Payload<a class="headerlink" href="#saved-payload" title="Link to this heading"></a></h2>
+<p>Each <code class="docutils literal notranslate"><span class="pre">segment_XXXXXX.pt</span></code> file contains an unbatched float32 <code class="docutils literal notranslate"><span class="pre">representation</span></code> on CPU. Its shape is <code class="docutils literal notranslate"><span class="pre">[C,</span> <span class="pre">H,</span> <span class="pre">W]</span></code> for <code class="docutils literal notranslate"><span class="pre">temporal_pooling=&quot;temporal_mean&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">[C,</span> <span class="pre">D,</span> <span class="pre">H,</span> <span class="pre">W]</span></code> for <code class="docutils literal notranslate"><span class="pre">temporal_pooling=&quot;none&quot;</span></code>. The payload also records the source path, model identifier and revision information, library and VAE metadata, source segment frame/time bounds, selected frame indices, input and padded shapes, spatial padding, sampling information, and the processed frame rate used for reconstruction.</p>
+<p><code class="docutils literal notranslate"><span class="pre">save_latent=True</span></code> adds an unbatched <code class="docutils literal notranslate"><span class="pre">latent</span></code> tensor. <code class="docutils literal notranslate"><span class="pre">save_decoder_input=True</span></code> adds the unbatched <code class="docutils literal notranslate"><span class="pre">decoder_input</span></code> tensor and its compatibility alias <code class="docutils literal notranslate"><span class="pre">pre_decoder_hidden</span></code>. <code class="docutils literal notranslate"><span class="pre">audio_reconstructed</span></code> is always <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</section>
+<section id="command-line-interface">
+<h2>Command-Line Interface<a class="headerlink" href="#command-line-interface" title="Link to this heading"></a></h2>
+<p>The same pipeline is exposed as <code class="docutils literal notranslate"><span class="pre">gpi-extract-video</span></code> (or <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">gpi_pack.video</span></code>):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gpi-extract-video<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--input<span class="w"> </span>path/to/videos<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--output_dir<span class="w"> </span>outputs<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--segment_seconds<span class="w"> </span><span class="m">5</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--segment<span class="w"> </span><span class="m">1</span>-3<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--frame_size<span class="w"> </span><span class="m">320</span><span class="w"> </span><span class="m">480</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--save_reconstruction
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">--input</span></code>, <code class="docutils literal notranslate"><span class="pre">--output_dir</span></code>, and <code class="docutils literal notranslate"><span class="pre">--segment_seconds</span></code> are required. <code class="docutils literal notranslate"><span class="pre">--segment</span></code> accepts <code class="docutils literal notranslate"><span class="pre">N</span></code>, <code class="docutils literal notranslate"><span class="pre">START-END</span></code>, or <code class="docutils literal notranslate"><span class="pre">START-</span></code> and uses inclusive bounds. <code class="docutils literal notranslate"><span class="pre">--max_frames</span> <span class="pre">0</span></code> disables frame sampling; negative values are rejected. <code class="docutils literal notranslate"><span class="pre">--save_reconstruction</span></code> uses <code class="docutils literal notranslate"><span class="pre">--output_dir</span></code> for both payloads and reconstructed MP4 files, while the Python function permits separate roots. Other flags correspond to the options above: <code class="docutils literal notranslate"><span class="pre">--model_id</span></code>, <code class="docutils literal notranslate"><span class="pre">--cache_dir</span></code>, <code class="docutils literal notranslate"><span class="pre">--device</span></code>, <code class="docutils literal notranslate"><span class="pre">--dtype</span></code>, <code class="docutils literal notranslate"><span class="pre">--temporal_pooling</span></code>, <code class="docutils literal notranslate"><span class="pre">--pad_multiple</span></code>, <code class="docutils literal notranslate"><span class="pre">--max_frames</span></code>, <code class="docutils literal notranslate"><span class="pre">--frame_size</span></code>, <code class="docutils literal notranslate"><span class="pre">--drop_last</span></code>, <code class="docutils literal notranslate"><span class="pre">--save_latent</span></code>, <code class="docutils literal notranslate"><span class="pre">--save_decoder_input</span></code>, and <code class="docutils literal notranslate"><span class="pre">--overwrite</span></code>.</p>
+</section>
+<section id="related-module-utilities">
+<h2>Related Module Utilities<a class="headerlink" href="#related-module-utilities" title="Link to this heading"></a></h2>
+<p>The following functions support the high-level pipeline. They remain available from <code class="docutils literal notranslate"><span class="pre">gpi_pack.video</span></code> for specialized workflows, although they are not re-exported as the module’s primary public API:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">parse_segment_spec</span></code> and <code class="docutils literal notranslate"><span class="pre">format_segment_spec</span></code> parse and display CLI segment ranges.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">model_dtype</span></code> validates and resolves a precision option for a device.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">find_videos</span></code> recursively discovers supported video files.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fps_for</span></code> selects a finite nominal frame rate from a PyAV stream.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">segment_meta</span></code> creates the frame and time metadata for one segment.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">iter_segments</span></code> yields consecutive RGB frame arrays and their metadata.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">uniform_frame_indices</span></code> selects at most a requested number of uniformly spaced frames. It retains both endpoints when at least two frames are selected.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">frames_to_bcthw</span></code> validates and normalizes RGB frames into a BCTHW tensor.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">resize_spatial</span></code>, <code class="docutils literal notranslate"><span class="pre">pad_spatial</span></code>, and <code class="docutils literal notranslate"><span class="pre">crop_spatial</span></code> implement spatial preprocessing and restoration.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_latent</span></code> returns the deterministic Cosmos latent distribution mode.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pool_decoder_input</span></code> applies temporal-mean pooling or preserves latent time.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">reconstruct_and_extract</span></code> returns the latent, decoder input, and reconstruction from a compatible VAE.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bcthw_to_uint8</span></code> converts one normalized BCTHW reconstruction to uint8 THWC frames.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">save_mp4</span></code> writes visual-only H.264 video frames.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">output_name</span></code> creates a readable collision-resistant directory name for a source video.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">parse_args</span></code> and <code class="docutils literal notranslate"><span class="pre">main</span></code> implement the <code class="docutils literal notranslate"><span class="pre">gpi-extract-video</span></code> command-line interface.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="f_VideoSegmentOutput.html" class="btn btn-neutral float-left" title="VideoSegmentOutput" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="f_TextMLPEncoder.html" class="btn btn-neutral float-right" title="TextMLPEncoder" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Kentaro Nakamura, Kosuke Imai.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
